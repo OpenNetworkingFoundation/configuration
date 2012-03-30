@@ -1,4 +1,4 @@
-module onf-config-10 {
+module onf-config-1.1 {
 namespace "urn:onf:of12:config:yang";
 prefix of12-config;
 
@@ -234,7 +234,8 @@ type leafref {
 path "/capable-switch/resources/flow-table/resource-id";
 }
 description "The list references to all flow table resources   of the OpenFlow Capable Switch that the OpenFlow Logical Switch has exclusive access to.";
-}
+  }
+  }
 }
 
 grouping openflow-logical-switch-capabilities-grouping {
@@ -294,7 +295,7 @@ description "Specifies if the logical switch supports reassemble IP fragments.";
 leaf block-looping-ports {
 type boolean;
 default false;
-description "'true' indicates that a switch protocol outside of OpenFlow, such as 802.1D Spanning Tree, will detect topology loops and block ports to prevent packet loops."
+description "'true' indicates that a switch protocol outside of OpenFlow, such as 802.1D Spanning Tree, will detect topology loops and block ports to prevent packet loops.";
 }
 
 container reserved-port-types {
@@ -615,43 +616,43 @@ grouping openflow-flow-table-resource-grouping {
 description "Representation of an OpenFlow Flow Table Resource.";
 leaf resource-id {
 type inet:uri;
-description "An unique but locally arbitrary identifier that identifies a flow table and is persistent across reboots of the system."
+description "An unique but locally arbitrary identifier that identifies a flow table and is persistent across reboots of the system.";
 }
-Leaf max-entries {
-Type uint8;
-description "The maximum number of flow entries supported by the flow table."
+leaf max-entries {
+type uint8;
+description "The maximum number of flow entries supported by the flow table.";
 }
 container instructions {
 leaf-list type {
 type instruction-type;
 }
-description "The instruction types supported by the flow table."
+description "The instruction types supported by the flow table.";
 }
 container matches {
 leaf-list type {
 type match-type;
 }
-description "The match types supported by the flow table."
+description "The match types supported by the flow table.";
 }
 container write-actions {
 leaf-list type {
 type action-type;
 }
-description "The write action types supported by the flow table."
+description "The write action types supported by the flow table.";
 }
 container apply-actions {
 leaf-list type {
 type action-type;
 }
-description "The apply action types supported by the flow table."
+description "The apply action types supported by the flow table.";
 }
 leaf metadata-match {
 type hex-binary;
-description "The bits of metadata the flow table can match."
+description "The bits of metadata the flow table can match.";
 }
 leaf metadata-write {
 type hex-binary;
-description "The bits of metadata the flow table can write."
+description "The bits of metadata the flow table can write.";
 }
 }
 
