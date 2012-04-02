@@ -71,11 +71,17 @@ maxOccurs="unbounded"/>
 maxOccurs="unbounded"/>
 <xs:element name="queue" type="OFQueueType" 
 maxOccurs="unbounded"/>
+<xs:element name="certificates">
+<xs:complexType>
+<xs:sequence>
 <xs:element name="owned-certificate"
 type="OFOwnedCertificateType" maxOccurs="unbounded"/>
 <xs:element name="external-certificate"
 type="OFExternalCertificateType" 
 maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
 <xs:element name="flow-table"
 type="OFFlowTableType" maxOccurs="unbounded"/>
 </xs:sequence>
