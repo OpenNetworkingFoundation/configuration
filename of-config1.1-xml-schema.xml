@@ -724,15 +724,25 @@ type="ds:KeyValue"/>
 <xs:extension base="OFResourceType">
 <xs:sequence maxOccurs="1" minOccurs="1">
 <xs:element name="max-entries" type="xs:integer"/>
+<xs:element name="next-tables" type="OFNextFlowTables"/>
 <xs:element name="instructions" type="OFFlowTableInstructions"/>
 <xs:element name="matches" type="OFFlowTableMatches"/>
 <xs:element name="write-actions" type="OFFlowTableWriteActions"/>
 <xs:element name="apply-actions" type="OFFlowTableApplyActions"/>
+<xs:element name="write-setfields" type="OFFlowTableMatchFields"/>
+<xs:element name="apply-setfields" type="OFFlowTableMatchFields"/>
+<xs:element name="wildcards" type="OFFlowTableMatchFields"/>
 <xs:element name="metadata-match" type="xs:hexBinary"/>
 <xs:element name="metadata-write" type="xs:hexBinary"/>
 </xs:sequence>
 </xs:extension>
 </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="OFNextFlowTables">
+<xs:sequence minOccurs="1" maxOccurs="unbounded">
+<xs:element name="table-id" type="OFConfigID"/>
+</xs:sequence>
 </xs:complexType>
 
 <xs:complexType name="OFFlowTableInstructions">
@@ -741,9 +751,9 @@ type="ds:KeyValue"/>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="OFFlowTableMatches">
+<xs:complexType name="OFFlowTableMatchFields">
 <xs:sequence minOccurs="1" maxOccurs="unbounded">
-<xs:element name="type" type="OFMatchType"/>
+<xs:element name="type" type="OFMatchFieldType"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -759,9 +769,9 @@ type="ds:KeyValue"/>
 </xs:sequence>
 </xs:complexType>
 
-<xs:simpleType name="OFMatchType">
+<xs:simpleType name="OFMatchFieldType">
 <xs:annotation>
-<xs:documentation> The open flow match types. See OpenFlow protocol 1.2 section A.2.3.7		
+<xs:documentation> The open flow match field types. See OpenFlow protocol 1.2 section A.2.3.7		
 </xs:documentation>
 </xs:annotation>
 <xs:restriction base="xs:string">

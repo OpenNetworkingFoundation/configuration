@@ -112,8 +112,8 @@ typedef instruction-type {
   }
 }
 
-typedef match-type {
-  description "The types of matches defined in OpenFlow Switch
+typedef match-field-type {
+  description "The types of match fields defined in OpenFlow Switch
     Specification version 1.2.";
   type enumeration {
     enum input-port;
@@ -882,6 +882,12 @@ grouping openflow-flow-table-resource-grouping {
     description "The maximum number of flow entries supported by
       the flow table.";
   }
+	container next-tables {
+    leaf-list table-id {
+      type inet:uri;
+    }
+    description "The array of flow table ids that can be directly reached from the present table using "goto-table" instruction.";
+  }
   container instructions {
     leaf-list type {
       type instruction-type;
@@ -891,7 +897,7 @@ grouping openflow-flow-table-resource-grouping {
   }
   container matches {
     leaf-list type {
-      type match-type;
+      type match-field-type;
     }
     description "The match types supported by the flow table.";
   }
@@ -908,6 +914,24 @@ grouping openflow-flow-table-resource-grouping {
     }
     description "The apply action types supported by the flow
       table.";
+  }
+	container write-setfields {
+    leaf-list type {
+	    type match-field-type;
+	  }
+    description "'set-field' action types supported by the table using "write-actions" instruction.";
+  }
+  container apply-setfields {
+	  leaf-list type {
+      type match-field-type;
+	  }
+    description "'set-field' action types supported by the table using "apply-actions" instruction.;
+  }
+  container wildcards {
+    leaf-list type {
+	    type match-field-type;
+	  }
+    description " the fields for which the table supports wildcarding(omitting).";
   }
   leaf metadata-match {
     type hex-binary;
