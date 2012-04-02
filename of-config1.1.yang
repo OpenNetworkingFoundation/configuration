@@ -886,7 +886,7 @@ grouping openflow-flow-table-resource-grouping {
     leaf-list table-id {
       type inet:uri;
     }
-    description "The array of flow table ids that can be directly reached from the present table using "goto-table" instruction.";
+    description "The array of flow table ids that can be directly reached from the present table using 'goto-table' instruction.";
   }
   container instructions {
     leaf-list type {
@@ -919,19 +919,19 @@ grouping openflow-flow-table-resource-grouping {
     leaf-list type {
 	    type match-field-type;
 	  }
-    description "'set-field' action types supported by the table using "write-actions" instruction.";
+    description "'set-field' action types supported by the table using 'write-actions' instruction.";
   }
   container apply-setfields {
 	  leaf-list type {
       type match-field-type;
 	  }
-    description "'set-field' action types supported by the table using "apply-actions" instruction.;
+    description "'set-field' action types supported by the table using 'apply-actions' instruction.";
   }
   container wildcards {
     leaf-list type {
 	    type match-field-type;
 	  }
-    description " the fields for which the table supports wildcarding(omitting).";
+    description "The fields for which the table supports wildcarding.";
   }
   leaf metadata-match {
     type hex-binary;
