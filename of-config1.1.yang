@@ -113,7 +113,7 @@ typedef instruction-type {
 }
 
 typedef match-field-type {
-  description "The types of match fields defined in OpenFlow Switch
+  description "The types of match field defined in OpenFlow Switch
     Specification version 1.2.";
   type enumeration {
     enum input-port;
