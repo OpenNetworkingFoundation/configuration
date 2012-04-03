@@ -24,7 +24,8 @@ revision 2011-12-07 {
 /*****************************************************************
  * Type definitions
  *****************************************************************/
-typedef openflow-version {
+
+ typedef openflow-version {
   type enumeration {
     enum "1.0";
     enum "1.1";
@@ -113,7 +114,7 @@ typedef instruction-type {
 }
 
 typedef match-field-type {
-  description "The types of match fields defined in OpenFlow Switch
+  description "The types of match field defined in OpenFlow Switch
     Specification version 1.2.";
   type enumeration {
     enum input-port;
@@ -632,7 +633,7 @@ grouping openflow-port-resource-grouping {
       type uint8;
       description "The IPv4 TTL or IPv6 Hop Limit used in an 
         encapsulating IP header.  If MAC encapsulation is used, 
-        this element SHOULD be absent. A value of “0” indicates 
+        this element SHOULD be absent. A value of '0' indicates 
         that the encapsulating header uses the value of the 
         encapsulated header.";
     }
@@ -674,20 +675,19 @@ grouping openflow-port-resource-grouping {
       }
       leaf vni {
         type uint32;
-        description “tbd.”;
+        description "tbd.";
       }
       leaf vni-multicast-group {
         type inet:ip-address;
-        description “tbd.”;
+        description "tbd.";
       }
       leaf udp-source-port {
         type inet:port-number;
-        description “tbd.”;
+        description "tbd.";
       }
       leaf udp-dest-port {
         type inet:port-number;
-        /*default IANA_VXLAN_PORT; since this is still a draft */
-        description “tbd.”;
+        description "tbd.";
       }
       leaf udp-checksum {
         type boolean;
@@ -708,7 +708,7 @@ grouping openflow-port-resource-grouping {
       }
       leaf tni-multicast-group {
         type inet:ip-address;
-        description “tbd.”;
+        description "tbd.";
       }
     }
   }
@@ -862,10 +862,71 @@ grouping openflow-owned-certificate-grouping {
     description "An X.509 certificate in DER format base64
       encoded.";
   }
-  leaf private-key {
-    type ds:KeyValue;
-    mandatory true;
+  container private-key {
+    uses KeyValueType;
     description "tbd.";
+  }
+}
+
+grouping KeyValueType {
+  choice key-type {
+    mandatory true;
+    case dsa {
+      container DSAKeyValue {
+        uses DSAKeyValueType;
+      }
+    }
+    case rsa {
+      container RSAKeyValue {
+        uses RSAKeyValueType;
+      }
+    }
+  }
+}
+
+grouping DSAKeyValueType {
+  leaf P {
+    when "count(../Q) != 0";
+    type binary;
+    mandatory true;
+  }
+  leaf Q {
+    when "count(../P) != 0";
+    type binary;
+    mandatory true;
+  }
+  leaf J {
+    type binary;
+    mandatory true;
+  }
+  leaf G {
+    type binary;
+    mandatory true;
+  }
+  leaf Y {
+    type binary;
+    mandatory true;
+  }
+  leaf Seed {
+    when "count(../PgenCounter) != 0";
+    type binary;
+    mandatory true;
+  }
+  leaf PgenCounter {
+    when "count(../Seed) != 0";
+    type binary;
+    mandatory true;
+  }
+}
+   
+grouping RSAKeyValueType {
+  leaf Modulus {
+    type binary;
+    mandatory true;
+  }
+  leaf Exponent {
+    type binary;
+    mandatory true;
   }
 }
 
@@ -882,11 +943,11 @@ grouping openflow-flow-table-resource-grouping {
     description "The maximum number of flow entries supported by
       the flow table.";
   }
-	container next-tables {
+  container next-tables {
     leaf-list table-id {
       type inet:uri;
     }
-    description "The array of flow table ids that can be directly reached from the present table using "goto-table" instruction.";
+    description "The array of flow table ids that can be directly reached from the present table using 'goto-table' instruction.";
   }
   container instructions {
     leaf-list type {
@@ -915,23 +976,23 @@ grouping openflow-flow-table-resource-grouping {
     description "The apply action types supported by the flow
       table.";
   }
-	container write-setfields {
+  container write-setfields {
     leaf-list type {
-	    type match-field-type;
-	  }
-    description "'set-field' action types supported by the table using "write-actions" instruction.";
+      type match-field-type;
+    }
+    description "'set-field' action types supported by the table using 'write-actions' instruction.";
   }
   container apply-setfields {
-	  leaf-list type {
+    leaf-list type {
       type match-field-type;
-	  }
-    description "'set-field' action types supported by the table using "apply-actions" instruction.;
+    }
+    description "'set-field' action types supported by the table using 'apply-actions' instruction.";
   }
   container wildcards {
     leaf-list type {
-	    type match-field-type;
-	  }
-    description " the fields for which the table supports wildcarding(omitting).";
+      type match-field-type;
+    }
+    description "The fields for which the table supports wildcarding.";
   }
   leaf metadata-match {
     type hex-binary;
