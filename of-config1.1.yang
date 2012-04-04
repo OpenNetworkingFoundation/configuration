@@ -81,8 +81,6 @@ typedef rate-type {
 }
 
 typedef action-type {
-  description "The types of actions defined in OpenFlow Switch
-    Specification version 1.2.";
   type enumeration {
     enum output;
     enum acopy-ttl-out;
@@ -99,11 +97,11 @@ typedef action-type {
     enum dec-nw-ttl;
     enum set-field;
   }
+  description "The types of actions defined in OpenFlow Switch
+    Specification version 1.2.";
 }
 
 typedef instruction-type {
-  description "The types of instructions defined in OpenFlow Switch
-    Specification version 1.2.";
   type enumeration {
     enum apply-actions;
     enum clear-actions;
@@ -111,11 +109,11 @@ typedef instruction-type {
     enum write-metadata;
     enum goto-table;
   }
+  description "The types of instructions defined in OpenFlow Switch
+    Specification version 1.2.";
 }
 
 typedef match-field-type {
-  description "The types of match field defined in OpenFlow Switch
-    Specification version 1.2.";
   type enumeration {
     enum input-port;
     enum physical-input-port;
@@ -154,6 +152,8 @@ typedef match-field-type {
     enum mpls-label;
     enum mpls-tc;
   }
+  description "The types of match field defined in OpenFlow Switch
+    Specification version 1.2.";
 }
 
 typedef hex-binary {
@@ -254,7 +254,7 @@ grouping openflow-logical-switch-grouping {
     }
     leaf certificate {
       type leafref {
-        path "/capable-switch/resources/certificates/owned-certificate/resource-id";
+        path "/capable-switch/resources/owned-certificate/resource-id";
       }
       description "The reference to the owned certificate in 
         the OpenFlow Capable Switch that the OpenFlow Logical
@@ -629,19 +629,19 @@ grouping openflow-port-resource-grouping {
       uses openflow-port-base-tunnel-grouping;
       leaf checksum-present {
         type boolean;
-        description "Indicates presence of the GRE checksum.";
         default true;
+        description "Indicates presence of the GRE checksum.";
       }
       leaf key-present {
         type boolean;
-        description "Indicates presence of the GRE key.";
         default true;
+        description "Indicates presence of the GRE key.";
       }
       leaf sequence-number-present {
         type boolean;
+        default false;
         description "Indicates presence of the GRE sequence
           number.";
-        default false;
       }
     }
     container vxlan-tunnel {
@@ -649,8 +649,8 @@ grouping openflow-port-resource-grouping {
       uses openflow-port-base-tunnel-grouping;
       leaf vni-valid {
         type boolean;
-        description "tbd.";
         default true;
+        description "tbd.";
       }
       leaf vni {
         type uint32;
@@ -670,8 +670,8 @@ grouping openflow-port-resource-grouping {
       }
       leaf udp-checksum {
         type boolean;
-        description "tbd.";
         default false;
+        description "tbd.";
       }
     }
     container nvgre-tunnel {
