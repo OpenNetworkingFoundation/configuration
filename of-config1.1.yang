@@ -616,27 +616,6 @@ grouping openflow-port-resource-grouping {
         description "The MAC address of the remote tunnel endpoint.";
       }
     }
-    leaf tunnel-id {
-      type uint32;
-      description "The identifier of the tunnel used to distinguish 
-        between multiple tunnels of the same encapsulation  method,
-        with the same endpoints.";
-    }
-    leaf tos {
-      type uint8;
-      description "The value of the IPv4 TOS or IPv6 Traffic Class
-        of the encapsulating header. Values for this element are 
-        defined according to the definition of values for managed
-        object tunnelIfTOS in the TUNNEL-MIB, see RFC 4087.";
-    }
-    leaf hop-limit {
-      type uint8;
-      description "The IPv4 TTL or IPv6 Hop Limit used in an 
-        encapsulating IP header.  If MAC encapsulation is used, 
-        this element SHOULD be absent. A value of '0' indicates 
-        that the encapsulating header uses the value of the 
-        encapsulated header.";
-    }
   }
   choice tunnel-type {
     container tunnel {
