@@ -1035,22 +1035,19 @@ container capable-switch {
         OpenFlow Capable Switch.";
       uses openflow-queue-resource-grouping;
     }
-    container certificates {
-      description "Contains all external and owned certificates";
-      list owned-certificate {
-        key "resource-id";
-        unique "resource-id";
-        description "The list contains all owned certificate
-          resources of the OpenFlow Capable Switch.";
-        uses openflow-owned-certificate-grouping;
-      }
-      list external-certificate {
-        key "resource-id";
-        unique "resource-id";
-        description "The list contains all external certificate
-          resources of the OpenFlow Capable Switch.";
-        uses openflow-external-certificate-grouping;
-      }
+    list owned-certificate {
+      key "resource-id";
+      unique "resource-id";
+      description "The list contains all owned certificate
+        resources of the OpenFlow Capable Switch.";
+      uses openflow-owned-certificate-grouping;
+    }
+    list external-certificate {
+      key "resource-id";
+      unique "resource-id";
+      description "The list contains all external certificate
+        resources of the OpenFlow Capable Switch.";
+      uses openflow-external-certificate-grouping;
     }
     list flow-table {
       key "resource-id";
