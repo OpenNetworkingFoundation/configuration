@@ -637,6 +637,10 @@ grouping openflow-port-resource-grouping {
         default true;
         description "Indicates presence of the GRE key.";
       }
+      leaf key {
+        type uint32;
+        description "The (optional) key of the GRE tunnel.";
+      }
       leaf sequence-number-present {
         type boolean;
         default false;
@@ -650,28 +654,34 @@ grouping openflow-port-resource-grouping {
       leaf vni-valid {
         type boolean;
         default true;
-        description "tbd.";
+        description "Indicates how the corresponding flag should be
+          set in packets sent on the tunnel";
       }
       leaf vni {
         type uint32;
-        description "tbd.";
+        description "Virtual network identifier assigned to all
+          packets sent on the tunnel";
       }
       leaf vni-multicast-group {
         type inet:ip-address;
-        description "tbd.";
+        description "If IP multicast is used to support broadcast
+          on the tunnel this specifies the corresponding multicast
+          IP address";
       }
       leaf udp-source-port {
         type inet:port-number;
-        description "tbd.";
+        description "Specifies the outer UDP source port number.";
       }
       leaf udp-dest-port {
         type inet:port-number;
-        description "tbd.";
+        description "Specifies the outer UDP destination port
+          number, generally the well-known port number for VxLAN";
       }
       leaf udp-checksum {
         type boolean;
         default false;
-        description "tbd.";
+        description "Boolean flag to indicate whether or not the
+          outer UDP checksum should be set";
       }
     }
     container nvgre-tunnel {
@@ -679,15 +689,19 @@ grouping openflow-port-resource-grouping {
       uses openflow-port-base-tunnel-grouping;
       leaf tni {
         type uint32;
-        description "tbd.";
+        description "Specifies the tenant network identifier
+          assigned to all packets sent on the tunnel";
       }
       leaf tni-resv {
         type uint32;
-        description "tbd.";
+        description "Used to set the reserved user-defined bits of
+          the GRE key field";
       }
       leaf tni-multicast-group {
         type inet:ip-address;
-        description "tbd.";
+        description "If IP multicast is used to support broadcast
+          on the tunnel this specifies the corresponding multicast
+          IP address";
       }
     }
   }
@@ -926,7 +940,9 @@ grouping openflow-flow-table-resource-grouping {
     leaf-list table-id {
       type inet:uri;
     }
-    description "The array of flow table ids that can be directly reached from the present table using 'goto-table' instruction.";
+    description "The array of flow table ids that can be directly
+      reached from the present table using 'goto-table'
+      instruction.";
   }
   container instructions {
     leaf-list type {
@@ -959,13 +975,15 @@ grouping openflow-flow-table-resource-grouping {
     leaf-list type {
       type match-field-type;
     }
-    description "'set-field' action types supported by the table using 'write-actions' instruction.";
+    description "'set-field' action types supported by the table
+      using 'write-actions' instruction.";
   }
   container apply-setfields {
     leaf-list type {
       type match-field-type;
     }
-    description "'set-field' action types supported by the table using 'apply-actions' instruction.";
+    description "'set-field' action types supported by the table
+      using 'apply-actions' instruction.";
   }
   container wildcards {
     leaf-list type {
