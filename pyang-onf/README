@@ -1,0 +1,24 @@
+The original README file is available as README.pyang!
+
+Usage instruction for ONF Configuration Management:
+===================================================
+
+Make sure you have a Unix like environment. This version was tested
+on Linux and Cygwin. You need at least python 2.6 to get pyang to work.
+
+You need to enter the root directory of the pyang distribution and
+source the "env.sh" file with your shell to get the paths for python
+libraries right.
+
+After that you can change to the directory where your yang file is
+located. To create the schema just issue:
+
+pyang -f xsd --xsd-groups --xsd-no-any-augments file.yang > file.xsd
+
+Then you should get a valid XML schema for the current yang file.
+
+
+TODOs:
+------
+
+* Only top level groups are supported. Nested groups will follow.
