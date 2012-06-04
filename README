@@ -1,0 +1,13 @@
+ONF Configuration Management Specification:
+===========================================
+
+Here you will find anything you might need to build/create at least parts of
+specification.
+
+of-config.yang	This file contains the yang version of the config
+of-config.xsd	This file contains the XML schema version of the config
+pyang-onf/	This subdirectory contains the tool to auto create the 
+		XML schema from the yang code
+
+Further information on the auto creation tool can be found in the respective
+directory. Please consult the README there.
