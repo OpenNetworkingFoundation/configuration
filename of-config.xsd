@@ -226,18 +226,33 @@
       <xs:element name="resource-id"  type="inet:uri">
         <xs:annotation>
           <xs:documentation>
-            An unique but locally arbitrary identifier that
-            identifies a queue and is persistent across reboots of the
-            system.
+            A unique but locally arbitrary identifier that
+            uniquely identifies an OpenFlow Queue within the context  
+            of an OpenFlow Logical Switch.  It MUST be persistent across 
+            reboots of the OpenFlow Capable Switch.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="id"  type="xs:unsignedLong">
         <xs:annotation>
           <xs:documentation>
-            An unique but locally arbitrary number that
-            identifies a queue and is persistent across reboots of the
-            system.
+            This id identifies the OpenFlow Queue to 
+            OpenFlow Controllers. It is assigned to an OpenFlow Port 
+            lastest when the OpenFlow Port is associated with and OpenFlow
+            Logical Switch.  If the OpenFlow Port is associated with an 
+            OpenFlow Logical Switch, this element MUST be unique within 
+            the context of the OpenFlow Logical Switch.  
+                  
+            OpenFlow Capable Switch implementations may choose to assign
+            values to OpenFlow Queues that are unique within the context 
+            of the OpenFlow Logical Switch.  These id can be used 
+            independent of assignments to OpenFlow Logical Switches. 
+                  
+            Other implementytion may assign values to this element only
+            if the OpenFlow Port is assigned to an OpenFlow Logical 
+            Switch.  If no value is currently assigned to this element 
+            then this element MUST not be included in replies to 
+            get-config requests or get-status requests.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -246,6 +261,12 @@
           <xs:documentation>
             Reference to port resources in the Capable
             Switch.
+                  
+            This element associates an OpenFlow Queue with an OpenFlow 
+            Port. If the OpenFlow Queue is associated with an OpenFlow 
+            Logical Switch S and this element is non-empty, then it MUST 
+            be set to the value of element resource-id of an OpenFlow Port
+            which is associated with the OpenFlow Logical Switch S
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -307,9 +328,10 @@
       <xs:element name="resource-id"  type="inet:uri">
         <xs:annotation>
           <xs:documentation>
-            A unique but locally arbitrary identifier that 
-            identifies an external certificate and is persistent across
-            reboots of the system.
+            A unique but locally arbitrary identifier that
+            uniquely identifies an Owned Certificate within the context  
+            of an OpenFlow Logical Switch.  It MUST be persistent across 
+            reboots of the OpenFlow Capable Switch.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -324,7 +346,11 @@
       <xs:element name="private-key">
         <xs:annotation>
           <xs:documentation>
-            tbd.
+            This element contains the private key corresponding
+            to the certificate. The private key is encoded as specified in
+            XML-Signature Syntax and Processing 
+            (http://www.w3.org/TR/2001/PR-xmldsig-core-20010820/).  
+            Currently the specification only support DSA and RSA keys.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -591,21 +617,36 @@
         <xs:annotation>
           <xs:documentation>
             The transmission rate that is currently used.
+            The value MUST indicate a valid forwarding rate.  
+                  
+            The current Port Feature set MUST contain this element exactly 
+            once.  The other Port Feature sets MAY contain this element 
+            more than once.  If this element appears more than once in a 
+            Port Feature set than the value MUST be unique within the Port 
+            Feature set.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="auto-negotiate"  type="xs:boolean">
         <xs:annotation>
           <xs:documentation>
-            Specifies if auto-negotiation of transmission
-            parameters was used for the port.
+            Specifies the administrative state of the 
+            forwarding rate auto-negotiation protocol at this OpenFlow
+            Port.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="medium">
         <xs:annotation>
           <xs:documentation>
-            The transmission medium used by the port.
+            This element MUST indicate a valid physical medium
+            used by the OpenFlow Port.
+                  
+            The current Port Feature set MUST contain this element exactly 
+            once. The other Port Feature sets MAY contain this element 
+            more than once. If this element appears more than once in a 
+            Port Feature set than the value MUST be unique within the Port
+            Feature set.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -824,6 +865,10 @@
             when connecting to this OpenFlow Controller.  It is the source
             IP address of packets sent to this OpenFlow Controller.  If 
             present, this element overrides any default IP address.
+                
+            Attempts to set this element to a port number that cannot be
+            used by the OpenFlow Logical Switch will result in an error
+            message of type XXX.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -833,9 +878,12 @@
             The local TCP port number of the OpenFlow Logical 
             Switch when connecting to this OpenFlow Controller.  It is the 
             source TCP port number of packets sent to this OpenFlow 
-            Controller.  If this element has its defaqult value 0, then 
-            port number is chosen arbitrarily by the OpenFlow Logical 
-            Switch.
+            Controller.  If this element is not present, then the port 
+            number is chosen arbitrarily by the OpenFlow Logical Switch.
+                  
+            Attempts to set this element to an IP address that cannot be
+            used by the OpenFlow Logical Switch will result in an error
+            message of type XXX.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1116,9 +1164,10 @@
       <xs:element name="resource-id"  type="inet:uri">
         <xs:annotation>
           <xs:documentation>
-            A unique but locally arbitrary identifier that 
-            identifies an external certificate and is persistent across
-            reboots of the system.
+            A unique but locally arbitrary identifier that
+            uniquely identifies an External Certificate within the context  
+            of an OpenFlow Logical Switch.  It MUST be persistent across 
+            reboots of the OpenFlow Capable Switch.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1326,12 +1375,12 @@
   <xs:group name="openflow-port-resource-grouping">
     <xs:annotation>
       <xs:documentation>
-        This grouping specifies all properties of an OpenFlow
-        resource of type OpenFlow Port. It represent a physical port or a 
-        logical port of the OpenFlow Capable Switch and can be assigned
-        for exclusive use to an OpenFlow Logical Switch. A logical port 
-        represents a tunnel endpoint as described in the OpenFlow protocol
-        specification versions 1.3 - 1.3.1.
+        This element specifies all properties of an OpenFlow
+        resource of type OpenFlow Port. It represent a physical port or 
+        a logical port of the OpenFlow Capable Switch and can be 
+        assigned for exclusive use to an OpenFlow Logical Switch.  A 
+        logical port represents a tunnel endpoint as described in the 
+        OpenFlow protocol specification versions 1.3 - 1.3.1.
       </xs:documentation>
     </xs:annotation>
 
@@ -1354,18 +1403,39 @@
             lastest when the OpenFlow Port is associated with and OpenFlow
             Logical Switch.  If the OpenFlow Port is associated with an 
             OpenFlow Logical Switch, this element MUST be unique within 
-            the context of the OpenFlow Logical Switch.  If no value is 
-            currently assigned to this element then this element MUST
-            not be included in replies to get-config requests or 
-            get-status requests.
+            the context of the OpenFlow Logical Switch.  
+                  
+            OpenFlow Capable Switch implementations may choose to assign
+            values to OpenFlow Ports that are unique within the context of 
+            the OpenFlow Logical Switch.  These numbers can be used 
+            independent of assignments to OpenFlow Logical Switches. 
+                  
+            Other implementytion may assign values to this element only
+            if the OpenFlow Port is assigned to an OpenFlow Logical 
+            Switch.  If no value is currently assigned to this element 
+            then this element MUST not be included in replies to 
+            get-config requests or get-status requests.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="name">
         <xs:annotation>
           <xs:documentation>
-            Textual port name to ease identification of the port
-            at the switch.
+            This element assists OpenFlow Controllers in 
+            identifying OpenFlow Ports.  
+                  
+            This element is not to be set by the OP-CONFIG protocol, but 
+            it is set by the switch implementation.  It may be set at 
+            start-up time of an OpenFlow Capable Switch or when the 
+            OpenFlow Port is assigned to an OpenFlow Logical Switch.  It 
+            MAY also be not set at all.  If this element is set to a value
+            other than the empty string when being assigned to an OpenFlow
+            Logical Switch, then the value of this element MUST be unique
+            within the context of the OpenFlow Logical Switch.  
+                  
+            If no value or the empty string is currently assigned to this
+            element then this element MUST not be included in replies to 
+            get-config requests or get-status requests.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -1378,50 +1448,65 @@
       <xs:element name="current-rate"  type="xs:unsignedInt">
         <xs:annotation>
           <xs:documentation>
-            The current rate in kilobit/second if the current
-            rate selector has value 'other'.
+            This element indicates the current bit rate of 
+            the port. Its values is to be provided in units of kilobit 
+            per second (kbps). This element is only valid if the 
+            element called 'rate' in the current Port Features has a 
+            value of 'other'.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="max-rate"  type="xs:unsignedInt">
         <xs:annotation>
           <xs:documentation>
-            The maximum rate in kilobit/second if the current
-            rate selector has value 'other'.
+            This element indicates the maximum bit rate of 
+            the port. Its values is to be provided in units of kilobit 
+            per second (kbps). This element is only valid if the 
+            element called 'rate' in the current Port Features has a 
+            value of 'other'.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="configuration">
+        <xs:annotation>
+          <xs:documentation>
+            This element represents the general adminitrative 
+            configuration of the OpenFlow Port.
+          </xs:documentation>
+        </xs:annotation>
         <xs:complexType>
           <xs:sequence>
             <xs:element name="admin-state" minOccurs="0"  type="up-down-state-type">
               <xs:annotation>
                 <xs:documentation>
-                  The administrative state of the port.
+                  The administrative state of the port.  If true,
+                  the port has been administratively brought down and SHOULD 
+                  not be used by OpenFlow.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
             <xs:element name="no-receive" minOccurs="0"  type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
-                  Specifies if receiving packets is not enabled on
-                  the port.
+                  If true, packets received at this OpenFlow port 
+                  SHOULD be dropped.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
             <xs:element name="no-forward" minOccurs="0"  type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
-                  Specifies if forwarding packets is not enabled
-                  on that port.
+                  If true, packets forwarded to this OpenFlow Port
+                  SHOULD be dropped.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
             <xs:element name="no-packet-in" minOccurs="0"  type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
-                  Specifies if sending packet-in messages for
-                  coming packets is not enabled on that port.
+                  If true, packets received on that port that 
+                  generate a table miss should never trigger a packet-in 
+                  message to the OpenFlow Controller.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -1429,26 +1514,38 @@
         </xs:complexType>
       </xs:element>
       <xs:element name="state">
+        <xs:annotation>
+          <xs:documentation>
+            This element represents the general operational 
+            state of the OpenFlow Port.
+          </xs:documentation>
+        </xs:annotation>
         <xs:complexType>
           <xs:sequence>
             <xs:element name="oper-state"  type="up-down-state-type">
               <xs:annotation>
                 <xs:documentation>
-                  The operational state of the port.
+                  If the value of this element is 'down', it 
+                  indicates that there is no physical link present.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
             <xs:element name="blocked"  type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
-                  tbd
+                  If the value of this element is 'true', it 
+                  indicates that a switch protocol outside of OpenFlow, such 
+                  as 802.1D Spanning Tree, is preventing the use of this
+                  OpenFlow port for OpenFlow flooding.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
             <xs:element name="live"  type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
-                  tbd
+                  If the value of this element is 'true', it 
+                  indicates that this OpenFlow Port is live and can be used 
+                  for fast failover.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -1461,7 +1558,7 @@
             <xs:element name="current" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
-                  The features (rates, duplex, etc.) of the port
+                  The features (rates, duplex, etc.) of the port,
                   that are currently in use.
                 </xs:documentation>
               </xs:annotation>
@@ -1474,7 +1571,7 @@
             <xs:element name="advertised" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
-                  The features (rates, duplex, etc.) of the port
+                  The features (rates, duplex, etc.) of the port,
                   that are advertised to the peer port.
                 </xs:documentation>
               </xs:annotation>
@@ -1487,7 +1584,7 @@
             <xs:element name="supported" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
-                  The features (rates, duplex, etc.) of the port
+                  The features (rates, duplex, etc.) of the port,
                   that are supported on the port.
                 </xs:documentation>
               </xs:annotation>
@@ -1514,12 +1611,17 @@
         </xs:complexType>
       </xs:element>
       <xs:choice>
+        <xs:annotation>
+          <xs:documentation>
+            Tunnels are modeld as logical ports.
+          </xs:documentation>
+        </xs:annotation>
+
         <xs:sequence>
           <xs:element name="tunnel">
             <xs:annotation>
               <xs:documentation>
-                Features of a basic IP-in-GRE tunnel. Tunnels
-                are modeld as logical ports.
+                Properties of a basic IP-in-GRE tunnel.
               </xs:documentation>
             </xs:annotation>
             <xs:complexType>
@@ -1594,7 +1696,7 @@
           <xs:element name="ipgre-tunnel">
             <xs:annotation>
               <xs:documentation>
-                Features of a IP-in-GRE tunnel with key,
+                Properties of a IP-in-GRE tunnel with key,
                 checksum, and sequence number information.
               </xs:documentation>
             </xs:annotation>
@@ -1679,7 +1781,9 @@
                 <xs:element name="key" minOccurs="0"  type="xs:unsignedInt">
                   <xs:annotation>
                     <xs:documentation>
-                      The (optional) key of the GRE tunnel.
+                      The (optional) key of the GRE tunnel.  It MAY
+                      be used to set the OXM_OF_TUNNEL_ID match field metadata 
+                      in the OpenFlow protocol
                     </xs:documentation>
                   </xs:annotation>
                 </xs:element>
@@ -1699,7 +1803,7 @@
           <xs:element name="vxlan-tunnel">
             <xs:annotation>
               <xs:documentation>
-                Features of a VxLAN tunnel.
+                Properties of a VxLAN tunnel.
               </xs:documentation>
             </xs:annotation>
             <xs:complexType>
@@ -1770,7 +1874,7 @@
                   <xs:annotation>
                     <xs:documentation>
                       Indicates how the corresponding flag should be
-                      set in packets sent on the tunnel
+                      set in packets sent on the tunnel.
                     </xs:documentation>
                   </xs:annotation>
                 </xs:element>
@@ -1778,7 +1882,9 @@
                   <xs:annotation>
                     <xs:documentation>
                       Virtual network identifier assigned to all
-                      packets sent on the tunnel
+                      packets sent on the tunnel.  A VxLAN  implementation MAY 
+                      use the this element to set the OXM_OF_TUNNEL_ID match 
+                      field metadata in the OpenFlow protocol.
                     </xs:documentation>
                   </xs:annotation>
                 </xs:element>
@@ -1795,6 +1901,8 @@
                   <xs:annotation>
                     <xs:documentation>
                       Specifies the outer UDP source port number.
+                      If this element is absent, the port number MAY be chosen 
+                      dynamically.
                     </xs:documentation>
                   </xs:annotation>
                 </xs:element>
@@ -1802,7 +1910,10 @@
                   <xs:annotation>
                     <xs:documentation>
                       Specifies the outer UDP destination port
-                      number, generally the well-known port number for VxLAN
+                      number.  It is intended to reserve a port number for
+                      VxLAN at IANA.  As soon as this has been reserved, the
+                      reserved number SHOULD become the default value for this
+                      element.
                     </xs:documentation>
                   </xs:annotation>
                 </xs:element>
@@ -1822,7 +1933,7 @@
           <xs:element name="nvgre-tunnel">
             <xs:annotation>
               <xs:documentation>
-                Features of a NVGRE tunnel.
+                Properties of a NVGRE tunnel.
               </xs:documentation>
             </xs:annotation>
             <xs:complexType>
@@ -1909,8 +2020,8 @@
                   <xs:annotation>
                     <xs:documentation>
                       If IP multicast is used to support broadcast
-                      on the tunnel this specifies the corresponding multicast
-                      IP address
+                      on the tunnel this element specifies the corresponding 
+                      multicast IP address
                     </xs:documentation>
                   </xs:annotation>
                 </xs:element>
