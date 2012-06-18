@@ -36,7 +36,32 @@
   </xs:annotation>
 
   <!-- YANG typedefs -->
-  <xs:simpleType name="openflow-version">
+  <xs:simpleType name="OFConfigId">
+    <xs:annotation>
+      <xs:documentation>
+        Generic type of an identifier in OF-CONFIG
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:restriction base="inet:uri">
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="OFConfigurationPointProtocolType">
+    <xs:annotation>
+      <xs:documentation>
+        Possible protocols to connect ot an OF
+        Configuration Point
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ssh"/>
+      <xs:enumeration value="soap"/>
+      <xs:enumeration value="tls"/>
+      <xs:enumeration value="beep"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="OFOpenFlowVersionType">
     <xs:annotation>
       <xs:documentation>
         This enumeration contains the all OpenFlow versions
@@ -50,6 +75,9 @@
       <xs:enumeration value="1.0.1"/>
       <xs:enumeration value="1.1"/>
       <xs:enumeration value="1.1.1"/>
+      <xs:enumeration value="1.2"/>
+      <xs:enumeration value="1.3"/>
+      <xs:enumeration value="1.3.1"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="datapath-id-type">
@@ -64,7 +92,7 @@
     <xs:pattern value="[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){7}"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="tenth-of-a-percent">
+  <xs:simpleType name="OFTenthOfAPercentType">
     <xs:annotation>
       <xs:documentation>
         This type defines a value in tenth of a percent.
@@ -76,7 +104,7 @@
       <xs:maxInclusive value="1000"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="up-down-state-type">
+  <xs:simpleType name="OFUpDownStateType">
     <xs:annotation>
       <xs:documentation>
         Type to specify state information for a port or a
@@ -89,13 +117,13 @@
       <xs:enumeration value="down"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="rate-type">
+  <xs:simpleType name="OFPortRateType">
     <xs:annotation>
       <xs:documentation>
         Type to specify the rate of a port including the
         duplex transmission feature. Possible rates are 10Mb, 100Mb,
         1Gb, 10Gb, 40Gb, 100Gb, 1Tb or other. Rates of 10Mb, 100Mb and
-        1Gb can support half or full duplex transmission.
+        1 Gb can support half or full duplex transmission.
       </xs:documentation>
     </xs:annotation>
 
@@ -113,7 +141,7 @@
       <xs:enumeration value="other"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="action-type">
+  <xs:simpleType name="OFActionType">
     <xs:annotation>
       <xs:documentation>
         The types of actions defined in OpenFlow Switch
@@ -123,7 +151,7 @@
 
     <xs:restriction base="xs:string">
       <xs:enumeration value="output"/>
-      <xs:enumeration value="acopy-ttl-out"/>
+      <xs:enumeration value="copy-ttl-out"/>
       <xs:enumeration value="copy-ttl-in"/>
       <xs:enumeration value="set-mpls-ttl"/>
       <xs:enumeration value="dec-mpls-ttl"/>
@@ -138,7 +166,7 @@
       <xs:enumeration value="set-field"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="instruction-type">
+  <xs:simpleType name="OFInstructionType">
     <xs:annotation>
       <xs:documentation>
         The types of instructions defined in OpenFlow Switch
@@ -154,7 +182,7 @@
       <xs:enumeration value="goto-table"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="match-field-type">
+  <xs:simpleType name="OFMatchFieldType">
     <xs:annotation>
       <xs:documentation>
         The types of match field defined in OpenFlow Switch
@@ -214,7 +242,301 @@
 
   <!-- YANG groupings -->
 
-  <xs:group name="openflow-queue-resource-grouping">
+  <xs:group name="OFPortCurrentFeatureListType">
+    <xs:annotation>
+      <xs:documentation>
+        The current features of a port.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:element name="rate"  type="OFPortRateType">
+        <xs:annotation>
+          <xs:documentation>
+            The transmission rate that is currently used.
+            The value MUST indicate a valid forwarding rate.  
+                  
+            The current Port Feature set MUST contain this element exactly 
+            once.  The other Port Feature sets MAY contain this element 
+            more than once.  If this element appears more than once in a 
+            Port Feature set than the value MUST be unique within the Port 
+            Feature set.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="auto-negotiate"  type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies the administrative state of the 
+            forwarding rate auto-negotiation protocol at this OpenFlow
+            Port.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="medium">
+        <xs:annotation>
+          <xs:documentation>
+            This element MUST indicate a valid physical medium
+            used by the OpenFlow Port.
+                  
+            The current Port Feature set MUST contain this element exactly 
+            once. The other Port Feature sets MAY contain this element 
+            more than once. If this element appears more than once in a 
+            Port Feature set than the value MUST be unique within the Port
+            Feature set.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="copper"/>
+            <xs:enumeration value="fiber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="pause">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies if pausing of transmission is supported
+            at all and if yes if it is asymmetric or symmetric.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="unsupported"/>
+            <xs:enumeration value="symmetric"/>
+            <xs:enumeration value="asymmetric"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFPortOtherFeatureListType">
+    <xs:annotation>
+      <xs:documentation>
+        The features of a port that are supported or
+        advertised.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:element name="rate"  type="OFPortRateType">
+        <xs:annotation>
+          <xs:documentation>
+            The transmission rate that is supported or
+            advertised. Multiple transmissions rates are allowed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="auto-negotiate"  type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies if auto-negotiation of transmission
+            parameters is enabled for the port.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="medium">
+        <xs:annotation>
+          <xs:documentation>
+            The transmission medium used by the port. Multiple
+            media are allowed.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="copper"/>
+            <xs:enumeration value="fiber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="pause">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies if pausing of transmission is supported
+            at all and if yes if it is asymmetric or symmetric.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="unsupported"/>
+            <xs:enumeration value="symmetric"/>
+            <xs:enumeration value="asymmetric"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="DSAKeyValueType">
+    <xs:sequence>
+      <xs:element name="P"  type="xs:base64Binary"/>
+      <xs:element name="Q"  type="xs:base64Binary"/>
+      <xs:element name="J"  type="xs:base64Binary"/>
+      <xs:element name="G"  type="xs:base64Binary"/>
+      <xs:element name="Y"  type="xs:base64Binary"/>
+      <xs:element name="Seed"  type="xs:base64Binary"/>
+      <xs:element name="PgenCounter"  type="xs:base64Binary"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFPortBaseTunnelType">
+    <xs:annotation>
+      <xs:documentation>
+        A group of common elements that are included
+        in every supported tunnel type.  Tunnels are modeled as 
+        logical ports.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element name="local-endpoint-ipv4-adress"  type="inet:ipv4-address">
+            <xs:annotation>
+              <xs:documentation>
+                The IPv4 address of the local tunnel
+                endpoint.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="local-endpoint-ipv6-adress"  type="inet:ipv6-address">
+            <xs:annotation>
+              <xs:documentation>
+                The IPv6 address of the local tunnel
+                endpoint.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="local-endpoint-mac-adress"  type="yang:mac-address">
+            <xs:annotation>
+              <xs:documentation>
+                The MAC address of the local tunnel endpoint.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:choice>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element name="remote-endpoint-ipv4-adress"  type="inet:ipv4-address">
+            <xs:annotation>
+              <xs:documentation>
+                The IPv4 address of the remote tunnel
+                endpoint.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="remote-endpoint-ipv6-adress"  type="inet:ipv6-address">
+            <xs:annotation>
+              <xs:documentation>
+                The IPv6 address of the remote tunnel
+                endpoint.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="remote-endpoint-mac-adress"  type="yang:mac-address">
+            <xs:annotation>
+              <xs:documentation>
+                The MAC address of the remote tunnel endpoint.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFPortIPGRETunnelType">
+    <xs:annotation>
+      <xs:documentation>
+        Properties of a IP-in-GRE tunnel with key,
+        checksum, and sequence number information.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:group ref="OFPortBaseTunnelType"/>
+      <xs:element name="checksum-present"  type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates presence of the GRE checksum.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="key-present"  type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates presence of the GRE key.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="key"  type="xs:unsignedInt">
+        <xs:annotation>
+          <xs:documentation>
+            The (optional) key of the GRE tunnel.  It MAY
+            be used to set the OXM_OF_TUNNEL_ID match field metadata 
+            in the OpenFlow protocol
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sequence-number-present"  type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates presence of the GRE sequence
+            number.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFPortNVGRETunnelType">
+    <xs:annotation>
+      <xs:documentation>
+        Properties of a NVGRE tunnel.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:group ref="OFPortBaseTunnelType"/>
+      <xs:element name="tni"  type="xs:unsignedInt">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies the tenant network identifier
+            assigned to all packets sent on the tunnel
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="tni-resv"  type="xs:unsignedInt">
+        <xs:annotation>
+          <xs:documentation>
+            Used to set the reserved user-defined bits of
+            the GRE key field
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="tni-multicast-group"  type="inet:ip-address">
+        <xs:annotation>
+          <xs:documentation>
+            If IP multicast is used to support broadcast
+            on the tunnel this element specifies the corresponding 
+            multicast IP address
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFQueueType">
     <xs:annotation>
       <xs:documentation>
         This grouping specifies all properties of a queue
@@ -223,23 +545,14 @@
     </xs:annotation>
 
     <xs:sequence>
-      <xs:element name="resource-id"  type="inet:uri">
-        <xs:annotation>
-          <xs:documentation>
-            A unique but locally arbitrary identifier that
-            uniquely identifies an OpenFlow Queue within the context  
-            of an OpenFlow Logical Switch.  It MUST be persistent across 
-            reboots of the OpenFlow Capable Switch.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
+      <xs:group ref="OFResourceType"/>
       <xs:element name="id"  type="xs:unsignedLong">
         <xs:annotation>
           <xs:documentation>
             This id identifies the OpenFlow Queue to 
-            OpenFlow Controllers. It is assigned to an OpenFlow Port 
-            lastest when the OpenFlow Port is associated with and OpenFlow
-            Logical Switch.  If the OpenFlow Port is associated with an 
+            OpenFlow Controllers. It is assigned to an OpenFlow Queue 
+            latest when the OpenFlow Queue is associated with and OpenFlow
+            Logical Switch.  If the OpenFlow Queue is associated with an 
             OpenFlow Logical Switch, this element MUST be unique within 
             the context of the OpenFlow Logical Switch.  
                   
@@ -249,7 +562,7 @@
             independent of assignments to OpenFlow Logical Switches. 
                   
             Other implementytion may assign values to this element only
-            if the OpenFlow Port is assigned to an OpenFlow Logical 
+            if the OpenFlow Queue is assigned to an OpenFlow Logical 
             Switch.  If no value is currently assigned to this element 
             then this element MUST not be included in replies to 
             get-config requests or get-status requests.
@@ -282,7 +595,7 @@
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="min-rate" minOccurs="0"  type="tenth-of-a-percent">
+            <xs:element name="min-rate" minOccurs="0"  type="OFTenthOfAPercentType">
               <xs:annotation>
                 <xs:documentation>
                   The minimal rate that is reserved for this queue
@@ -291,7 +604,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="max-rate" minOccurs="0"  type="tenth-of-a-percent">
+            <xs:element name="max-rate" minOccurs="0"  type="OFTenthOfAPercentType">
               <xs:annotation>
                 <xs:documentation>
                   The maximum rate that is reserved for this queue
@@ -314,7 +627,7 @@
     </xs:sequence>
   </xs:group>
 
-  <xs:group name="openflow-owned-certificate-grouping">
+  <xs:group name="OFOwnedCertificateType">
     <xs:annotation>
       <xs:documentation>
         This grouping specifies a certificate and a private
@@ -325,16 +638,7 @@
     </xs:annotation>
 
     <xs:sequence>
-      <xs:element name="resource-id"  type="inet:uri">
-        <xs:annotation>
-          <xs:documentation>
-            A unique but locally arbitrary identifier that
-            uniquely identifies an Owned Certificate within the context  
-            of an OpenFlow Logical Switch.  It MUST be persistent across 
-            reboots of the OpenFlow Capable Switch.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
+      <xs:group ref="OFResourceType"/>
       <xs:element name="certificate"  type="xs:string">
         <xs:annotation>
           <xs:documentation>
@@ -362,7 +666,231 @@
     </xs:sequence>
   </xs:group>
 
-  <xs:group name="openflow-logical-switch-grouping">
+  <xs:group name="OFExternalCertificateType">
+    <xs:annotation>
+      <xs:documentation>
+        This grouping specifies a certificate that can be
+        used by an OpenFlow Logical Switch for authenticating a 
+        controller when a TLS connection is established.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:group ref="OFResourceType"/>
+      <xs:element name="certificate"  type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            An X.509 certificate in DER format base64
+            encoded.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFConfigurationPointType">
+    <xs:annotation>
+      <xs:documentation>
+        Representation of an OpenFlow Configuration Point.
+        Instances of the Configuration Point class SHOULD be stored 
+        persistently across reboots of the OpenFlow Capable Switch.
+            
+        When a connection is established between an OpenFlow Capable 
+        Switch and a Configuration Point the switch  must store the 
+        connection information in an instance of the Configuration 
+        Point class. If such an instance does not exist, the OpenFlow 
+        Capable Switch MUST create an instance where it then stores 
+        the connection information.
+            
+        An OpenFlow Capable Switch that cannot initiate a connection 
+        to a configuration point does not have to implement the 
+        Configuration Point class. It SHOULD block attempts to write to 
+        instances of the Configuration Point class with NETCONF 
+        &lt;edit-config&gt; operations.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:element name="id"  type="OFConfigId">
+        <xs:annotation>
+          <xs:documentation>
+            A unique but locally arbitrary identifier that
+            identifies a Configuration Point within the context of an 
+            OpenFlow Capable Switch.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="uri"  type="inet:uri">
+        <xs:annotation>
+          <xs:documentation>
+            A locator of the Configuration Point.  It 
+            identifies the location of the Configuration Point as a 
+            service resource and MUST include all information necessary 
+            for the OpenFlow Capable Switch to connect to the 
+            Configuration Point or re-connect to it should it become 
+            disconnected.  Such information MAY include, for example, 
+            protocol, fully qualified domain name, IP address, port 
+            number, etc.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="protocol"  type="OFConfigurationPointProtocolType">
+        <xs:annotation>
+          <xs:documentation>
+            The transport protocol that the Configuration
+            Point uses when communicating via NETCONF with the OpenFlow 
+            Capable Switch.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="RSAKeyValueType">
+    <xs:sequence>
+      <xs:element name="Modulus"  type="xs:base64Binary"/>
+      <xs:element name="Exponent"  type="xs:base64Binary"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFFlowTableType">
+    <xs:annotation>
+      <xs:documentation>
+        Representation of an OpenFlow Flow Table Resource.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:group ref="OFResourceType"/>
+      <xs:element name="max-entries"  type="xs:unsignedByte">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum number of flow entries supported by
+            the flow table.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="next-tables">
+        <xs:annotation>
+          <xs:documentation>
+            The array of flow table ids that can be directly
+            reached from the present table using 'goto-table'
+            instruction.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="table-id" minOccurs="0" maxOccurs="unbounded"  type="inet:uri"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="instructions">
+        <xs:annotation>
+          <xs:documentation>
+            The instruction types supported by the flow
+            table.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFInstructionType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="matches">
+        <xs:annotation>
+          <xs:documentation>
+            The match types supported by the flow table.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFMatchFieldType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="write-actions">
+        <xs:annotation>
+          <xs:documentation>
+            The write action types supported by the flow
+            table.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFActionType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="apply-actions">
+        <xs:annotation>
+          <xs:documentation>
+            The apply action types supported by the flow
+            table.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFActionType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="write-setfields">
+        <xs:annotation>
+          <xs:documentation>
+            'set-field' action types supported by the table
+            using 'write-actions' instruction.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFMatchFieldType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="apply-setfields">
+        <xs:annotation>
+          <xs:documentation>
+            'set-field' action types supported by the table
+            using 'apply-actions' instruction.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFMatchFieldType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="wildcards">
+        <xs:annotation>
+          <xs:documentation>
+            The fields for which the table supports wildcarding.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFMatchFieldType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="metadata-match"  type="hex-binary">
+        <xs:annotation>
+          <xs:documentation>
+            The bits of metadata the flow table can match.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="metadata-write"  type="hex-binary">
+        <xs:annotation>
+          <xs:documentation>
+            The bits of metadata the flow table can write.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFLogicalSwitchType">
     <xs:annotation>
       <xs:documentation>
         This grouping specifies all properties of an
@@ -371,7 +899,7 @@
     </xs:annotation>
 
     <xs:sequence>
-      <xs:element name="id"  type="inet:uri">
+      <xs:element name="id"  type="OFConfigId">
         <xs:annotation>
           <xs:documentation>
             A unique but locally arbitrary identifier that
@@ -391,7 +919,7 @@
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
-            <xs:group ref="openflow-logical-switch-capabilities-grouping"/>
+            <xs:group ref="OFLogicalSwitchCapabilitiesType"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -405,7 +933,7 @@
             be formatted as a sequence of 10 2-digit hexadecimal numbers 
             that are separated by colons, for example, 
             '01:23:45:67:89:ab:cd:ef:01:23#.  When processing a datapath
-            identifier, the case of the hexadecimal digits MUST be 
+            identifier, the case of the decimal digits MUST be 
             ignored.
           </xs:documentation>
         </xs:annotation>
@@ -492,16 +1020,16 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:sequence>
-                  <xs:group ref="openflow-controller-grouping"/>
+                  <xs:group ref="OFControllerType"/>
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
           </xs:sequence>
         </xs:complexType>
-        <xs:unique name="unique_controllers_controller_0">
+        <xs:key name="key_controllers_controller">
           <xs:selector xpath="of11-config:controller"/>
           <xs:field xpath="of11-config:id"/>
-        </xs:unique>
+        </xs:key>
       </xs:element>
       <xs:element name="resources">
         <xs:annotation>
@@ -593,539 +1121,6 @@
     </xs:sequence>
   </xs:group>
 
-  <xs:group name="DSAKeyValueType">
-    <xs:sequence>
-      <xs:element name="P"  type="xs:base64Binary"/>
-      <xs:element name="Q"  type="xs:base64Binary"/>
-      <xs:element name="J"  type="xs:base64Binary"/>
-      <xs:element name="G"  type="xs:base64Binary"/>
-      <xs:element name="Y"  type="xs:base64Binary"/>
-      <xs:element name="Seed"  type="xs:base64Binary"/>
-      <xs:element name="PgenCounter"  type="xs:base64Binary"/>
-    </xs:sequence>
-  </xs:group>
-
-  <xs:group name="openflow-port-current-features-grouping">
-    <xs:annotation>
-      <xs:documentation>
-        The current features of a port.
-      </xs:documentation>
-    </xs:annotation>
-
-    <xs:sequence>
-      <xs:element name="rate"  type="rate-type">
-        <xs:annotation>
-          <xs:documentation>
-            The transmission rate that is currently used.
-            The value MUST indicate a valid forwarding rate.  
-                  
-            The current Port Feature set MUST contain this element exactly 
-            once.  The other Port Feature sets MAY contain this element 
-            more than once.  If this element appears more than once in a 
-            Port Feature set than the value MUST be unique within the Port 
-            Feature set.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="auto-negotiate"  type="xs:boolean">
-        <xs:annotation>
-          <xs:documentation>
-            Specifies the administrative state of the 
-            forwarding rate auto-negotiation protocol at this OpenFlow
-            Port.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="medium">
-        <xs:annotation>
-          <xs:documentation>
-            This element MUST indicate a valid physical medium
-            used by the OpenFlow Port.
-                  
-            The current Port Feature set MUST contain this element exactly 
-            once. The other Port Feature sets MAY contain this element 
-            more than once. If this element appears more than once in a 
-            Port Feature set than the value MUST be unique within the Port
-            Feature set.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="copper"/>
-            <xs:enumeration value="fiber"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="pause">
-        <xs:annotation>
-          <xs:documentation>
-            Specifies if pausing of transmission is supported
-            at all and if yes if it is asymmetric or symmetric.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="unsupported"/>
-            <xs:enumeration value="symmetric"/>
-            <xs:enumeration value="asymmetric"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-
-  <xs:group name="openflow-port-other-features-grouping">
-    <xs:annotation>
-      <xs:documentation>
-        The features of a port that are supported or
-        advertised.
-      </xs:documentation>
-    </xs:annotation>
-
-    <xs:sequence>
-      <xs:element name="rate"  type="rate-type">
-        <xs:annotation>
-          <xs:documentation>
-            The transmission rate that is supported or
-            advertised. Multiple transmissions rates are allowed.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="auto-negotiate"  type="xs:boolean">
-        <xs:annotation>
-          <xs:documentation>
-            Specifies if auto-negotiation of transmission
-            parameters is enabled for the port.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="medium">
-        <xs:annotation>
-          <xs:documentation>
-            The transmission medium used by the port. Multiple
-            media are allowed.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="copper"/>
-            <xs:enumeration value="fiber"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="pause">
-        <xs:annotation>
-          <xs:documentation>
-            Specifies if pausing of transmission is supported
-            at all and if yes if it is asymmetric or symmetric.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="unsupported"/>
-            <xs:enumeration value="symmetric"/>
-            <xs:enumeration value="asymmetric"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-
-  <xs:group name="openflow-configuration-point-grouping">
-    <xs:annotation>
-      <xs:documentation>
-        Representation of an OpenFlow Configuration Point.
-        Instances of the Configuration Point class SHOULD be stored 
-        persistently across reboots of the OpenFlow Capable Switch.
-            
-        When a connection is established between an OpenFlow Capable 
-        Switch and a Configuration Point the switch  must store the 
-        connection information in an instance of the Configuration 
-        Point class. If such an instance does not exist, the OpenFlow 
-        Capable Switch MUST create an instance where it then stores 
-        the connection information.
-            
-        An OpenFlow Capable Switch that cannot initiate a connection 
-        to a configuration point does not have to implement the 
-        Configuration Point class. It SHOULD block attempts to write to 
-        instances of the Configuration Point class with NETCONF 
-        &lt;edit-config&gt; operations.
-      </xs:documentation>
-    </xs:annotation>
-
-    <xs:sequence>
-      <xs:element name="id"  type="inet:uri">
-        <xs:annotation>
-          <xs:documentation>
-            A unique but locally arbitrary identifier that
-            identifies a Configuration Point within the context of an 
-            OpenFlow Capable Switch.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="uri"  type="inet:uri">
-        <xs:annotation>
-          <xs:documentation>
-            A locator of the Configuration Point.  It 
-            identifies the location of the Configuration Point as a 
-            service resource and MUST include all information necessary 
-            for the OpenFlow Capable Switch to connect to the 
-            Configuration Point or re-connect to it should it become 
-            disconnected.  Such information MAY include, for example, 
-            protocol, fully qualified domain name, IP address, port 
-            number, etc.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="protocol">
-        <xs:annotation>
-          <xs:documentation>
-            The transport protocol that the Configuration
-            Point uses when communicating via NETCONF with the OpenFlow 
-            Capable Switch.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="ssh"/>
-            <xs:enumeration value="soap"/>
-            <xs:enumeration value="tls"/>
-            <xs:enumeration value="beep"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-
-  <xs:group name="openflow-controller-grouping">
-    <xs:annotation>
-      <xs:documentation>
-        This grouping specifies all properties of an
-        OpenFlow Logical Switch Controller.
-      </xs:documentation>
-    </xs:annotation>
-
-    <xs:sequence>
-      <xs:element name="id"  type="inet:uri">
-        <xs:annotation>
-          <xs:documentation>
-            A unique but locally arbitrary identifier that
-            uniquely identifies an OpenFlow Controller within the context  
-            of an OpenFlow Capable Switch.  It MUST be persistent across 
-            reboots of the OpenFlow Capable Switch.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="role">
-        <xs:annotation>
-          <xs:documentation>
-            This element indicates the role of the OpenFlow 
-            Controller.  Semantics of these roles are specified in the 
-            OpenFlow specifications 1.0 - 1.3.1.  It is RECOMMENDED that 
-            the roles of controllers are not configured by OF-CONFIG 
-            1.1.1 but determined using the OpenFlow protocol.  OpenFlow
-            Controllers configured by OF-CONFIG 1.1.1 have the default 
-            role 'equal'.  A role other than 'equal' MAY be assigned to a 
-            controller.  Roles 'slave' and 'equal' MAY be assigned to 
-            multiple controllers.  Role 'master' MUST NOT be assigned to 
-            more than one controller.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="master"/>
-            <xs:enumeration value="slave"/>
-            <xs:enumeration value="equal"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="ip-address"  type="inet:ip-address">
-        <xs:annotation>
-          <xs:documentation>
-            The IP address of the OpenFlow Controller.  This IP 
-            address is used by the OpenFlow Logical Switch when connecting
-            to the OpenFlow Controller.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="port"  type="inet:port-number">
-        <xs:annotation>
-          <xs:documentation>
-            The TCP port number at the OpenFlow Controller.  
-            This port number is used by the OpenFlow Logical Switch when 
-            connecting to the OpenFlow Controller using TCP or TLS.  The 
-            default value is 6633.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="local-ip-address"  type="inet:ip-address">
-        <xs:annotation>
-          <xs:documentation>
-            The local IP address of the OpenFlow Logical Switch
-            when connecting to this OpenFlow Controller.  It is the source
-            IP address of packets sent to this OpenFlow Controller.  If 
-            present, this element overrides any default IP address.
-                
-            Attempts to set this element to a port number that cannot be
-            used by the OpenFlow Logical Switch will result in an error
-            message of type XXX.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="local-port"  type="inet:port-number">
-        <xs:annotation>
-          <xs:documentation>
-            The local TCP port number of the OpenFlow Logical 
-            Switch when connecting to this OpenFlow Controller.  It is the 
-            source TCP port number of packets sent to this OpenFlow 
-            Controller.  If this element is not present, then the port 
-            number is chosen arbitrarily by the OpenFlow Logical Switch.
-                  
-            Attempts to set this element to an IP address that cannot be
-            used by the OpenFlow Logical Switch will result in an error
-            message of type XXX.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="protocol">
-        <xs:annotation>
-          <xs:documentation>
-            The default protocol tha the OpenFlow Logical 
-            Switch uses to connect to this OpenFlow Controller.  'tls'
-            is the default value.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="tcp"/>
-            <xs:enumeration value="tls"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-      <xs:element name="state">
-        <xs:annotation>
-          <xs:documentation>
-            This container holds connection state information
-            that indicate the connection state of the OpenFlow Logical 
-            Switch and the OpenFlow protocol version used for the 
-            connection.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="connection-state" minOccurs="0"  type="up-down-state-type">
-              <xs:annotation>
-                <xs:documentation>
-                  This object indicates the connections state of
-                  the OpenFlow Logical Switch to this controller.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="current-version" minOccurs="0"  type="openflow-version">
-              <xs:annotation>
-                <xs:documentation>
-                  This object indicates the version of the OpenFlow
-                  protocol used between the OpenFlow Logical Switch and this
-                  Controller.  If element connection-state has value 'up', 
-                  then this element indicates the actual version in use.  If
-                  element connection-state has value 'down', then this element
-                  indicates the version number of the last established 
-                  connection with this OpenFlow Controller.  The value of this 
-                  element MAY be persistent across reboots of the OpenFlow 
-                  Logical Switch in such a case.  If element connection-state 
-                  has value 'down'and there is no information about previous 
-                  there connections to this OpenFlow controller, then this 
-                  element is not present or has the value '0'.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="supported-versions" minOccurs="0" maxOccurs="unbounded"  type="openflow-version">
-              <xs:annotation>
-                <xs:documentation>
-                  This list of elements includes one entry for each
-                  OpenFlow protocol version that this OpenFlow controller 
-                  supports.  It SHOULD contain all
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="local-ip-address-in-use" minOccurs="0"  type="inet:ip-address">
-              <xs:annotation>
-                <xs:documentation>
-                  The local IP address of the OpenFlow Logical Switch
-                  when connecting to this OpenFlow Controller.  It is the source
-                  IP address of packets sent to this OpenFlow Controller.  If 
-                  present, this element overrides any default IP address.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="local-port-in-use" minOccurs="0"  type="inet:port-number">
-              <xs:annotation>
-                <xs:documentation>
-                  The local TCP port number of the OpenFlow Logical 
-                  Switch.  If element connection-state has value 'up', then
-                  this element indicates the actual port number in use.  If
-                  element connection-state has value 'down', then this element
-                  indicates the port number used for the last attempt to 
-                  establish a connection with this OpenFlow Controller.??? 
-                  If  when connecting to this OpenFlow Controller.  It is the 
-                  source TCP port number of packets sent to this OpenFlow 
-                  Controller.  If this element has its defaqult value 0, then 
-                  port number is chosen arbitrarily by the OpenFlow Logical 
-                  Switch.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-
-  <xs:group name="openflow-flow-table-resource-grouping">
-    <xs:annotation>
-      <xs:documentation>
-        Representation of an OpenFlow Flow Table Resource.
-      </xs:documentation>
-    </xs:annotation>
-
-    <xs:sequence>
-      <xs:element name="resource-id"  type="inet:uri">
-        <xs:annotation>
-          <xs:documentation>
-            An unique but locally arbitrary identifier that
-            identifies a flow table and is persistent across reboots of
-            the system.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="max-entries"  type="xs:unsignedByte">
-        <xs:annotation>
-          <xs:documentation>
-            The maximum number of flow entries supported by
-            the flow table.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="next-tables">
-        <xs:annotation>
-          <xs:documentation>
-            The array of flow table ids that can be directly
-            reached from the present table using 'goto-table'
-            instruction.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="table-id" minOccurs="0" maxOccurs="unbounded"  type="inet:uri"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="instructions">
-        <xs:annotation>
-          <xs:documentation>
-            The instruction types supported by the flow
-            table.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="instruction-type"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="matches">
-        <xs:annotation>
-          <xs:documentation>
-            The match types supported by the flow table.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="match-field-type"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="write-actions">
-        <xs:annotation>
-          <xs:documentation>
-            The write action types supported by the flow
-            table.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="action-type"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="apply-actions">
-        <xs:annotation>
-          <xs:documentation>
-            The apply action types supported by the flow
-            table.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="action-type"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="write-setfields">
-        <xs:annotation>
-          <xs:documentation>
-            'set-field' action types supported by the table
-            using 'write-actions' instruction.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="match-field-type"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="apply-setfields">
-        <xs:annotation>
-          <xs:documentation>
-            'set-field' action types supported by the table
-            using 'apply-actions' instruction.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="match-field-type"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="wildcards">
-        <xs:annotation>
-          <xs:documentation>
-            The fields for which the table supports wildcarding.
-          </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="match-field-type"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="metadata-match"  type="hex-binary">
-        <xs:annotation>
-          <xs:documentation>
-            The bits of metadata the flow table can match.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="metadata-write"  type="hex-binary">
-        <xs:annotation>
-          <xs:documentation>
-            The bits of metadata the flow table can write.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-
   <xs:group name="KeyValueType">
     <xs:sequence>
       <xs:choice>
@@ -1151,38 +1146,7 @@
     </xs:sequence>
   </xs:group>
 
-  <xs:group name="openflow-external-certificate-grouping">
-    <xs:annotation>
-      <xs:documentation>
-        This grouping specifies a certificate that can be
-        used by an OpenFlow Logical Switch for authenticating a 
-        controller when a TLS connection is established.
-      </xs:documentation>
-    </xs:annotation>
-
-    <xs:sequence>
-      <xs:element name="resource-id"  type="inet:uri">
-        <xs:annotation>
-          <xs:documentation>
-            A unique but locally arbitrary identifier that
-            uniquely identifies an External Certificate within the context  
-            of an OpenFlow Logical Switch.  It MUST be persistent across 
-            reboots of the OpenFlow Capable Switch.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="certificate"  type="xs:string">
-        <xs:annotation>
-          <xs:documentation>
-            An X.509 certificate in DER format base64
-            encoded.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-
-  <xs:group name="openflow-logical-switch-capabilities-grouping">
+  <xs:group name="OFLogicalSwitchCapabilitiesType">
     <xs:annotation>
       <xs:documentation>
         This grouping specifies all properties of an
@@ -1352,7 +1316,7 @@
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="action-type"/>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFActionType"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -1365,14 +1329,14 @@
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="instruction-type"/>
+            <xs:element name="type" minOccurs="0" maxOccurs="unbounded"  type="OFInstructionType"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:group>
 
-  <xs:group name="openflow-port-resource-grouping">
+  <xs:group name="OFPortType">
     <xs:annotation>
       <xs:documentation>
         This element specifies all properties of an OpenFlow
@@ -1385,16 +1349,7 @@
     </xs:annotation>
 
     <xs:sequence>
-      <xs:element name="resource-id"  type="inet:uri">
-        <xs:annotation>
-          <xs:documentation>
-            A unique but locally arbitrary identifier that
-            uniquely identifies an OpenFlow Port within the context  
-            of an OpenFlow Logical Switch.  It MUST be persistent across 
-            reboots of the OpenFlow Capable Switch.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
+      <xs:group ref="OFResourceType"/>
       <xs:element name="number"  type="xs:unsignedLong">
         <xs:annotation>
           <xs:documentation>
@@ -1476,7 +1431,7 @@
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="admin-state" minOccurs="0"  type="up-down-state-type">
+            <xs:element name="admin-state" minOccurs="0"  type="OFUpDownStateType">
               <xs:annotation>
                 <xs:documentation>
                   The administrative state of the port.  If true,
@@ -1522,7 +1477,7 @@
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="oper-state"  type="up-down-state-type">
+            <xs:element name="oper-state"  type="OFUpDownStateType">
               <xs:annotation>
                 <xs:documentation>
                   If the value of this element is 'down', it 
@@ -1564,7 +1519,7 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:sequence>
-                  <xs:group ref="openflow-port-current-features-grouping"/>
+                  <xs:group ref="OFPortCurrentFeatureListType"/>
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
@@ -1577,7 +1532,7 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:sequence>
-                  <xs:group ref="openflow-port-other-features-grouping"/>
+                  <xs:group ref="OFPortOtherFeatureListType"/>
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
@@ -1590,7 +1545,7 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:sequence>
-                  <xs:group ref="openflow-port-other-features-grouping"/>
+                  <xs:group ref="OFPortOtherFeatureListType"/>
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
@@ -1603,7 +1558,7 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:sequence>
-                  <xs:group ref="openflow-port-other-features-grouping"/>
+                  <xs:group ref="OFPortOtherFeatureListType"/>
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
@@ -1613,7 +1568,7 @@
       <xs:choice>
         <xs:annotation>
           <xs:documentation>
-            Tunnels are modeld as logical ports.
+            Tunnels are modeled as logical ports.
           </xs:documentation>
         </xs:annotation>
 
@@ -1626,68 +1581,7 @@
             </xs:annotation>
             <xs:complexType>
               <xs:sequence>
-                <xs:choice>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-ipv4-adress" minOccurs="0"  type="inet:ipv4-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv4 address of the local tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-ipv6-adress" minOccurs="0"  type="inet:ipv6-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv6 address of the local tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-mac-adress" minOccurs="0"  type="yang:mac-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The MAC address of the local tunnel endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:choice>
-                <xs:choice>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-ipv4-adress" minOccurs="0"  type="inet:ipv4-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv4 address of the remote tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-ipv6-adress" minOccurs="0"  type="inet:ipv6-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv6 address of the remote tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-mac-adress" minOccurs="0"  type="yang:mac-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The MAC address of the remote tunnel endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:choice>
+                <xs:group ref="OFPortBaseTunnelType"/>
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1696,105 +1590,12 @@
           <xs:element name="ipgre-tunnel">
             <xs:annotation>
               <xs:documentation>
-                Properties of a IP-in-GRE tunnel with key,
-                checksum, and sequence number information.
+                Properties of a IP-in-GRE tunnel.
               </xs:documentation>
             </xs:annotation>
             <xs:complexType>
               <xs:sequence>
-                <xs:choice>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-ipv4-adress" minOccurs="0"  type="inet:ipv4-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv4 address of the local tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-ipv6-adress" minOccurs="0"  type="inet:ipv6-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv6 address of the local tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-mac-adress" minOccurs="0"  type="yang:mac-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The MAC address of the local tunnel endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:choice>
-                <xs:choice>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-ipv4-adress" minOccurs="0"  type="inet:ipv4-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv4 address of the remote tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-ipv6-adress" minOccurs="0"  type="inet:ipv6-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv6 address of the remote tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-mac-adress" minOccurs="0"  type="yang:mac-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The MAC address of the remote tunnel endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:choice>
-                <xs:element name="checksum-present" minOccurs="0"  type="xs:boolean">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Indicates presence of the GRE checksum.
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="key-present" minOccurs="0"  type="xs:boolean">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Indicates presence of the GRE key.
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="key" minOccurs="0"  type="xs:unsignedInt">
-                  <xs:annotation>
-                    <xs:documentation>
-                      The (optional) key of the GRE tunnel.  It MAY
-                      be used to set the OXM_OF_TUNNEL_ID match field metadata 
-                      in the OpenFlow protocol
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="sequence-number-present" minOccurs="0"  type="xs:boolean">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Indicates presence of the GRE sequence
-                      number.
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
+                <xs:group ref="OFPortIPGRETunnelType"/>
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1808,123 +1609,7 @@
             </xs:annotation>
             <xs:complexType>
               <xs:sequence>
-                <xs:choice>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-ipv4-adress" minOccurs="0"  type="inet:ipv4-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv4 address of the local tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-ipv6-adress" minOccurs="0"  type="inet:ipv6-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv6 address of the local tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-mac-adress" minOccurs="0"  type="yang:mac-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The MAC address of the local tunnel endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:choice>
-                <xs:choice>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-ipv4-adress" minOccurs="0"  type="inet:ipv4-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv4 address of the remote tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-ipv6-adress" minOccurs="0"  type="inet:ipv6-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv6 address of the remote tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-mac-adress" minOccurs="0"  type="yang:mac-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The MAC address of the remote tunnel endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:choice>
-                <xs:element name="vni-valid" minOccurs="0"  type="xs:boolean">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Indicates how the corresponding flag should be
-                      set in packets sent on the tunnel.
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="vni" minOccurs="0"  type="xs:unsignedInt">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Virtual network identifier assigned to all
-                      packets sent on the tunnel.  A VxLAN  implementation MAY 
-                      use the this element to set the OXM_OF_TUNNEL_ID match 
-                      field metadata in the OpenFlow protocol.
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="vni-multicast-group" minOccurs="0"  type="inet:ip-address">
-                  <xs:annotation>
-                    <xs:documentation>
-                      If IP multicast is used to support broadcast
-                      on the tunnel this specifies the corresponding multicast
-                      IP address
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="udp-source-port" minOccurs="0"  type="inet:port-number">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Specifies the outer UDP source port number.
-                      If this element is absent, the port number MAY be chosen 
-                      dynamically.
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="udp-dest-port" minOccurs="0"  type="inet:port-number">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Specifies the outer UDP destination port
-                      number.  It is intended to reserve a port number for
-                      VxLAN at IANA.  As soon as this has been reserved, the
-                      reserved number SHOULD become the default value for this
-                      element.
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="udp-checksum" minOccurs="0"  type="xs:boolean">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Boolean flag to indicate whether or not the
-                      outer UDP checksum should be set
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
+                <xs:group ref="OFPortVXLANTunnelType"/>
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1938,93 +1623,7 @@
             </xs:annotation>
             <xs:complexType>
               <xs:sequence>
-                <xs:choice>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-ipv4-adress" minOccurs="0"  type="inet:ipv4-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv4 address of the local tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-ipv6-adress" minOccurs="0"  type="inet:ipv6-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv6 address of the local tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="local-endpoint-mac-adress" minOccurs="0"  type="yang:mac-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The MAC address of the local tunnel endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:choice>
-                <xs:choice>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-ipv4-adress" minOccurs="0"  type="inet:ipv4-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv4 address of the remote tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-ipv6-adress" minOccurs="0"  type="inet:ipv6-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The IPv6 address of the remote tunnel
-                          endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:sequence>
-                    <xs:element name="remote-endpoint-mac-adress" minOccurs="0"  type="yang:mac-address">
-                      <xs:annotation>
-                        <xs:documentation>
-                          The MAC address of the remote tunnel endpoint.
-                        </xs:documentation>
-                      </xs:annotation>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:choice>
-                <xs:element name="tni" minOccurs="0"  type="xs:unsignedInt">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Specifies the tenant network identifier
-                      assigned to all packets sent on the tunnel
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="tni-resv" minOccurs="0"  type="xs:unsignedInt">
-                  <xs:annotation>
-                    <xs:documentation>
-                      Used to set the reserved user-defined bits of
-                      the GRE key field
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
-                <xs:element name="tni-multicast-group" minOccurs="0"  type="inet:ip-address">
-                  <xs:annotation>
-                    <xs:documentation>
-                      If IP multicast is used to support broadcast
-                      on the tunnel this element specifies the corresponding 
-                      multicast IP address
-                    </xs:documentation>
-                  </xs:annotation>
-                </xs:element>
+                <xs:group ref="OFPortNVGRETunnelType"/>
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -2033,10 +1632,276 @@
     </xs:sequence>
   </xs:group>
 
-  <xs:group name="RSAKeyValueType">
+  <xs:group name="OFResourceType">
+    <xs:annotation>
+      <xs:documentation>
+        This element specifies a generic OpenFlow resource
+        that is used as a basis for specific resources.
+      </xs:documentation>
+    </xs:annotation>
+
     <xs:sequence>
-      <xs:element name="Modulus"  type="xs:base64Binary"/>
-      <xs:element name="Exponent"  type="xs:base64Binary"/>
+      <xs:element name="resource-id"  type="inet:uri">
+        <xs:annotation>
+          <xs:documentation>
+            A unique but locally arbitrary identifier that
+            uniquely identifies an OpenFlow Port within the context  
+            of an OpenFlow Logical Switch.  It MUST be persistent across 
+            reboots of the OpenFlow Capable Switch.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFPortVXLANTunnelType">
+    <xs:annotation>
+      <xs:documentation>
+        Properties of a VxLAN tunnel.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:group ref="OFPortBaseTunnelType"/>
+      <xs:element name="vni-valid"  type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates how the corresponding flag should be
+            set in packets sent on the tunnel.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="vni"  type="xs:unsignedInt">
+        <xs:annotation>
+          <xs:documentation>
+            Virtual network identifier assigned to all
+            packets sent on the tunnel.  A VxLAN  implementation MAY 
+            use the this element to set the OXM_OF_TUNNEL_ID match 
+            field metadata in the OpenFlow protocol.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="vni-multicast-group"  type="inet:ip-address">
+        <xs:annotation>
+          <xs:documentation>
+            If IP multicast is used to support broadcast
+            on the tunnel this specifies the corresponding multicast
+            IP address
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="udp-source-port"  type="inet:port-number">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies the outer UDP source port number.
+            If this element is absent, the port number MAY be chosen 
+            dynamically.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="udp-dest-port"  type="inet:port-number">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies the outer UDP destination port
+            number.  It is intended to reserve a port number for
+            VxLAN at IANA.  As soon as this has been reserved, the
+            reserved number SHOULD become the default value for this
+            element.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="udp-checksum"  type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            Boolean flag to indicate whether or not the
+            outer UDP checksum should be set
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="OFControllerType">
+    <xs:annotation>
+      <xs:documentation>
+        This grouping specifies all properties of an
+        OpenFlow Logical Switch Controller.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:element name="id"  type="OFConfigId">
+        <xs:annotation>
+          <xs:documentation>
+            A unique but locally arbitrary identifier that
+            uniquely identifies an OpenFlow Controller within the context  
+            of an OpenFlow Capable Switch.  It MUST be persistent across 
+            reboots of the OpenFlow Capable Switch.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="role">
+        <xs:annotation>
+          <xs:documentation>
+            This element indicates the role of the OpenFlow 
+            Controller.  Semantics of these roles are specified in the 
+            OpenFlow specifications 1.0 - 1.3.1.  It is RECOMMENDED that 
+            the roles of controllers are not configured by OF-CONFIG 
+            1.1.1 but determined using the OpenFlow protocol.  OpenFlow
+            Controllers configured by OF-CONFIG 1.1.1 have the default 
+            role 'equal'.  A role other than 'equal' MAY be assigned to a 
+            controller.  Roles 'slave' and 'equal' MAY be assigned to 
+            multiple controllers.  Role 'master' MUST NOT be assigned to 
+            more than one controller.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="master"/>
+            <xs:enumeration value="slave"/>
+            <xs:enumeration value="equal"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="ip-address"  type="inet:ip-address">
+        <xs:annotation>
+          <xs:documentation>
+            The IP address of the OpenFlow Controller.  This IP 
+            address is used by the OpenFlow Logical Switch when connecting
+            to the OpenFlow Controller.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="port"  type="inet:port-number">
+        <xs:annotation>
+          <xs:documentation>
+            The TCP port number at the OpenFlow Controller.  
+            This port number is used by the OpenFlow Logical Switch when 
+            connecting to the OpenFlow Controller using TCP or TLS.  The 
+            default value is 6633.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="local-ip-address"  type="inet:ip-address">
+        <xs:annotation>
+          <xs:documentation>
+            The local IP address of the OpenFlow Logical Switch
+            when connecting to this OpenFlow Controller.  It is the source
+            IP address of packets sent to this OpenFlow Controller.  If 
+            present, this element overrides any default IP address.
+                
+            Attempts to set this element to an IP address that cannot be
+            used by the OpenFlow Logical Switch will result in an error
+            message of type XXX.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="local-port"  type="inet:port-number">
+        <xs:annotation>
+          <xs:documentation>
+            The local TCP port number of the OpenFlow Logical 
+            Switch when connecting to this OpenFlow Controller.  It is the 
+            source TCP port number of packets sent to this OpenFlow 
+            Controller.  If this element is not present, then the port 
+            number is chosen arbitrarily by the OpenFlow Logical Switch.
+                  
+            Attempts to set this element to a port number that cannot be
+            used by the OpenFlow Logical Switch will result in an error
+            message of type XXX.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="protocol">
+        <xs:annotation>
+          <xs:documentation>
+            The default protocol tha the OpenFlow Logical 
+            Switch uses to connect to this OpenFlow Controller.  'tls'
+            is the default value.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="tcp"/>
+            <xs:enumeration value="tls"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="state">
+        <xs:annotation>
+          <xs:documentation>
+            This container holds connection state information
+            that indicate the connection state of the OpenFlow Logical 
+            Switch and the OpenFlow protocol version used for the 
+            connection.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="connection-state" minOccurs="0"  type="OFUpDownStateType">
+              <xs:annotation>
+                <xs:documentation>
+                  This object indicates the connections state of
+                  the OpenFlow Logical Switch to this controller.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="current-version" minOccurs="0"  type="OFOpenFlowVersionType">
+              <xs:annotation>
+                <xs:documentation>
+                  This object indicates the version of the OpenFlow
+                  protocol used between the OpenFlow Logical Switch and this
+                  Controller.  If element connection-state has value 'up', 
+                  then this element indicates the actual version in use.  If
+                  element connection-state has value 'down', then this element
+                  indicates the version number of the last established 
+                  connection with this OpenFlow Controller.  The value of this 
+                  element MAY be persistent across reboots of the OpenFlow 
+                  Logical Switch in such a case.  If element connection-state 
+                  has value 'down'and there is no information about previous 
+                  there connections to this OpenFlow controller, then this 
+                  element is not present or has the value '0'.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="supported-versions" minOccurs="0" maxOccurs="unbounded"  type="OFOpenFlowVersionType">
+              <xs:annotation>
+                <xs:documentation>
+                  This list of elements includes one entry for each
+                  OpenFlow protocol version that this OpenFlow controller 
+                  supports.  It SHOULD contain all
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="local-ip-address-in-use" minOccurs="0"  type="inet:ip-address">
+              <xs:annotation>
+                <xs:documentation>
+                  The local IP address of the OpenFlow Logical Switch
+                  when connecting to this OpenFlow Controller.  It is the source
+                  IP address of packets sent to this OpenFlow Controller.  If 
+                  present, this element overrides any default IP address.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="local-port-in-use" minOccurs="0"  type="inet:port-number">
+              <xs:annotation>
+                <xs:documentation>
+                  The local TCP port number of the OpenFlow Logical 
+                  Switch.  If element connection-state has value 'up', then
+                  this element indicates the actual port number in use.  If
+                  element connection-state has value 'down', then this element
+                  indicates the port number used for the last attempt to 
+                  establish a connection with this OpenFlow Controller.??? 
+                  If  when connecting to this OpenFlow Controller.  It is the 
+                  source TCP port number of packets sent to this OpenFlow 
+                  Controller.  If this element has its defaqult value 0, then 
+                  port number is chosen arbitrarily by the OpenFlow Logical 
+                  Switch.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
   </xs:group>
 
@@ -2075,16 +1940,16 @@
                 </xs:annotation>
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:group ref="openflow-configuration-point-grouping"/>
+                    <xs:group ref="OFConfigurationPointType"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
           </xs:complexType>
-          <xs:unique name="unique_configuration-points_capable-switch_configuration-point_0">
+          <xs:key name="key_configuration-points_capable-switch_configuration-point">
             <xs:selector xpath="of11-config:configuration-point"/>
             <xs:field xpath="of11-config:id"/>
-          </xs:unique>
+          </xs:key>
         </xs:element>
         <xs:element name="resources" minOccurs="0">
           <xs:annotation>
@@ -2108,7 +1973,7 @@
                 </xs:annotation>
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:group ref="openflow-port-resource-grouping"/>
+                    <xs:group ref="OFPortType"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -2121,7 +1986,7 @@
                 </xs:annotation>
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:group ref="openflow-queue-resource-grouping"/>
+                    <xs:group ref="OFQueueType"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -2134,7 +1999,7 @@
                 </xs:annotation>
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:group ref="openflow-owned-certificate-grouping"/>
+                    <xs:group ref="OFOwnedCertificateType"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -2147,7 +2012,7 @@
                 </xs:annotation>
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:group ref="openflow-external-certificate-grouping"/>
+                    <xs:group ref="OFExternalCertificateType"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -2160,32 +2025,32 @@
                 </xs:annotation>
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:group ref="openflow-flow-table-resource-grouping"/>
+                    <xs:group ref="OFFlowTableType"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
           </xs:complexType>
-          <xs:unique name="unique_resources_capable-switch_port_0">
+          <xs:key name="key_resources_capable-switch_port">
             <xs:selector xpath="of11-config:port"/>
             <xs:field xpath="of11-config:resource-id"/>
-          </xs:unique>
-          <xs:unique name="unique_resources_capable-switch_queue_0">
+          </xs:key>
+          <xs:key name="key_resources_capable-switch_queue">
             <xs:selector xpath="of11-config:queue"/>
             <xs:field xpath="of11-config:resource-id"/>
-          </xs:unique>
-          <xs:unique name="unique_resources_capable-switch_owned-certificate_0">
+          </xs:key>
+          <xs:key name="key_resources_capable-switch_owned-certificate">
             <xs:selector xpath="of11-config:owned-certificate"/>
             <xs:field xpath="of11-config:resource-id"/>
-          </xs:unique>
-          <xs:unique name="unique_resources_capable-switch_external-certificate_0">
+          </xs:key>
+          <xs:key name="key_resources_capable-switch_external-certificate">
             <xs:selector xpath="of11-config:external-certificate"/>
             <xs:field xpath="of11-config:resource-id"/>
-          </xs:unique>
-          <xs:unique name="unique_resources_capable-switch_flow-table_0">
+          </xs:key>
+          <xs:key name="key_resources_capable-switch_flow-table">
             <xs:selector xpath="of11-config:flow-table"/>
             <xs:field xpath="of11-config:resource-id"/>
-          </xs:unique>
+          </xs:key>
         </xs:element>
         <xs:element name="logical-switches" minOccurs="0">
           <xs:annotation>
@@ -2205,16 +2070,16 @@
                 </xs:annotation>
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:group ref="openflow-logical-switch-grouping"/>
+                    <xs:group ref="OFLogicalSwitchType"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
           </xs:complexType>
-          <xs:unique name="unique_logical-switches_capable-switch_switch_0">
+          <xs:key name="key_logical-switches_capable-switch_switch">
             <xs:selector xpath="of11-config:switch"/>
             <xs:field xpath="of11-config:id"/>
-          </xs:unique>
+          </xs:key>
         </xs:element>
       </xs:sequence>
     </xs:complexType>
