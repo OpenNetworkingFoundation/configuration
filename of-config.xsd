@@ -74,7 +74,6 @@
       <xs:enumeration value="1.0"/>
       <xs:enumeration value="1.0.1"/>
       <xs:enumeration value="1.1"/>
-      <xs:enumeration value="1.1.1"/>
       <xs:enumeration value="1.2"/>
       <xs:enumeration value="1.3"/>
       <xs:enumeration value="1.3.1"/>
@@ -145,7 +144,7 @@
     <xs:annotation>
       <xs:documentation>
         The types of actions defined in OpenFlow Switch
-        Specification version 1.2.
+        Specification versions 1.2, 1.3, and 1.3.1
       </xs:documentation>
     </xs:annotation>
 
@@ -170,7 +169,7 @@
     <xs:annotation>
       <xs:documentation>
         The types of instructions defined in OpenFlow Switch
-        Specification version 1.2.
+        Specification versions 1.2, 1.3, and 1.3.1.
       </xs:documentation>
     </xs:annotation>
 
@@ -186,7 +185,7 @@
     <xs:annotation>
       <xs:documentation>
         The types of match field defined in OpenFlow Switch
-        Specification version 1.2.
+        Specification versions 1.2, 1.3, and 1.3.1.
       </xs:documentation>
     </xs:annotation>
 
@@ -773,9 +772,9 @@
       <xs:element name="next-tables">
         <xs:annotation>
           <xs:documentation>
-            The array of flow table ids that can be directly
-            reached from the present table using 'goto-table'
-            instruction.
+            An array of resource-ids of all flow tables that 
+            can be directly reached from this table using the 
+            'goto-table' instruction.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -787,8 +786,8 @@
       <xs:element name="instructions">
         <xs:annotation>
           <xs:documentation>
-            The instruction types supported by the flow
-            table.
+            The list of all instruction types 
+            supported by the flow table.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -800,7 +799,8 @@
       <xs:element name="matches">
         <xs:annotation>
           <xs:documentation>
-            The match types supported by the flow table.
+            The list of all match types 
+            supported by the flow table.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -812,8 +812,8 @@
       <xs:element name="write-actions">
         <xs:annotation>
           <xs:documentation>
-            The write action types supported by the flow
-            table.
+            The list of all write action types 
+            supported by the flow table.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -825,8 +825,8 @@
       <xs:element name="apply-actions">
         <xs:annotation>
           <xs:documentation>
-            The apply action types supported by the flow
-            table.
+            The list of all apply action types 
+            supported by the flow table.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -838,8 +838,8 @@
       <xs:element name="write-setfields">
         <xs:annotation>
           <xs:documentation>
-            'set-field' action types supported by the table
-            using 'write-actions' instruction.
+            The list of all 'set-field' action types 
+            supported by the table using write actions.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -851,8 +851,8 @@
       <xs:element name="apply-setfields">
         <xs:annotation>
           <xs:documentation>
-            'set-field' action types supported by the table
-            using 'apply-actions' instruction.
+            The list of all 'set-field' action types 
+            supported by the table using apply actions.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -864,7 +864,8 @@
       <xs:element name="wildcards">
         <xs:annotation>
           <xs:documentation>
-            The fields for which the table supports wildcarding.
+            The list of all fields for which the table 
+            supports wildcarding.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -876,14 +877,20 @@
       <xs:element name="metadata-match"  type="hex-binary">
         <xs:annotation>
           <xs:documentation>
-            The bits of metadata the flow table can match.
+            This element indicates the bits of the metadata 
+            field on which the flow table can match.  It is represented
+            as 64-bit integer in hexadecimal digits([0-9a-fA-F]) 
+            format.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="metadata-write"  type="hex-binary">
         <xs:annotation>
           <xs:documentation>
-            The bits of metadata the flow table can write.
+            This element indicates the bits of the metadata 
+            field on which flow table can write using the 
+            'write-metadata' instruction.  It is represented as 
+            64-bit integer in hexadecimal digits([0-9a-fA-F]) format.
           </xs:documentation>
         </xs:annotation>
       </xs:element>

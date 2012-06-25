@@ -47,7 +47,6 @@ module of-config1.1.1 {
       enum "1.0";
       enum "1.0.1";
       enum "1.1";
-      enum "1.1.1";
       enum "1.2";
       enum "1.3";
       enum "1.3.1";
@@ -119,7 +118,7 @@ module of-config1.1.1 {
       enum set-field;
     }
     description "The types of actions defined in OpenFlow Switch
-      Specification version 1.2.";
+      Specification versions 1.2, 1.3, and 1.3.1";
   }
 
   typedef OFInstructionType {
@@ -131,7 +130,7 @@ module of-config1.1.1 {
       enum goto-table;
     }
     description "The types of instructions defined in OpenFlow Switch
-      Specification version 1.2.";
+      Specification versions 1.2, 1.3, and 1.3.1.";
   }
 
   typedef OFMatchFieldType {
@@ -174,7 +173,7 @@ module of-config1.1.1 {
       enum mpls-tc;
     }
     description "The types of match field defined in OpenFlow Switch
-      Specification version 1.2.";
+      Specification versions 1.2, 1.3, and 1.3.1.";
   }
 
   typedef hex-binary {
@@ -454,7 +453,7 @@ module of-config1.1.1 {
         to the controller, flooding, or forwarding using non-OpenFlow
         methods, such as 'normal' switch processing.";
       reference "The types of reserved ports are defined in OpenFlow
-        Switch Specification version 1.2.";
+        Switch Specification versions 1.2, 1.3, and 1.3.1.";
       leaf-list type {
 	type enumeration {
 	  enum all;
@@ -471,7 +470,7 @@ module of-config1.1.1 {
       description "Specify the group types supported by the logical
         switch.";
       reference "The types of groups are defined in OpenFlow Switch
-        Specification version 1.2.";
+        Specification versions 1.2, 1.3, and 1.3.1.";
       leaf-list type {
 	type enumeration {
 	  enum all;
@@ -485,7 +484,7 @@ module of-config1.1.1 {
       description "Specify the group capabilities supported by the
         logical switch.";
       reference "The types of group capability are defined in
-        OpenFlow Switch Specification version 1.2.";
+        OpenFlow Switch Specification versions 1.2, 1.3, and 1.3.1.";
       leaf-list capability {
 	type enumeration {
 	  enum select-weight;
@@ -1219,66 +1218,74 @@ module of-config1.1.1 {
     }
     container next-tables {
       leaf-list table-id {
-	type inet:uri;
+        type inet:uri;
       }
-      description "The array of flow table ids that can be directly
-        reached from the present table using 'goto-table'
-        instruction.";
+      description "An array of resource-ids of all flow tables that 
+        can be directly reached from this table using the 
+        'goto-table' instruction.";
     }
     container instructions {
       leaf-list type {
-	type OFInstructionType;
+        type OFInstructionType;
       }
-      description "The instruction types supported by the flow
-        table.";
+      description "The list of all instruction types 
+        supported by the flow table.";
     }
     container matches {
       leaf-list type {
 	type OFMatchFieldType;
       }
-      description "The match types supported by the flow table.";
+      description "The list of all match types 
+        supported by the flow table.";
     }
     container write-actions {
       leaf-list type {
 	type OFActionType;
       }
-      description "The write action types supported by the flow
-        table.";
+      description "The list of all write action types 
+        supported by the flow table.";
     }
     container apply-actions {
       leaf-list type {
 	type OFActionType;
       }
-      description "The apply action types supported by the flow
-        table.";
+      description "The list of all apply action types 
+        supported by the flow table.";
     }
     container write-setfields {
       leaf-list type {
 	type OFMatchFieldType;
       }
-      description "'set-field' action types supported by the table
-        using 'write-actions' instruction.";
+      description "The list of all 'set-field' action types 
+        supported by the table using write actions.";
     }
     container apply-setfields {
       leaf-list type {
 	type OFMatchFieldType;
       }
-      description "'set-field' action types supported by the table
-        using 'apply-actions' instruction.";
+      description "The list of all 'set-field' action types 
+        supported by the table using apply actions.";
     }
     container wildcards {
       leaf-list type {
 	type OFMatchFieldType;
       }
-      description "The fields for which the table supports wildcarding.";
+      description "The list of all fields for which the table 
+        supports wildcarding.";
     }
     leaf metadata-match {
       type hex-binary;
-      description "The bits of metadata the flow table can match.";
+      description "This element indicates the bits of the metadata 
+        field on which the flow table can match.  It is represented
+        as 64-bit integer in hexadecimal digits([0-9a-fA-F]) 
+        format.";
     }
     leaf metadata-write {
       type hex-binary;
-      description "The bits of metadata the flow table can write.";
+      description "This element indicates the bits of the metadata 
+        field on which flow table can write using the 
+        'write-metadata' instruction.  It is represented as 
+        64-bit integer in hexadecimal digits([0-9a-fA-F]) format.";
     }
   }
   
