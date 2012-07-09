@@ -1307,7 +1307,7 @@ module of-config1.1.1 {
         potential OpenFlow Configuration Points.  It MUST be 
         persistent across reboots of the OpenFlow Capable Switch.";
     }
-    leaf version {
+    leaf config-version {
       type string;
       config false;
       mandatory true;
