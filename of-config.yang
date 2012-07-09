@@ -1307,6 +1307,24 @@ module of-config1.1.1 {
         potential OpenFlow Configuration Points.  It MUST be 
         persistent across reboots of the OpenFlow Capable Switch.";
     }
+    leaf version {
+      type string;
+      config false;
+      mandatory true;
+      description "The maximum supported OF-CONFIG version that is
+        supported by the OpenFlow Capable Switch. For switches
+        implementing this version of the OF-CONFIG protocol this#
+        must always be 1.1.1.
+
+        This object can be used to identify the OF-CONFIG version
+        a capable switch supports beginning with version 1.1.1 of 
+        OF-CONFIG. In addtion the supported version can be
+        determined by the namespace the OpenFlow Capable Switch
+        returns to configuration request of an element (like 
+        capable-switch) that is present in all OF-CONFIG versions
+        specified so far. This is the only possiblity to identify
+        OF-CONFIG versions prior to OF-CONFIG 1.1.1.";
+    }
     container configuration-points {
       list configuration-point {
 	key "id";
