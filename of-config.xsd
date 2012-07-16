@@ -560,7 +560,7 @@
             of the OpenFlow Logical Switch.  These id can be used 
             independent of assignments to OpenFlow Logical Switches. 
                   
-            Other implementytion may assign values to this element only
+            Other implementation may assign values to this element only
             if the OpenFlow Queue is assigned to an OpenFlow Logical 
             Switch.  If no value is currently assigned to this element 
             then this element MUST not be included in replies to 
@@ -706,6 +706,21 @@
         Configuration Point class. It SHOULD block attempts to write to 
         instances of the Configuration Point class with NETCONF 
         &lt;edit-config&gt; operations.
+
+        NETCONF &lt;edit-config&gt; operations MUST be implemented as 
+        follows: 
+
+        * The 'id' element must be present at all &lt;edit-config&gt;
+        operations to identify the configuration point.
+        * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+        * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+        * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.
       </xs:documentation>
     </xs:annotation>
 
@@ -716,6 +731,9 @@
             A unique but locally arbitrary identifier that
             identifies a Configuration Point within the context of an 
             OpenFlow Capable Switch.
+
+            This element MUST be present to identify the configuration
+            point.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -730,6 +748,11 @@
             disconnected.  Such information MAY include, for example, 
             protocol, fully qualified domain name, IP address, port 
             number, etc.
+
+            This element MUST be present. If this element is not present
+            in a NETCONF &lt;edit-config&gt; operation 'create', 'merge' or
+            'replace' and the parent element does not exist, a
+            'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -739,6 +762,9 @@
             The transport protocol that the Configuration
             Point uses when communicating via NETCONF with the OpenFlow 
             Capable Switch.
+
+            This element is optional. If it is not present its value 
+            defaults to 'ssh'.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -902,6 +928,22 @@
       <xs:documentation>
         This grouping specifies all properties of an
         OpenFlow Logical Switch.
+
+        Elements of type OFLogicalSwitchType cannot be created or
+        deleted with NETCONF &lt;edit-config&gt; operations 'create' or
+        'delete'. The other NETCONF &lt;edit-config&gt; operations MUST be
+        implemented as follows: 
+
+        * The 'id' element must be present at all &lt;edit-config&gt;
+        operations to identify the OpenFlow Logical Switch.
+        * If the operation is 'merge' or 'replace', and the element
+        does not exist, a 'data-missing' error is returned. If the
+        element exists its value is set to the value found in the
+        XML RPC data.
+        * If the operation is 'create', a 'operation-not-supported'
+        error with type 'application' is returned.
+        * If the operation is 'delete', 'operation-not-supported' error
+        with type 'application' is returned.
       </xs:documentation>
     </xs:annotation>
 
@@ -914,6 +956,9 @@
             Capable Switch.  It MUST be persistent across reboots of the 
             OpenFlow Capable 
             Switch.
+
+            This element MUST be present to identify the OpenFlow Logical
+            Switch.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -922,6 +967,10 @@
           <xs:documentation>
             This element contains all capability items that
             an OpenFlow Logical Switch MAY implement.
+
+            This element and its children can only be retrieved by
+            NETCONF &lt;get&gt; operation since it contain no configuration
+            data.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -942,6 +991,11 @@
             '01:23:45:67:89:ab:cd:ef:01:23#.  When processing a datapath
             identifier, the case of the decimal digits MUST be 
             ignored.
+
+            This element MUST be present. If this element is not present
+            in a NETCONF &lt;edit-config&gt; operation 'create', 'merge' or
+            'replace' and the parent element does not exist, a
+            'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -954,6 +1008,9 @@
             OpenFlow Controllers, MUST NOT conduct any OpenFlow 
             processing, and SHOULD NOT be utilizing computational or 
             network resources of the underlying platform.
+
+            This element is optional. If this element is not present it
+            defaults to 'false'.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -986,6 +1043,9 @@
             OpenFlow controller that has the value of element protocol
             set to 'TCP'.  Only connections with protocol 'TLS' are 
             possible in this case.
+
+            This element is optional. If this element is not present it
+            defaults to 'false'.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -999,6 +1059,9 @@
             by the OpenFlow protocol specification version 1.2, section 
             6.4.  These are the only allowed values for this element. 
             Default is the fail secure mode.
+
+            This element is optional. If this element is not present it
+            defaults to 'failSecureMode'.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -1012,6 +1075,9 @@
         <xs:annotation>
           <xs:documentation>
             The list of controllers for this Logical switch.
+
+            The element 'id' of OFControllerType MUST be unique within
+            this list.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -1023,6 +1089,21 @@
                   assigned to the OpenFlow Logical Switch.  The switch MUST 
                   NOT connect to any OpenFlow Controller that is not contained 
                   in this list.
+
+                  NETCONF &lt;edit-config&gt; operations MUST be implemented as 
+                  follows: 
+
+                  * The 'id' element must be present at all &lt;edit-config&gt;
+                  operations to identify the controller.
+                  * If the operation is 'merge' or 'replace', the element is
+                  created if it does not exist, and its value is set to the
+                  value found in the XML RPC data.
+                  * If the operation is 'create', the element is created if
+                  it does not exist. If the element already exists, a
+                  'data‑exists' error is returned.
+                  * If the operation is 'delete', the element is deleted if
+                  it exists. If the element does not exist, a 
+                  'data‑missing' error is returned.
                 </xs:documentation>
               </xs:annotation>
               <xs:complexType>
@@ -1054,6 +1135,12 @@
             'flow-table'.  Depending on the type, different constraints 
             apply.  These are specified in separate descriptions per 
             type.
+
+            At present the elements in this lists are not configurable
+            and can only be retrieved by NETCONF &lt;get&gt; or &lt;get-config&gt;
+            operations. Attemps to modify this element and its children
+            with a NETCONF &lt;edit-config&gt; operation MUST result in an 
+            'operation-not-supported' error with type 'application'.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -1064,6 +1151,13 @@
                   A resource identifier of a port of the OpenFlow 
                   Capable Switch that the OpenFlow Logical Switch has 
                   exclusive access to.
+
+                  The elements in this list MUST refer to elements at the
+                  following path:
+                  /capable-switch/resources/port/resource-id
+
+                  Elements in this list MUST be unique. This means each
+                  port element can only be referenced once.
                 </xs:documentation>
               </xs:annotation>
               <xs:simpleType>
@@ -1077,6 +1171,13 @@
                   A resource identifier of a queue of the OpenFlow 
                   Capable Switch that the OpenFlow Logical Switch has 
                   exclusive access to.
+
+                  The elements in this list MUST refer to elements at the
+                  following path:
+                  /capable-switch/resources/queue/resource-id
+
+                  Elements in this list MUST be unique. This means each
+                  queue element can only be referenced once.
                 </xs:documentation>
               </xs:annotation>
               <xs:simpleType>
@@ -1102,6 +1203,9 @@
                   a TLS connection.  
                           
                   For TCP connections this element is irrelevant.
+
+                  The element MUST refer to an element at the following path:
+                  /capable-switch/resources/owned-certificate/resource-id
                 </xs:documentation>
               </xs:annotation>
               <xs:simpleType>
@@ -1115,6 +1219,13 @@
                   A resource identifier of a flow table of the 
                   OpenFlow Capable Switch that the OpenFlow Logical Switch 
                   has exclusive access to.
+
+                  The elements in this list MUST refer to elements at the
+                  following path:
+                  /capable-switch/resources/flow-table/resource-id
+
+                  Elements in this list MUST be unique. This means each
+                  flow-table element can only be referenced once.
                 </xs:documentation>
               </xs:annotation>
               <xs:simpleType>
@@ -1158,6 +1269,12 @@
       <xs:documentation>
         This grouping specifies all properties of an
         OpenFlow logical switch's capabilities.
+
+        Elements in the type OFLogicalSwitchCapabilitiesType are not
+        configurable and can only be retrieved by NETCONF &lt;get&gt;
+        operations. Attemps to modify this element and its children
+        with a NETCONF &lt;edit-config&gt; operation MUST result in an 
+        'operation-not-supported' error with type 'application'.
       </xs:documentation>
     </xs:annotation>
 

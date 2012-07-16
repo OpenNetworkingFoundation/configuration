@@ -202,15 +202,35 @@ module of-config1.1.1 {
       to a configuration point does not have to implement the 
       Configuration Point class. It SHOULD block attempts to write to 
       instances of the Configuration Point class with NETCONF 
-      <edit-config> operations.";
+      <edit-config> operations.
+
+      NETCONF <edit-config> operations MUST be implemented as 
+      follows: 
+
+      * The 'id' element must be present at all <edit-config>
+        operations to identify the configuration point.
+      * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+      * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+      * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.";
     leaf id {
       type OFConfigId;
+      mandatory true;
       description "A unique but locally arbitrary identifier that
         identifies a Configuration Point within the context of an 
-        OpenFlow Capable Switch.";
+        OpenFlow Capable Switch.
+
+        This element MUST be present to identify the configuration
+        point.";
     }
     leaf uri {
       type inet:uri;
+      mandatory true;
       description "A locator of the Configuration Point.  It 
         identifies the location of the Configuration Point as a 
         service resource and MUST include all information necessary 
@@ -218,14 +238,22 @@ module of-config1.1.1 {
         Configuration Point or re-connect to it should it become 
         disconnected.  Such information MAY include, for example, 
         protocol, fully qualified domain name, IP address, port 
-        number, etc.";
+        number, etc.
+
+        This element MUST be present. If this element is not present
+        in a NETCONF <edit-config> operation 'create', 'merge' or
+        'replace' and the parent element does not exist, a
+        'data-missing' error is returned.";
     }
     leaf protocol {
       type OFConfigurationPointProtocolType;
       default "ssh";
       description "The transport protocol that the Configuration
         Point uses when communicating via NETCONF with the OpenFlow 
-        Capable Switch.";
+        Capable Switch.
+
+        This element is optional. If it is not present its value 
+        defaults to 'ssh'.";
       reference "The mappings of NETCONF to different transport
         protocols are defined in RFC 6242 for SSH, RFC 4743 for SOAP,
         RFC 4744 for BEEP, and RFC 5539 for TLS";
@@ -234,7 +262,23 @@ module of-config1.1.1 {
 
   grouping OFLogicalSwitchType {
     description "This grouping specifies all properties of an
-      OpenFlow Logical Switch.";
+      OpenFlow Logical Switch.
+
+      Elements of type OFLogicalSwitchType cannot be created or
+      deleted with NETCONF <edit-config> operations 'create' or
+      'delete'. The other NETCONF <edit-config> operations MUST be
+      implemented as follows: 
+
+      * The 'id' element must be present at all <edit-config>
+        operations to identify the OpenFlow Logical Switch.
+      * If the operation is 'merge' or 'replace', and the element
+        does not exist, a 'data-missing' error is returned. If the
+        element exists its value is set to the value found in the
+        XML RPC data.
+      * If the operation is 'create', a 'operation-not-supported'
+        error with type 'application' is returned.
+      * If the operation is 'delete', 'operation-not-supported' error
+        with type 'application' is returned.";
     leaf id {
       type OFConfigId;
       mandatory true;
@@ -242,11 +286,19 @@ module of-config1.1.1 {
         identifies a Logical Switch within the context of an OpenFlow 
         Capable Switch.  It MUST be persistent across reboots of the 
         OpenFlow Capable 
+        Switch.
+
+        This element MUST be present to identify the OpenFlow Logical
         Switch.";
     }
     container capabilities {
+      config false;
       description "This element contains all capability items that
-        an OpenFlow Logical Switch MAY implement.";
+        an OpenFlow Logical Switch MAY implement.
+
+        This element and its children can only be retrieved by
+        NETCONF <get> operation since it contain no configuration
+        data.";
       uses OFLogicalSwitchCapabilitiesType;
     }
     leaf datapath-id {
@@ -260,19 +312,29 @@ module of-config1.1.1 {
         that are separated by colons, for example, 
         '01:23:45:67:89:ab:cd:ef:01:23#.  When processing a datapath
         identifier, the case of the decimal digits MUST be 
-        ignored.";
+        ignored.
+
+        This element MUST be present. If this element is not present
+        in a NETCONF <edit-config> operation 'create', 'merge' or
+        'replace' and the parent element does not exist, a
+        'data-missing' error is returned.";
     }
     leaf enabled {
       type boolean;
+      default false;
       description "This element indicates the administrative state of 
         the OpenFlow Logical Switch.  A value of 'false' means the 
         OpenFlow Logical Switch MUST NOT communicate with any 
         OpenFlow Controllers, MUST NOT conduct any OpenFlow 
         processing, and SHOULD NOT be utilizing computational or 
-        network resources of the underlying platform.";
+        network resources of the underlying platform.
+
+        This element is optional. If this element is not present it
+        defaults to 'false'.";
     }
     leaf check-controller-certificate {
       type boolean;
+      default false;
       description "This element indicates the behavior of the 
         OpenFlow Logical Switch when connecting to an OpenFlow
         Controller.  
@@ -298,7 +360,10 @@ module of-config1.1.1 {
         certificate.  This implies that it cannot connect to an
         OpenFlow controller that has the value of element protocol
         set to 'TCP'.  Only connections with protocol 'TLS' are 
-        possible in this case.";
+        possible in this case.
+
+        This element is optional. If this element is not present it
+        defaults to 'false'.";
     }
     leaf lost-connection-behavior {
       type enumeration {
@@ -312,16 +377,37 @@ module of-config1.1.1 {
         a case: fails secure mode and fail standalone mode as defined 
         by the OpenFlow protocol specification version 1.2, section 
         6.4.  These are the only allowed values for this element. 
-        Default is the fail secure mode.";
+        Default is the fail secure mode.
+
+        This element is optional. If this element is not present it
+        defaults to 'failSecureMode'.";
     }
     container controllers {
-      description "The list of controllers for this Logical switch.";
+      description "The list of controllers for this Logical switch.
+
+        The element 'id' of OFControllerType MUST be unique within
+        this list.";
       list controller {
 	key "id";
 	description "The list of OpenFlow Controllers that are 
           assigned to the OpenFlow Logical Switch.  The switch MUST 
           NOT connect to any OpenFlow Controller that is not contained 
-          in this list.";
+          in this list.
+
+          NETCONF <edit-config> operations MUST be implemented as 
+          follows: 
+
+          * The 'id' element must be present at all <edit-config>
+            operations to identify the controller.
+          * If the operation is 'merge' or 'replace', the element is
+            created if it does not exist, and its value is set to the
+            value found in the XML RPC data.
+          * If the operation is 'create', the element is created if
+            it does not exist. If the element already exists, a
+            'data‑exists' error is returned.
+          * If the operation is 'delete', the element is deleted if
+            it exists. If the element does not exist, a 
+            'data‑missing' error is returned.";
 	uses OFControllerType;
       }
     }
@@ -338,14 +424,27 @@ module of-config1.1.1 {
         the type of resource: 'port', 'queue', 'certificate', or 
         'flow-table'.  Depending on the type, different constraints 
         apply.  These are specified in separate descriptions per 
-        type.";
+        type.
+
+        At present the elements in this lists are not configurable
+        and can only be retrieved by NETCONF <get> or <get-config>
+        operations. Attemps to modify this element and its children
+        with a NETCONF <edit-config> operation MUST result in an 
+        'operation-not-supported' error with type 'application'.";
       leaf-list port {
 	type leafref {
 	  path "/capable-switch/resources/port/resource-id";
 	}
 	description "A resource identifier of a port of the OpenFlow 
           Capable Switch that the OpenFlow Logical Switch has 
-          exclusive access to.";
+          exclusive access to.
+
+          The elements in this list MUST refer to elements at the
+          following path:
+            /capable-switch/resources/port/resource-id
+
+          Elements in this list MUST be unique. This means each
+          port element can only be referenced once.";
       }
       leaf-list queue {
 	type leafref {
@@ -353,7 +452,14 @@ module of-config1.1.1 {
 	}
 	description "A resource identifier of a queue of the OpenFlow 
           Capable Switch that the OpenFlow Logical Switch has 
-          exclusive access to.";
+          exclusive access to.
+
+          The elements in this list MUST refer to elements at the
+          following path:
+            /capable-switch/resources/queue/resource-id
+
+          Elements in this list MUST be unique. This means each
+          queue element can only be referenced once.";
       }
       leaf certificate {
 	type leafref {
@@ -373,7 +479,10 @@ module of-config1.1.1 {
           authentication to an OpenFlow Controller when setting up
           a TLS connection.  
         
-          For TCP connections this element is irrelevant.";
+          For TCP connections this element is irrelevant.
+
+          The element MUST refer to an element at the following path:
+            /capable-switch/resources/owned-certificate/resource-id";
       }
       leaf-list flow-table {
 	type leafref {
@@ -381,14 +490,27 @@ module of-config1.1.1 {
 	}
 	description "A resource identifier of a flow table of the 
           OpenFlow Capable Switch that the OpenFlow Logical Switch 
-          has exclusive access to.";
+          has exclusive access to.
+
+          The elements in this list MUST refer to elements at the
+          following path:
+            /capable-switch/resources/flow-table/resource-id
+
+          Elements in this list MUST be unique. This means each
+          flow-table element can only be referenced once.";
       }
     }
   }
 
   grouping OFLogicalSwitchCapabilitiesType {
     description "This grouping specifies all properties of an
-      OpenFlow logical switch's capabilities.";
+      OpenFlow logical switch's capabilities.
+
+      Elements in the type OFLogicalSwitchCapabilitiesType are not
+      configurable and can only be retrieved by NETCONF <get>
+      operations. Attemps to modify this element and its children
+      with a NETCONF <edit-config> operation MUST result in an 
+      'operation-not-supported' error with type 'application'.";
     leaf max-buffered-packets {
       type uint32;
       description "The maximum number of packets the logical switch
@@ -588,6 +710,7 @@ module of-config1.1.1 {
         is the default value.";
     }
     container state {
+      config false;
       description "This container holds connection state information
         that indicate the connection state of the OpenFlow Logical 
         Switch and the OpenFlow protocol version used for the 
@@ -647,6 +770,7 @@ module of-config1.1.1 {
       that is used as a basis for specific resources.";
     leaf resource-id {
       type inet:uri;
+      mandatory true;
       description "A unique but locally arbitrary identifier that
         uniquely identifies an OpenFlow Port within the context  
         of an OpenFlow Logical Switch.  It MUST be persistent across 
@@ -659,6 +783,7 @@ module of-config1.1.1 {
       in every supported tunnel type.  Tunnels are modeled as 
       logical ports.";
     choice local-endpoint-address {
+      mandatory true;
       leaf local-endpoint-ipv4-adress {
 	type inet:ipv4-address;
 	description "The IPv4 address of the local tunnel
@@ -675,6 +800,7 @@ module of-config1.1.1 {
       }
     }
     choice remote-endpoint-address {
+      mandatory true;
       leaf remote-endpoint-ipv4-adress {
 	type inet:ipv4-address;
 	description "The IPv4 address of the remote tunnel
@@ -822,6 +948,7 @@ module of-config1.1.1 {
     leaf name {
       type string { length "1..16"; }
       config false;
+      mandatory true;
       description "This element assists OpenFlow Controllers in 
         identifying OpenFlow Ports.  
       
@@ -846,6 +973,7 @@ module of-config1.1.1 {
       type uint32;
       units "kbit/s";
       config false;
+      mandatory true;
       description "This element indicates the current bit rate of 
         the port. Its values is to be provided in units of kilobit 
         per second (kbps). This element is only valid if the 
@@ -860,6 +988,7 @@ module of-config1.1.1 {
       type uint32;
       units "kbit/s";
       config false;
+      mandatory true;
       description "This element indicates the maximum bit rate of 
         the port. Its values is to be provided in units of kilobit 
         per second (kbps). This element is only valid if the 
@@ -987,7 +1116,7 @@ module of-config1.1.1 {
         of the OpenFlow Logical Switch.  These id can be used 
         independent of assignments to OpenFlow Logical Switches. 
       
-        Other implementytion may assign values to this element only
+        Other implementation may assign values to this element only
         if the OpenFlow Queue is assigned to an OpenFlow Logical 
         Switch.  If no value is currently assigned to this element 
         then this element MUST not be included in replies to 
@@ -997,6 +1126,7 @@ module of-config1.1.1 {
       type leafref {
 	path "/capable-switch/resources/port/resource-id";
       }
+      mandatory true;
       description "Reference to port resources in the Capable
         Switch.
       
@@ -1106,6 +1236,7 @@ module of-config1.1.1 {
 	enum symmetric;
 	enum asymmetric;
       }
+      mandatory true;
       description "Specifies if pausing of transmission is supported
         at all and if yes if it is asymmetric or symmetric.";
     }
