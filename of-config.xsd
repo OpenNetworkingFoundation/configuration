@@ -32,6 +32,17 @@
   <xs:annotation>
     <xs:documentation>
       tbd
+
+      NETCONF Operational Considerations
+
+      Elements that are configurable, optional and have a default
+      value MAY be reported by replies to NETCONF &lt;get-config&gt;
+      requests. All non-configurable values SHOULD be reported by
+      replies to NETCONF &lt;get&gt; requests.
+
+      Attemps to modify non-configurable elements with a NETCONF
+      &lt;edit-config&gt; operation MUST result in an
+      'operation-not-supported' error with type 'application'.
     </xs:documentation>
   </xs:annotation>
 
@@ -245,6 +256,12 @@
     <xs:annotation>
       <xs:documentation>
         The current features of a port.
+
+        Elements in the type OFPortCurrentFeatureListType are not
+        configurable and can only be retrieved by NETCONF &lt;get&gt;
+        operations. Attemps to modify this element and its children
+        with a NETCONF &lt;edit-config&gt; operation MUST result in an 
+        'operation-not-supported' error with type 'application'.
       </xs:documentation>
     </xs:annotation>
 
@@ -315,6 +332,29 @@
       <xs:documentation>
         The features of a port that are supported or
         advertised.
+
+        If the elements in the OFPortOtherFeatureListType ares used
+        as configurable elements the NETCONF &lt;edit-config&gt; operations
+        MUST be implemented as follows: 
+
+        * The 'resource-id' element MUST be present in the path or in
+        the filter at all &lt;edit-config&gt; operations to identify the
+        resource.
+        * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+        * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+        * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.
+
+        If elements in the type OFPortOtherFeatureListType are used in
+        an non-configurable way, they only be retrieved by NETCONF &lt;get&gt;
+        operations. Attemps to modify this element and its children
+        with a NETCONF &lt;edit-config&gt; operation MUST result in an 
+        'operation-not-supported' error with type 'application'.
       </xs:documentation>
     </xs:annotation>
 
@@ -324,6 +364,12 @@
           <xs:documentation>
             The transmission rate that is supported or
             advertised. Multiple transmissions rates are allowed.
+
+            At least one element MUST be present in the NETCONF data
+            store. If none of this elements is are present in a NETCONF
+            &lt;edit-config&gt; operation 'create', 'merge' or 'replace' and the
+            parent element does not exist, a 'data-missing' error is
+            returned.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -332,6 +378,9 @@
           <xs:documentation>
             Specifies if auto-negotiation of transmission
             parameters is enabled for the port.
+
+            This element is optional. If this element is not present it
+            defaults to 'true'.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -340,6 +389,12 @@
           <xs:documentation>
             The transmission medium used by the port. Multiple
             media are allowed.
+
+            At least one element MUST be present in the NETCONF data
+            store. If none of this elements is are present in a NETCONF
+            &lt;edit-config&gt; operation 'create', 'merge' or 'replace' and the
+            parent element does not exist, a 'data-missing' error is
+            returned.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -354,6 +409,11 @@
           <xs:documentation>
             Specifies if pausing of transmission is supported
             at all and if yes if it is asymmetric or symmetric.
+
+            This element MUST be present in the NETCONF data store.
+            If this element is not present in a NETCONF &lt;edit-config&gt;
+            operation 'create', 'merge' or 'replace' and the parent
+            element does not exist, a 'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -368,14 +428,123 @@
   </xs:group>
 
   <xs:group name="DSAKeyValueType">
+    <xs:annotation>
+      <xs:documentation>
+        DSA keys and the DSA signature algorithm are
+        specified in 'FIPS PUB 186-2, Digital Signature Standard (DSS),
+        U.S. Department of Commerce/National Institute of Standards and
+        Technology,
+        http://csrc.nist.gov/publications/fips/fips186-2/fips186-2.pdf'.
+        DSA public key values can have the following fields:
+
+        P
+        a prime modulus meeting the requirements of the standard
+        above
+        Q
+        an integer in the range 2**159 &lt; Q &lt; 2**160 which is a prime
+        divisor of P-1
+        G
+        an integer with certain properties with respect to P and Q
+        J
+        (P - 1) / Q
+        Y
+        G**X mod P (where X is part of the private key and not made
+        public)
+        seed
+        a DSA prime generation seed
+        pgenCounter
+        a DSA prime generation counter
+
+        Parameter J is avilable for inclusion solely for efficiency as it
+        is calculatable from P and Q. Parameters seed and pgenCounter are
+        used in the DSA prime number generation algorithm specified in the
+        above standard. As such, they are optional but MUST either both be
+        present or both be absent. This prime generation algorithm is
+        designed to provide assurance that a weak prime is not being used
+        and it yields a P and Q value. Parameters P, Q, and G can be
+        public and common to a group of users. They might be known from
+        application context. As such, they are optional but P and Q MUST
+        either both appear or both be absent. If all of P, Q, seed, and
+        pgenCounter are present, implementations are not required to check
+        if they are consistent and are free to use either P and Q or seed
+        and pgenCounter. All parameters are encoded as base64 values.
+      </xs:documentation>
+    </xs:annotation>
+
     <xs:sequence>
-      <xs:element name="P"  type="xs:base64Binary"/>
-      <xs:element name="Q"  type="xs:base64Binary"/>
-      <xs:element name="J"  type="xs:base64Binary"/>
-      <xs:element name="G"  type="xs:base64Binary"/>
-      <xs:element name="Y"  type="xs:base64Binary"/>
-      <xs:element name="Seed"  type="xs:base64Binary"/>
-      <xs:element name="PgenCounter"  type="xs:base64Binary"/>
+      <xs:element name="P"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element is optional. It MUST be present in the
+            NETCONF data store, if the element 'Q' is present.
+                    
+            If element 'Q' is present in a NETCONF &lt;edit-config&gt; operation
+            'create', 'merge' or 'replace' and this element is missing, a
+            'data-missing' error is returned.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Q"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element is optional. It MUST be present in the
+            NETCONF data store, if the element 'P' is present.
+                    
+            If element 'P' is present in a NETCONF &lt;edit-config&gt; operation
+            'create', 'merge' or 'replace' and this element is missing, a
+            'data-missing' error is returned.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="J"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element is optional.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="G"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element is optional.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Y"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element MUST be present in the NETCONF data
+            store. If this element is not present in a NETCONF
+            &lt;edit-config&gt; operation 'create', 'merge' or 'replace' and the
+            parent element does not exist, a 'data-missing' error is
+            returned.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Seed"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element is optional. It MUST be present in the
+            NETCONF data store, if the element 'PgenCounter' is present.
+                    
+            If element 'PgenCounter' is present in a NETCONF &lt;edit-config&gt;
+            operation 'create', 'merge' or 'replace' and this element is
+            missing, a 'data-missing' error is returned.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="PgenCounter"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element is optional. It MUST be present in the
+            NETCONF data store, if the element 'Seed' is present.
+                    
+            If element 'Seed' is present in a NETCONF &lt;edit-config&gt; operation
+            'create', 'merge' or 'replace' and this element is missing, a
+            'data-missing' error is returned.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:sequence>
   </xs:group>
 
@@ -540,6 +709,21 @@
       <xs:documentation>
         This grouping specifies all properties of a queue
         resource.
+
+        NETCONF &lt;edit-config&gt; operations MUST be implemented as 
+        follows: 
+
+        * The 'resource-id' element of OFResoureType MUST be present at
+        all &lt;edit-config&gt; operations to identify the port.
+        * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+        * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+        * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.
       </xs:documentation>
     </xs:annotation>
 
@@ -560,11 +744,13 @@
             of the OpenFlow Logical Switch.  These id can be used 
             independent of assignments to OpenFlow Logical Switches. 
                   
-            Other implementation may assign values to this element only
+            Other implementations may assign values to this element only
             if the OpenFlow Queue is assigned to an OpenFlow Logical 
             Switch.  If no value is currently assigned to this element 
-            then this element MUST not be included in replies to 
-            get-config requests or get-status requests.
+            then this element MUST NOT be included in replies to 
+            NETCONF &lt;get&gt; requests. Since this element is not configurable
+            with the NETCONF protocol it MUST NOT be included in replies to
+            NETCONF &lt;get-config&gt; requests.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -576,9 +762,12 @@
                   
             This element associates an OpenFlow Queue with an OpenFlow 
             Port. If the OpenFlow Queue is associated with an OpenFlow 
-            Logical Switch S and this element is non-empty, then it MUST 
+            Logical Switch S and this element is present, then it MUST 
             be set to the value of element resource-id of an OpenFlow Port
-            which is associated with the OpenFlow Logical Switch S
+            which is associated with the OpenFlow Logical Switch S.
+
+            The element MUST refer to an element at the following path:
+            /capable-switch/resources/port/resource-id
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -598,8 +787,10 @@
               <xs:annotation>
                 <xs:documentation>
                   The minimal rate that is reserved for this queue
-                  in 1/10 of a percent of the actual rate. If not present a
-                  min-rate is not set.
+                  in 1/10 of a percent of the actual rate.
+
+                  This element is optional. If not present a min-rate is not
+                  set.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -607,8 +798,10 @@
               <xs:annotation>
                 <xs:documentation>
                   The maximum rate that is reserved for this queue
-                  in 1/10 of a percent of the actual rate. If not present the
-                  max-rate is not set.
+                  in 1/10 of a percent of the actual rate.
+
+                  This element is optional. If not present the max-rate is not
+                  set.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -617,6 +810,8 @@
                 <xs:documentation>
                   A list of experimenter identifiers of queue
                   properties used.
+
+                  This element is optional.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -643,6 +838,11 @@
           <xs:documentation>
             An X.509 certificate in DER format base64
             encoded.
+
+            This element MUST be present in the NETCONF data store.
+            If this element is not present in a NETCONF &lt;edit-config&gt;
+            operation 'create', 'merge' or 'replace' and the parent
+            element does not exist, a 'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -654,6 +854,11 @@
             XML-Signature Syntax and Processing 
             (http://www.w3.org/TR/2001/PR-xmldsig-core-20010820/).  
             Currently the specification only support DSA and RSA keys.
+
+            This element MUST be present in the NETCONF data store.
+            If this element is not present in a NETCONF &lt;edit-config&gt;
+            operation 'create', 'merge' or 'replace' and the parent
+            element does not exist, a 'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -681,6 +886,11 @@
           <xs:documentation>
             An X.509 certificate in DER format base64
             encoded.
+
+            This element MUST be present in the NETCONF data store.
+            If this element is not present in a NETCONF &lt;edit-config&gt;
+            operation 'create', 'merge' or 'replace' and the parent
+            element does not exist, a 'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -695,7 +905,7 @@
         persistently across reboots of the OpenFlow Capable Switch.
             
         When a connection is established between an OpenFlow Capable 
-        Switch and a Configuration Point the switch  must store the 
+        Switch and a Configuration Point the switch  MUST store the 
         connection information in an instance of the Configuration 
         Point class. If such an instance does not exist, the OpenFlow 
         Capable Switch MUST create an instance where it then stores 
@@ -710,7 +920,7 @@
         NETCONF &lt;edit-config&gt; operations MUST be implemented as 
         follows: 
 
-        * The 'id' element must be present at all &lt;edit-config&gt;
+        * The 'id' element MUST be present at all &lt;edit-config&gt;
         operations to identify the configuration point.
         * If the operation is 'merge' or 'replace', the element is
         created if it does not exist, and its value is set to the
@@ -749,10 +959,10 @@
             protocol, fully qualified domain name, IP address, port 
             number, etc.
 
-            This element MUST be present. If this element is not present
-            in a NETCONF &lt;edit-config&gt; operation 'create', 'merge' or
-            'replace' and the parent element does not exist, a
-            'data-missing' error is returned.
+            This element MUST be present in the NETCONF data store.
+            If this element is not present in a NETCONF &lt;edit-config&gt;
+            operation 'create', 'merge' or 'replace' and the parent
+            element does not exist, a 'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -772,9 +982,36 @@
   </xs:group>
 
   <xs:group name="RSAKeyValueType">
+    <xs:annotation>
+      <xs:documentation>
+        RSA key values have two fields: Modulus and
+        Exponent.
+      </xs:documentation>
+    </xs:annotation>
+
     <xs:sequence>
-      <xs:element name="Modulus"  type="xs:base64Binary"/>
-      <xs:element name="Exponent"  type="xs:base64Binary"/>
+      <xs:element name="Modulus"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element MUST be present in the NETCONF data
+            store. If this element is not present in a NETCONF
+            &lt;edit-config&gt; operation 'create', 'merge' or 'replace' and the
+            parent element does not exist, a 'data-missing' error is
+            returned.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Exponent"  type="xs:base64Binary">
+        <xs:annotation>
+          <xs:documentation>
+            This element MUST be present in the NETCONF data
+            store. If this element is not present in a NETCONF
+            &lt;edit-config&gt; operation 'create', 'merge' or 'replace' and the
+            parent element does not exist, a 'data-missing' error is
+            returned.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:sequence>
   </xs:group>
 
@@ -782,6 +1019,12 @@
     <xs:annotation>
       <xs:documentation>
         Representation of an OpenFlow Flow Table Resource.
+
+        Elements in the type OFFlowTableType are not configurable and
+        can only be retrieved by NETCONF &lt;get&gt; operations. Attemps to
+        modify this element and its children with a NETCONF
+        &lt;edit-config&gt; operation MUST result in an
+        'operation-not-supported' error with type 'application'.
       </xs:documentation>
     </xs:annotation>
 
@@ -934,7 +1177,7 @@
         'delete'. The other NETCONF &lt;edit-config&gt; operations MUST be
         implemented as follows: 
 
-        * The 'id' element must be present at all &lt;edit-config&gt;
+        * The 'id' element MUST be present at all &lt;edit-config&gt;
         operations to identify the OpenFlow Logical Switch.
         * If the operation is 'merge' or 'replace', and the element
         does not exist, a 'data-missing' error is returned. If the
@@ -992,10 +1235,10 @@
             identifier, the case of the decimal digits MUST be 
             ignored.
 
-            This element MUST be present. If this element is not present
-            in a NETCONF &lt;edit-config&gt; operation 'create', 'merge' or
-            'replace' and the parent element does not exist, a
-            'data-missing' error is returned.
+            This element MUST be present in the NETCONF data store.
+            If this element is not present in a NETCONF &lt;edit-config&gt;
+            operation 'create', 'merge' or 'replace' and the parent
+            element does not exist, a 'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1093,7 +1336,7 @@
                   NETCONF &lt;edit-config&gt; operations MUST be implemented as 
                   follows: 
 
-                  * The 'id' element must be present at all &lt;edit-config&gt;
+                  * The 'id' element MUST be present at all &lt;edit-config&gt;
                   operations to identify the controller.
                   * If the operation is 'merge' or 'replace', the element is
                   created if it does not exist, and its value is set to the
@@ -1240,6 +1483,28 @@
   </xs:group>
 
   <xs:group name="KeyValueType">
+    <xs:annotation>
+      <xs:documentation>
+        The KeyValue element contains a single public key
+        that may be useful in validating the signature.
+
+        NETCONF &lt;edit-config&gt; operations MUST be implemented as 
+        follows: 
+
+        * Exactly one of the elemenst 'DSAKeyValue' or 'RSAKeyValue'
+        all &lt;edit-config&gt; operations.
+        * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+        * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+        * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.
+      </xs:documentation>
+    </xs:annotation>
+
     <xs:sequence>
       <xs:choice>
         <xs:sequence>
@@ -1469,6 +1734,21 @@
         assigned for exclusive use to an OpenFlow Logical Switch.  A 
         logical port represents a tunnel endpoint as described in the 
         OpenFlow protocol specification versions 1.3 - 1.3.1.
+
+        NETCONF &lt;edit-config&gt; operations MUST be implemented as 
+        follows: 
+
+        * The 'resource-id' element of OFResoureType MUST be present at
+        all &lt;edit-config&gt; operations to identify the port.
+        * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+        * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+        * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.
       </xs:documentation>
     </xs:annotation>
 
@@ -1479,7 +1759,7 @@
           <xs:documentation>
             This number identifies the OpenFlow Port to 
             OpenFlow Controllers. It is assigned to an OpenFlow Port 
-            lastest when the OpenFlow Port is associated with and OpenFlow
+            latest when the OpenFlow Port is associated with and OpenFlow
             Logical Switch.  If the OpenFlow Port is associated with an 
             OpenFlow Logical Switch, this element MUST be unique within 
             the context of the OpenFlow Logical Switch.  
@@ -1489,11 +1769,13 @@
             the OpenFlow Logical Switch.  These numbers can be used 
             independent of assignments to OpenFlow Logical Switches. 
                   
-            Other implementytion may assign values to this element only
+            Other implementations may assign values to this element only
             if the OpenFlow Port is assigned to an OpenFlow Logical 
             Switch.  If no value is currently assigned to this element 
-            then this element MUST not be included in replies to 
-            get-config requests or get-status requests.
+            then this element MUST NOT be included in replies to 
+            NETCONF &lt;get&gt; requests. Since this element is not configurable
+            with the NETCONF protocol it MUST NOT be included in replies
+            to NETCONF &lt;get-config&gt; requests.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1514,7 +1796,9 @@
                   
             If no value or the empty string is currently assigned to this
             element then this element MUST not be included in replies to 
-            get-config requests or get-status requests.
+            NETCONF &lt;get&gt; requests. Since this element is not configurable
+            with the NETCONF protocol it MUST NOT be included in replies
+            to NETCONF &lt;get-config&gt; requests.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -1532,6 +1816,10 @@
             per second (kbps). This element is only valid if the 
             element called 'rate' in the current Port Features has a 
             value of 'other'.
+
+            Since this element is not configurable with the NETCONF
+            protocol it MUST NOT be included in replies to NETCONF
+            &lt;get-config&gt; requests.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1543,6 +1831,10 @@
             per second (kbps). This element is only valid if the 
             element called 'rate' in the current Port Features has a 
             value of 'other'.
+
+            Since this element is not configurable with the NETCONF
+            protocol it MUST NOT be included in replies to NETCONF
+            &lt;get-config&gt; requests.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1561,6 +1853,9 @@
                   The administrative state of the port.  If true,
                   the port has been administratively brought down and SHOULD 
                   not be used by OpenFlow.
+
+                  This element is optional. If this element is not present it
+                  defaults to 'up'.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -1569,6 +1864,9 @@
                 <xs:documentation>
                   If true, packets received at this OpenFlow port 
                   SHOULD be dropped.
+
+                  This element is optional. If this element is not present it
+                  defaults to 'false'.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -1577,6 +1875,9 @@
                 <xs:documentation>
                   If true, packets forwarded to this OpenFlow Port
                   SHOULD be dropped.
+
+                  This element is optional. If this element is not present it
+                  defaults to 'false'.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -1586,6 +1887,9 @@
                   If true, packets received on that port that 
                   generate a table miss should never trigger a packet-in 
                   message to the OpenFlow Controller.
+
+                  This element is optional. If this element is not present it
+                  defaults to 'false'.
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
@@ -1597,11 +1901,17 @@
           <xs:documentation>
             This element represents the general operational 
             state of the OpenFlow Port.
+
+            Children of this element are not configurable and can only be
+            retrieved by NETCONF &lt;get&gt; operations. Attemps to modify this
+            element and its children with a NETCONF &lt;edit-config&gt;
+            operation MUST result in an 'operation-not-supported' error
+            with type 'application'.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="oper-state"  type="OFUpDownStateType">
+            <xs:element name="oper-state" minOccurs="0"  type="OFUpDownStateType">
               <xs:annotation>
                 <xs:documentation>
                   If the value of this element is 'down', it 
@@ -1609,7 +1919,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="blocked"  type="xs:boolean">
+            <xs:element name="blocked" minOccurs="0"  type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
                   If the value of this element is 'true', it 
@@ -1619,7 +1929,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="live"  type="xs:boolean">
+            <xs:element name="live" minOccurs="0"  type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
                   If the value of this element is 'true', it 
@@ -1639,6 +1949,12 @@
                 <xs:documentation>
                   The features (rates, duplex, etc.) of the port,
                   that are currently in use.
+
+                  Children of this element are not configurable and can only
+                  be retrieved by NETCONF &lt;get&gt; operations. Attemps to modify
+                  this element and its children with a NETCONF &lt;edit-config&gt;
+                  operation MUST result in an 'operation-not-supported' error
+                  with type 'application'.
                 </xs:documentation>
               </xs:annotation>
               <xs:complexType>
@@ -1652,6 +1968,22 @@
                 <xs:documentation>
                   The features (rates, duplex, etc.) of the port,
                   that are advertised to the peer port.
+
+                  NETCONF &lt;edit-config&gt; operations MUST be implemented as 
+                  follows: 
+
+                  * The 'resource-id' element of OFResoureType MUST be present
+                  in the path or in the filter at all &lt;edit-config&gt;
+                  operations to identify the port.
+                  * If the operation is 'merge' or 'replace', the element is
+                  created if it does not exist, and its value is set to the
+                  value found in the XML RPC data.
+                  * If the operation is 'create', the element is created if it
+                  does not exist. If the element already exists, a
+                  'data‑exists' error is returned.
+                  * If the operation is 'delete', the element is deleted if it
+                  exists. If the element does not exist, a 'data‑missing' error
+                  is returned.
                 </xs:documentation>
               </xs:annotation>
               <xs:complexType>
@@ -1665,6 +1997,12 @@
                 <xs:documentation>
                   The features (rates, duplex, etc.) of the port,
                   that are supported on the port.
+
+                  Children of this element are not configurable and can only
+                  be retrieved by NETCONF &lt;get&gt; operations. Attemps to modify
+                  this element and its children with a NETCONF &lt;edit-config&gt;
+                  operation MUST result in an 'operation-not-supported' error
+                  with type 'application'.
                 </xs:documentation>
               </xs:annotation>
               <xs:complexType>
@@ -1678,6 +2016,12 @@
                 <xs:documentation>
                   The features (rates, duplex, etc.) that are
                   currently advertised by the peer port.
+
+                  Children of this element are not configurable and can only
+                  be retrieved by NETCONF &lt;get&gt; operations. Attemps to modify
+                  this element and its children with a NETCONF &lt;edit-config&gt;
+                  operation MUST result in an 'operation-not-supported' error
+                  with type 'application'.
                 </xs:documentation>
               </xs:annotation>
               <xs:complexType>
@@ -1693,6 +2037,12 @@
         <xs:annotation>
           <xs:documentation>
             Tunnels are modeled as logical ports.
+
+            Elements in this choice are not configurable and can only
+            be retrieved by NETCONF &lt;get&gt; operations. Attemps to modify
+            this element and its children with a NETCONF &lt;edit-config&gt;
+            operation MUST result in an 'operation-not-supported' error
+            with type 'application'.
           </xs:documentation>
         </xs:annotation>
 
@@ -1760,7 +2110,25 @@
     <xs:annotation>
       <xs:documentation>
         This element specifies a generic OpenFlow resource
-        that is used as a basis for specific resources.
+        that is used as a basis for specific resources. Even though
+        this element is not used on its own the following rules for
+        NETCONF operations MUST be obeyed also by elemnts using this
+        element.
+
+        NETCONF &lt;edit-config&gt; operations MUST be implemented as 
+        follows: 
+
+        * The 'id' element MUST be present at all &lt;edit-config&gt;
+        operations to identify the resource.
+        * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+        * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+        * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.
       </xs:documentation>
     </xs:annotation>
 
@@ -1772,6 +2140,9 @@
             uniquely identifies an OpenFlow Port within the context  
             of an OpenFlow Logical Switch.  It MUST be persistent across 
             reboots of the OpenFlow Capable Switch.
+
+            This element MUST be present to identify the OpenFlow
+            resource.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1850,6 +2221,21 @@
       <xs:documentation>
         This grouping specifies all properties of an
         OpenFlow Logical Switch Controller.
+
+        NETCONF &lt;edit-config&gt; operations MUST be implemented as 
+        follows: 
+
+        * The 'id' element MUST be present at all &lt;edit-config&gt;
+        operations to identify the controller.
+        * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+        * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+        * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.
       </xs:documentation>
     </xs:annotation>
 
@@ -1861,6 +2247,9 @@
             uniquely identifies an OpenFlow Controller within the context  
             of an OpenFlow Capable Switch.  It MUST be persistent across 
             reboots of the OpenFlow Capable Switch.
+
+            This element MUST be present to identify the OpenFlow
+            controller.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1877,6 +2266,9 @@
             controller.  Roles 'slave' and 'equal' MAY be assigned to 
             multiple controllers.  Role 'master' MUST NOT be assigned to 
             more than one controller.
+
+            This element is optional. If this element is not present it
+            defaults to 'equal'.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -1893,6 +2285,11 @@
             The IP address of the OpenFlow Controller.  This IP 
             address is used by the OpenFlow Logical Switch when connecting
             to the OpenFlow Controller.
+
+            This element MUST be present in the NETCONF data store.
+            If this element is not present in a NETCONF &lt;edit-config&gt;
+            operation 'create', 'merge' or 'replace' and the parent
+            element does not exist, a 'data-missing' error is returned.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1903,6 +2300,9 @@
             This port number is used by the OpenFlow Logical Switch when 
             connecting to the OpenFlow Controller using TCP or TLS.  The 
             default value is 6633.
+
+            This element is optional. If this element is not present it
+            defaults to 6633.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1914,9 +2314,12 @@
             IP address of packets sent to this OpenFlow Controller.  If 
             present, this element overrides any default IP address.
                 
-            Attempts to set this element to an IP address that cannot be
-            used by the OpenFlow Logical Switch will result in an error
-            message of type XXX.
+                    
+            This element is optional. Attempts to set this element to an IP
+            address that cannot be used by the OpenFlow Logical Switch MUST
+            result in an 'bad-element' error with type 'application'. The
+            &lt;error-info&gt; element MUST contain the name of this element in
+            the &lt;bad-element&gt; element.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1929,9 +2332,11 @@
             Controller.  If this element is not present, then the port 
             number is chosen arbitrarily by the OpenFlow Logical Switch.
                   
-            Attempts to set this element to a port number that cannot be
-            used by the OpenFlow Logical Switch will result in an error
-            message of type XXX.
+            This element is optional. Attempts to set this element to a
+            port number that cannot be used by the OpenFlow Logical Switch
+            MUST result in an 'bad-element' error with type 'application'.
+            The &lt;error-info&gt; element MUST contain the name of this element
+            in the &lt;bad-element&gt; element.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1941,6 +2346,9 @@
             The default protocol tha the OpenFlow Logical 
             Switch uses to connect to this OpenFlow Controller.  'tls'
             is the default value.
+
+            This element is optional. If this element is not present it
+            defaults to 'tls'.
           </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
@@ -1957,6 +2365,12 @@
             that indicate the connection state of the OpenFlow Logical 
             Switch and the OpenFlow protocol version used for the 
             connection.
+
+            Children of this element are not configurable and can only be
+            retrieved by NETCONF &lt;get&gt; operations. Attemps to modify this
+            element and its children with a NETCONF &lt;edit-config&gt;
+            operation MUST result in an 'operation-not-supported' error
+            with type 'application'.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -2048,16 +2462,21 @@
               uniquely identifies a Capable Switch within the context of 
               potential OpenFlow Configuration Points.  It MUST be 
               persistent across reboots of the OpenFlow Capable Switch.
+
+              This element MUST be present in the NETCONF data store.
+              If this element is not present in a NETCONF &lt;edit-config&gt;
+              operation 'create', 'merge' or 'replace' and the parent
+              element does not exist, a 'data-missing' error is returned.
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="config-version"  type="xs:string">
+        <xs:element name="config-version" minOccurs="0"  type="xs:string">
           <xs:annotation>
             <xs:documentation>
               The maximum supported OF-CONFIG version that is
               supported by the OpenFlow Capable Switch. For switches
               implementing this version of the OF-CONFIG protocol this#
-              must always be 1.1.1.
+              MUST always be 1.1.1.
 
               This object can be used to identify the OF-CONFIG version
               a capable switch supports beginning with version 1.1.1 of 
@@ -2079,6 +2498,9 @@
                     The list of all Configuration Points known to
                     the OpenFlow Capable Switch that may manage it using
                     OF-CONFIG.
+
+                    The element 'id' of OFConfigurationType MUST be unique
+                    within this list.
                   </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
@@ -2112,6 +2534,9 @@
                   <xs:documentation>
                     The list contains all port resources of the
                     OpenFlow Capable Switch.
+
+                    The element 'resource-id' of OFPortType MUST be unique
+                    within this list.
                   </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
@@ -2125,6 +2550,9 @@
                   <xs:documentation>
                     The list contains all queue resources of the
                     OpenFlow Capable Switch.
+
+                    The element 'resource-id' of OFQueueType MUST be unique
+                    within this list.
                   </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
@@ -2138,6 +2566,9 @@
                   <xs:documentation>
                     The list contains all owned certificate
                     resources of the OpenFlow Capable Switch.
+
+                    The element 'resource-id' of OFOwnedCertificateType MUST be
+                    unique within this list.
                   </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
@@ -2151,6 +2582,9 @@
                   <xs:documentation>
                     The list contains all external certificate
                     resources of the OpenFlow Capable Switch.
+
+                    The element 'resource-id' of OFExternalCertificateType MUST
+                    be unique within this list.
                   </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
@@ -2164,6 +2598,9 @@
                   <xs:documentation>
                     The list contains all flow table resources of
                     the OpenFlow Capable Switch.
+
+                    The element 'resource-id' of OFFlowTableType MUST be unique
+                    within this list.
                   </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
@@ -2209,6 +2646,9 @@
                   <xs:documentation>
                     The list of all OpenFlow Logical Switches on the
                     OpenFlow Capable Switch.
+
+                    The element 'resource-id' of OFLogicalSwitchType MUST be
+                    unique within this list.
                   </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>

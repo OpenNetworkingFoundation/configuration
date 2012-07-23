@@ -9,7 +9,18 @@ module of-config1.1.1 {
 
   contact "tbd";
 
-  description "tbd";
+  description "tbd
+
+    NETCONF Operational Considerations
+
+    Elements that are configurable, optional and have a default
+    value MAY be reported by replies to NETCONF <get-config>
+    requests. All non-configurable values SHOULD be reported by
+    replies to NETCONF <get> requests.
+
+     Attemps to modify non-configurable elements with a NETCONF
+     <edit-config> operation MUST result in an
+     'operation-not-supported' error with type 'application'.";
 
   revision 2011-12-07 {
     description "First Version";
@@ -192,7 +203,7 @@ module of-config1.1.1 {
       persistently across reboots of the OpenFlow Capable Switch.
     
       When a connection is established between an OpenFlow Capable 
-      Switch and a Configuration Point the switch  must store the 
+      Switch and a Configuration Point the switch  MUST store the 
       connection information in an instance of the Configuration 
       Point class. If such an instance does not exist, the OpenFlow 
       Capable Switch MUST create an instance where it then stores 
@@ -207,7 +218,7 @@ module of-config1.1.1 {
       NETCONF <edit-config> operations MUST be implemented as 
       follows: 
 
-      * The 'id' element must be present at all <edit-config>
+      * The 'id' element MUST be present at all <edit-config>
         operations to identify the configuration point.
       * If the operation is 'merge' or 'replace', the element is
         created if it does not exist, and its value is set to the
@@ -240,10 +251,10 @@ module of-config1.1.1 {
         protocol, fully qualified domain name, IP address, port 
         number, etc.
 
-        This element MUST be present. If this element is not present
-        in a NETCONF <edit-config> operation 'create', 'merge' or
-        'replace' and the parent element does not exist, a
-        'data-missing' error is returned.";
+        This element MUST be present in the NETCONF data store.
+        If this element is not present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and the parent
+        element does not exist, a 'data-missing' error is returned.";
     }
     leaf protocol {
       type OFConfigurationPointProtocolType;
@@ -269,7 +280,7 @@ module of-config1.1.1 {
       'delete'. The other NETCONF <edit-config> operations MUST be
       implemented as follows: 
 
-      * The 'id' element must be present at all <edit-config>
+      * The 'id' element MUST be present at all <edit-config>
         operations to identify the OpenFlow Logical Switch.
       * If the operation is 'merge' or 'replace', and the element
         does not exist, a 'data-missing' error is returned. If the
@@ -314,10 +325,10 @@ module of-config1.1.1 {
         identifier, the case of the decimal digits MUST be 
         ignored.
 
-        This element MUST be present. If this element is not present
-        in a NETCONF <edit-config> operation 'create', 'merge' or
-        'replace' and the parent element does not exist, a
-        'data-missing' error is returned.";
+        This element MUST be present in the NETCONF data store.
+        If this element is not present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and the parent
+        element does not exist, a 'data-missing' error is returned.";
     }
     leaf enabled {
       type boolean;
@@ -397,7 +408,7 @@ module of-config1.1.1 {
           NETCONF <edit-config> operations MUST be implemented as 
           follows: 
 
-          * The 'id' element must be present at all <edit-config>
+          * The 'id' element MUST be present at all <edit-config>
             operations to identify the controller.
           * If the operation is 'merge' or 'replace', the element is
             created if it does not exist, and its value is set to the
@@ -634,14 +645,32 @@ module of-config1.1.1 {
 
   grouping OFControllerType {
     description "This grouping specifies all properties of an
-      OpenFlow Logical Switch Controller.";
+      OpenFlow Logical Switch Controller.
+
+      NETCONF <edit-config> operations MUST be implemented as 
+      follows: 
+
+      * The 'id' element MUST be present at all <edit-config>
+        operations to identify the controller.
+      * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+      * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+      * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.";
     leaf id {
       type OFConfigId;
       mandatory true;
       description "A unique but locally arbitrary identifier that
         uniquely identifies an OpenFlow Controller within the context  
         of an OpenFlow Capable Switch.  It MUST be persistent across 
-        reboots of the OpenFlow Capable Switch.";
+        reboots of the OpenFlow Capable Switch.
+
+        This element MUST be present to identify the OpenFlow
+        controller.";
     }
     leaf role {
       type enumeration {
@@ -659,14 +688,22 @@ module of-config1.1.1 {
         role 'equal'.  A role other than 'equal' MAY be assigned to a 
         controller.  Roles 'slave' and 'equal' MAY be assigned to 
         multiple controllers.  Role 'master' MUST NOT be assigned to 
-        more than one controller.";
+        more than one controller.
+
+        This element is optional. If this element is not present it
+        defaults to 'equal'.";
     }
     leaf ip-address {
       type inet:ip-address;
       mandatory true;
       description "The IP address of the OpenFlow Controller.  This IP 
         address is used by the OpenFlow Logical Switch when connecting
-        to the OpenFlow Controller.";
+        to the OpenFlow Controller.
+
+        This element MUST be present in the NETCONF data store.
+        If this element is not present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and the parent
+        element does not exist, a 'data-missing' error is returned.";
     }
     leaf port {
       type inet:port-number;
@@ -674,7 +711,10 @@ module of-config1.1.1 {
       description "The TCP port number at the OpenFlow Controller.  
         This port number is used by the OpenFlow Logical Switch when 
         connecting to the OpenFlow Controller using TCP or TLS.  The 
-        default value is 6633.";
+        default value is 6633.
+
+        This element is optional. If this element is not present it
+        defaults to 6633.";
     }
     leaf local-ip-address {
       type inet:ip-address;
@@ -683,9 +723,12 @@ module of-config1.1.1 {
         IP address of packets sent to this OpenFlow Controller.  If 
         present, this element overrides any default IP address.
     
-        Attempts to set this element to an IP address that cannot be
-        used by the OpenFlow Logical Switch will result in an error
-        message of type XXX.";
+        
+        This element is optional. Attempts to set this element to an IP
+        address that cannot be used by the OpenFlow Logical Switch MUST
+        result in an 'bad-element' error with type 'application'. The
+        <error-info> element MUST contain the name of this element in
+        the <bad-element> element.";
     }
     leaf local-port {
       type inet:port-number;
@@ -695,9 +738,11 @@ module of-config1.1.1 {
         Controller.  If this element is not present, then the port 
         number is chosen arbitrarily by the OpenFlow Logical Switch.
       
-        Attempts to set this element to a port number that cannot be
-        used by the OpenFlow Logical Switch will result in an error
-        message of type XXX.";
+        This element is optional. Attempts to set this element to a
+        port number that cannot be used by the OpenFlow Logical Switch
+        MUST result in an 'bad-element' error with type 'application'.
+        The <error-info> element MUST contain the name of this element
+        in the <bad-element> element.";
     }
     leaf protocol {
       type enumeration {
@@ -707,14 +752,23 @@ module of-config1.1.1 {
       default "tls";
       description "The default protocol tha the OpenFlow Logical 
         Switch uses to connect to this OpenFlow Controller.  'tls'
-        is the default value.";
+        is the default value.
+
+        This element is optional. If this element is not present it
+        defaults to 'tls'.";
     }
     container state {
       config false;
       description "This container holds connection state information
         that indicate the connection state of the OpenFlow Logical 
         Switch and the OpenFlow protocol version used for the 
-        connection.";
+        connection.
+
+        Children of this element are not configurable and can only be
+        retrieved by NETCONF <get> operations. Attemps to modify this
+        element and its children with a NETCONF <edit-config>
+        operation MUST result in an 'operation-not-supported' error
+        with type 'application'.";
       leaf connection-state {
 	type OFUpDownStateType;
 	description "This object indicates the connections state of
@@ -767,14 +821,35 @@ module of-config1.1.1 {
 
   grouping OFResourceType {
     description "This element specifies a generic OpenFlow resource
-      that is used as a basis for specific resources.";
+      that is used as a basis for specific resources. Even though
+      this element is not used on its own the following rules for
+      NETCONF operations MUST be obeyed also by elemnts using this
+      element.
+
+      NETCONF <edit-config> operations MUST be implemented as 
+      follows: 
+
+      * The 'id' element MUST be present at all <edit-config>
+        operations to identify the resource.
+      * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+      * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+      * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.";
     leaf resource-id {
       type inet:uri;
       mandatory true;
       description "A unique but locally arbitrary identifier that
         uniquely identifies an OpenFlow Port within the context  
         of an OpenFlow Logical Switch.  It MUST be persistent across 
-        reboots of the OpenFlow Capable Switch.";
+        reboots of the OpenFlow Capable Switch.
+
+        This element MUST be present to identify the OpenFlow
+        resource.";
     }
   }
 
@@ -921,15 +996,29 @@ module of-config1.1.1 {
       a logical port of the OpenFlow Capable Switch and can be 
       assigned for exclusive use to an OpenFlow Logical Switch.  A 
       logical port represents a tunnel endpoint as described in the 
-      OpenFlow protocol specification versions 1.3 - 1.3.1.";
+      OpenFlow protocol specification versions 1.3 - 1.3.1.
+
+      NETCONF <edit-config> operations MUST be implemented as 
+      follows: 
+
+      * The 'resource-id' element of OFResoureType MUST be present at
+        all <edit-config> operations to identify the port.
+      * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+      * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+      * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.";
     uses OFResourceType;
     leaf number {
       type uint64;
       config false;
-      mandatory true;
       description "This number identifies the OpenFlow Port to 
         OpenFlow Controllers. It is assigned to an OpenFlow Port 
-        lastest when the OpenFlow Port is associated with and OpenFlow
+        latest when the OpenFlow Port is associated with and OpenFlow
         Logical Switch.  If the OpenFlow Port is associated with an 
         OpenFlow Logical Switch, this element MUST be unique within 
         the context of the OpenFlow Logical Switch.  
@@ -939,16 +1028,17 @@ module of-config1.1.1 {
         the OpenFlow Logical Switch.  These numbers can be used 
         independent of assignments to OpenFlow Logical Switches. 
       
-        Other implementytion may assign values to this element only
+        Other implementations may assign values to this element only
         if the OpenFlow Port is assigned to an OpenFlow Logical 
         Switch.  If no value is currently assigned to this element 
-        then this element MUST not be included in replies to 
-        get-config requests or get-status requests.";
+        then this element MUST NOT be included in replies to 
+        NETCONF <get> requests. Since this element is not configurable
+        with the NETCONF protocol it MUST NOT be included in replies
+        to NETCONF <get-config> requests.";
     }
     leaf name {
       type string { length "1..16"; }
       config false;
-      mandatory true;
       description "This element assists OpenFlow Controllers in 
         identifying OpenFlow Ports.  
       
@@ -963,7 +1053,9 @@ module of-config1.1.1 {
       
         If no value or the empty string is currently assigned to this
         element then this element MUST not be included in replies to 
-        get-config requests or get-status requests.";
+        NETCONF <get> requests. Since this element is not configurable
+        with the NETCONF protocol it MUST NOT be included in replies
+        to NETCONF <get-config> requests.";
     }
     leaf current-rate {
       when "../features/current/rate='other'" {
@@ -973,12 +1065,15 @@ module of-config1.1.1 {
       type uint32;
       units "kbit/s";
       config false;
-      mandatory true;
       description "This element indicates the current bit rate of 
         the port. Its values is to be provided in units of kilobit 
         per second (kbps). This element is only valid if the 
         element called 'rate' in the current Port Features has a 
-        value of 'other'.";
+        value of 'other'.
+
+        Since this element is not configurable with the NETCONF
+        protocol it MUST NOT be included in replies to NETCONF
+        <get-config> requests.";
     }
     leaf max-rate {
       when "../features/current/rate='other'" {
@@ -988,56 +1083,75 @@ module of-config1.1.1 {
       type uint32;
       units "kbit/s";
       config false;
-      mandatory true;
       description "This element indicates the maximum bit rate of 
         the port. Its values is to be provided in units of kilobit 
         per second (kbps). This element is only valid if the 
         element called 'rate' in the current Port Features has a 
-        value of 'other'.";
+        value of 'other'.
+
+        Since this element is not configurable with the NETCONF
+        protocol it MUST NOT be included in replies to NETCONF
+        <get-config> requests.";
     }
     container configuration {
       description "This element represents the general adminitrative 
         configuration of the OpenFlow Port.";
       leaf admin-state {
 	type OFUpDownStateType;
-	default up;
+	default 'up';
 	description "The administrative state of the port.  If true,
           the port has been administratively brought down and SHOULD 
-          not be used by OpenFlow.";
+          not be used by OpenFlow.
+
+          This element is optional. If this element is not present it
+          defaults to 'up'.";
       }
       leaf no-receive {
 	type boolean;
 	default false;
 	description "If true, packets received at this OpenFlow port 
-          SHOULD be dropped.";
+          SHOULD be dropped.
+
+          This element is optional. If this element is not present it
+          defaults to 'false'.";
       }
       leaf no-forward {
 	type boolean;
 	default false;
 	description "If true, packets forwarded to this OpenFlow Port
-          SHOULD be dropped.";
+          SHOULD be dropped.
+
+          This element is optional. If this element is not present it
+          defaults to 'false'.";
       }
       leaf no-packet-in {
 	type boolean;
 	default false;
 	description "If true, packets received on that port that 
           generate a table miss should never trigger a packet-in 
-          message to the OpenFlow Controller.";
+          message to the OpenFlow Controller.
+
+          This element is optional. If this element is not present it
+          defaults to 'false'.";
       }
     }
     container state {
-      description "This element represents the general operational 
-      state of the OpenFlow Port.";
       config false;
+      description "This element represents the general operational 
+      state of the OpenFlow Port.
+
+      Children of this element are not configurable and can only be
+      retrieved by NETCONF <get> operations. Attemps to modify this
+      element and its children with a NETCONF <edit-config>
+      operation MUST result in an 'operation-not-supported' error
+      with type 'application'.";
       leaf oper-state {
 	type OFUpDownStateType;
-	mandatory true;
 	description "If the value of this element is 'down', it 
           indicates that there is no physical link present.";
       }
       leaf blocked {
 	type boolean;
-	mandatory true;
 	description "If the value of this element is 'true', it 
           indicates that a switch protocol outside of OpenFlow, such 
           as 802.1D Spanning Tree, is preventing the use of this
@@ -1045,7 +1159,6 @@ module of-config1.1.1 {
       }
       leaf live {
 	type boolean;
-	mandatory true;
 	description "If the value of this element is 'true', it 
           indicates that this OpenFlow Port is live and can be used 
           for fast failover.";
@@ -1056,28 +1169,68 @@ module of-config1.1.1 {
 	uses OFPortCurrentFeatureListType;
 	config false;
 	description "The features (rates, duplex, etc.) of the port,
-          that are currently in use.";
+          that are currently in use.
+
+          Children of this element are not configurable and can only
+          be retrieved by NETCONF <get> operations. Attemps to modify
+          this element and its children with a NETCONF <edit-config>
+          operation MUST result in an 'operation-not-supported' error
+          with type 'application'.";
       }
       container advertised {
 	uses OFPortOtherFeatureListType;
 	description "The features (rates, duplex, etc.) of the port,
-          that are advertised to the peer port.";
+          that are advertised to the peer port.
+
+          NETCONF <edit-config> operations MUST be implemented as 
+          follows: 
+
+          * The 'resource-id' element of OFResoureType MUST be present
+            in the path or in the filter at all <edit-config>
+            operations to identify the port.
+          * If the operation is 'merge' or 'replace', the element is
+            created if it does not exist, and its value is set to the
+            value found in the XML RPC data.
+          * If the operation is 'create', the element is created if it
+            does not exist. If the element already exists, a
+            'data‑exists' error is returned.
+          * If the operation is 'delete', the element is deleted if it
+            exists. If the element does not exist, a 'data‑missing' error
+            is returned.";
       }
       container supported {
 	uses OFPortOtherFeatureListType;
 	config false;
 	description "The features (rates, duplex, etc.) of the port,
-          that are supported on the port.";
+          that are supported on the port.
+
+          Children of this element are not configurable and can only
+          be retrieved by NETCONF <get> operations. Attemps to modify
+          this element and its children with a NETCONF <edit-config>
+          operation MUST result in an 'operation-not-supported' error
+          with type 'application'.";
       }
       container advertised-peer {
 	uses OFPortOtherFeatureListType;
 	config false;
 	description "The features (rates, duplex, etc.) that are
-          currently advertised by the peer port.";
+          currently advertised by the peer port.
+
+          Children of this element are not configurable and can only
+          be retrieved by NETCONF <get> operations. Attemps to modify
+          this element and its children with a NETCONF <edit-config>
+          operation MUST result in an 'operation-not-supported' error
+          with type 'application'.";
       }
     }
     choice tunnel-type {
-      description "Tunnels are modeled as logical ports.";
+      description "Tunnels are modeled as logical ports.
+
+        Elements in this choice are not configurable and can only
+        be retrieved by NETCONF <get> operations. Attemps to modify
+        this element and its children with a NETCONF <edit-config>
+        operation MUST result in an 'operation-not-supported' error
+        with type 'application'.";
       container tunnel {
 	description "Properties of a basic IP-in-GRE tunnel.";
 	uses OFPortBaseTunnelType;
@@ -1099,7 +1252,22 @@ module of-config1.1.1 {
 
   grouping OFQueueType {
     description "This grouping specifies all properties of a queue
-      resource.";
+      resource.
+
+      NETCONF <edit-config> operations MUST be implemented as 
+      follows: 
+
+      * The 'resource-id' element of OFResoureType MUST be present at
+        all <edit-config> operations to identify the port.
+      * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+      * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+      * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.";
     uses OFResourceType;
     leaf id {
       type uint64;
@@ -1116,53 +1284,68 @@ module of-config1.1.1 {
         of the OpenFlow Logical Switch.  These id can be used 
         independent of assignments to OpenFlow Logical Switches. 
       
-        Other implementation may assign values to this element only
+        Other implementations may assign values to this element only
         if the OpenFlow Queue is assigned to an OpenFlow Logical 
         Switch.  If no value is currently assigned to this element 
-        then this element MUST not be included in replies to 
-        get-config requests or get-status requests.";
+        then this element MUST NOT be included in replies to 
+        NETCONF <get> requests. Since this element is not configurable
+        with the NETCONF protocol it MUST NOT be included in replies to
+        NETCONF <get-config> requests.";
     }
     leaf port {
       type leafref {
 	path "/capable-switch/resources/port/resource-id";
       }
-      mandatory true;
       description "Reference to port resources in the Capable
         Switch.
       
         This element associates an OpenFlow Queue with an OpenFlow 
         Port. If the OpenFlow Queue is associated with an OpenFlow 
-        Logical Switch S and this element is non-empty, then it MUST 
+        Logical Switch S and this element is present, then it MUST 
         be set to the value of element resource-id of an OpenFlow Port
-        which is associated with the OpenFlow Logical Switch S";
+        which is associated with the OpenFlow Logical Switch S.
+
+        The element MUST refer to an element at the following path:
+          /capable-switch/resources/port/resource-id";
     }
     container properties {
       description "The queue properties currently configured.";
       leaf min-rate {
 	type OFTenthOfAPercentType;
 	description "The minimal rate that is reserved for this queue
-          in 1/10 of a percent of the actual rate. If not present a
-          min-rate is not set.";
+          in 1/10 of a percent of the actual rate.
+
+          This element is optional. If not present a min-rate is not
+          set.";
       }
       leaf max-rate {
 	type OFTenthOfAPercentType;
 	description "The maximum rate that is reserved for this queue
-          in 1/10 of a percent of the actual rate. If not present the
-          max-rate is not set.";
+          in 1/10 of a percent of the actual rate.
+
+          This element is optional. If not present the max-rate is not
+          set.";
       }
       leaf-list experimenter {
 	type uint32;
 	description "A list of experimenter identifiers of queue
-          properties used.";
+          properties used.
+
+          This element is optional.";
       }
     }
   }
 
   grouping OFPortCurrentFeatureListType {
-    description "The current features of a port.";
+    description "The current features of a port.
+
+      Elements in the type OFPortCurrentFeatureListType are not
+      configurable and can only be retrieved by NETCONF <get>
+      operations. Attemps to modify this element and its children
+      with a NETCONF <edit-config> operation MUST result in an 
+      'operation-not-supported' error with type 'application'.";
     leaf rate {
       type OFPortRateType;
-      mandatory true;
       description "The transmission rate that is currently used.
         The value MUST indicate a valid forwarding rate.  
       
@@ -1174,7 +1357,6 @@ module of-config1.1.1 {
     }
     leaf auto-negotiate { 
       type boolean;
-      mandatory true;
       description "Specifies the administrative state of the 
         forwarding rate auto-negotiation protocol at this OpenFlow
         Port.";
@@ -1184,7 +1366,6 @@ module of-config1.1.1 {
 	enum copper;
 	enum fiber;
       }
-      mandatory true;
       description "This element MUST indicate a valid physical medium
         used by the OpenFlow Port.
       
@@ -1200,7 +1381,6 @@ module of-config1.1.1 {
 	enum symmetric;
 	enum asymmetric;
       }
-      mandatory true;
       description "Specifies if pausing of transmission is supported
         at all and if yes if it is asymmetric or symmetric.";
     }
@@ -1208,18 +1388,50 @@ module of-config1.1.1 {
 
   grouping OFPortOtherFeatureListType {
     description "The features of a port that are supported or
-      advertised.";
+      advertised.
+
+      If the elements in the OFPortOtherFeatureListType ares used
+      as configurable elements the NETCONF <edit-config> operations
+      MUST be implemented as follows: 
+
+      * The 'resource-id' element MUST be present in the path or in
+        the filter at all <edit-config> operations to identify the
+        resource.
+      * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+      * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+      * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.
+
+      If elements in the type OFPortOtherFeatureListType are used in
+      an non-configurable way, they only be retrieved by NETCONF <get>
+      operations. Attemps to modify this element and its children
+      with a NETCONF <edit-config> operation MUST result in an 
+      'operation-not-supported' error with type 'application'.";
     leaf-list rate {
       type OFPortRateType;
       min-elements 1;
       description "The transmission rate that is supported or
-        advertised. Multiple transmissions rates are allowed.";
+        advertised. Multiple transmissions rates are allowed.
+
+        At least one element MUST be present in the NETCONF data
+        store. If none of this elements is are present in a NETCONF
+        <edit-config> operation 'create', 'merge' or 'replace' and the
+        parent element does not exist, a 'data-missing' error is
+        returned.";
     }
     leaf auto-negotiate { 
       type boolean;
-      mandatory true;
+      default true;
       description "Specifies if auto-negotiation of transmission
-        parameters is enabled for the port.";
+        parameters is enabled for the port.
+
+        This element is optional. If this element is not present it
+        defaults to 'true'.";
     }
     leaf-list medium {
       type enumeration {
@@ -1228,7 +1440,13 @@ module of-config1.1.1 {
       }
       min-elements 1;
       description "The transmission medium used by the port. Multiple
-        media are allowed.";
+        media are allowed.
+
+        At least one element MUST be present in the NETCONF data
+        store. If none of this elements is are present in a NETCONF
+        <edit-config> operation 'create', 'merge' or 'replace' and the
+        parent element does not exist, a 'data-missing' error is
+        returned.";
     }
     leaf pause {
       type enumeration {
@@ -1238,7 +1456,12 @@ module of-config1.1.1 {
       }
       mandatory true;
       description "Specifies if pausing of transmission is supported
-        at all and if yes if it is asymmetric or symmetric.";
+        at all and if yes if it is asymmetric or symmetric.
+
+        This element MUST be present in the NETCONF data store.
+        If this element is not present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and the parent
+        element does not exist, a 'data-missing' error is returned.";
     }
   }
   
@@ -1251,7 +1474,12 @@ module of-config1.1.1 {
       type string;
       mandatory true;
       description "An X.509 certificate in DER format base64
-        encoded.";
+        encoded.
+
+        This element MUST be present in the NETCONF data store.
+        If this element is not present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and the parent
+        element does not exist, a 'data-missing' error is returned.";
     }
   }
   
@@ -1265,7 +1493,12 @@ module of-config1.1.1 {
       type string;
       mandatory true;
       description "An X.509 certificate in DER format base64
-        encoded.";
+        encoded.
+
+        This element MUST be present in the NETCONF data store.
+        If this element is not present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and the parent
+        element does not exist, a 'data-missing' error is returned.";
     }
     container private-key {
       uses KeyValueType;
@@ -1273,11 +1506,33 @@ module of-config1.1.1 {
         to the certificate. The private key is encoded as specified in
         XML-Signature Syntax and Processing 
         (http://www.w3.org/TR/2001/PR-xmldsig-core-20010820/).  
-        Currently the specification only support DSA and RSA keys.";
+        Currently the specification only support DSA and RSA keys.
+
+        This element MUST be present in the NETCONF data store.
+        If this element is not present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and the parent
+        element does not exist, a 'data-missing' error is returned.";
     }
   }
   
   grouping KeyValueType {
+    description "The KeyValue element contains a single public key
+      that may be useful in validating the signature.
+
+      NETCONF <edit-config> operations MUST be implemented as 
+      follows: 
+
+      * Exactly one of the elemenst 'DSAKeyValue' or 'RSAKeyValue'
+        all <edit-config> operations.
+      * If the operation is 'merge' or 'replace', the element is
+        created if it does not exist, and its value is set to the
+        value found in the XML RPC data.
+      * If the operation is 'create', the element is created if it
+        does not exist. If the element already exists, a
+        'data‑exists' error is returned.
+      * If the operation is 'delete', the element is deleted if it
+        exists. If the element does not exist, a 'data‑missing' error
+        is returned.";
     choice key-type {
       mandatory true;
       case dsa {
@@ -1294,53 +1549,138 @@ module of-config1.1.1 {
   }
   
   grouping DSAKeyValueType {
+    description "DSA keys and the DSA signature algorithm are
+    specified in 'FIPS PUB 186-2, Digital Signature Standard (DSS),
+    U.S. Department of Commerce/National Institute of Standards and
+    Technology,
+    http://csrc.nist.gov/publications/fips/fips186-2/fips186-2.pdf'.
+    DSA public key values can have the following fields:
+
+    P
+        a prime modulus meeting the requirements of the standard
+        above
+    Q
+        an integer in the range 2**159 < Q < 2**160 which is a prime
+        divisor of P-1
+    G
+        an integer with certain properties with respect to P and Q
+    J
+        (P - 1) / Q
+    Y
+        G**X mod P (where X is part of the private key and not made
+        public)
+    seed
+        a DSA prime generation seed
+    pgenCounter
+        a DSA prime generation counter
+
+    Parameter J is avilable for inclusion solely for efficiency as it
+    is calculatable from P and Q. Parameters seed and pgenCounter are
+    used in the DSA prime number generation algorithm specified in the
+    above standard. As such, they are optional but MUST either both be
+    present or both be absent. This prime generation algorithm is
+    designed to provide assurance that a weak prime is not being used
+    and it yields a P and Q value. Parameters P, Q, and G can be
+    public and common to a group of users. They might be known from
+    application context. As such, they are optional but P and Q MUST
+    either both appear or both be absent. If all of P, Q, seed, and
+    pgenCounter are present, implementations are not required to check
+    if they are consistent and are free to use either P and Q or seed
+    and pgenCounter. All parameters are encoded as base64 values.";
     leaf P {
       when "count(../Q) != 0";
       type binary;
       mandatory true;
+      description "This element is optional. It MUST be present in the
+        NETCONF data store, if the element 'Q' is present.
+        
+        If element 'Q' is present in a NETCONF <edit-config> operation
+        'create', 'merge' or 'replace' and this element is missing, a
+        'data-missing' error is returned.";
     }
     leaf Q {
       when "count(../P) != 0";
       type binary;
       mandatory true;
+      description "This element is optional. It MUST be present in the
+        NETCONF data store, if the element 'P' is present.
+        
+        If element 'P' is present in a NETCONF <edit-config> operation
+        'create', 'merge' or 'replace' and this element is missing, a
+        'data-missing' error is returned.";
     }
     leaf J {
       type binary;
-      mandatory true;
+      description "This element is optional.";
     }
     leaf G {
       type binary;
-      mandatory true;
+      description "This element is optional.";
     }
     leaf Y {
       type binary;
       mandatory true;
+      description "This element MUST be present in the NETCONF data
+        store. If this element is not present in a NETCONF
+        <edit-config> operation 'create', 'merge' or 'replace' and the
+        parent element does not exist, a 'data-missing' error is
+        returned.";
     }
     leaf Seed {
       when "count(../PgenCounter) != 0";
       type binary;
       mandatory true;
+      description "This element is optional. It MUST be present in the
+        NETCONF data store, if the element 'PgenCounter' is present.
+        
+        If element 'PgenCounter' is present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and this element is
+        missing, a 'data-missing' error is returned.";
     }
     leaf PgenCounter {
       when "count(../Seed) != 0";
       type binary;
       mandatory true;
+      description "This element is optional. It MUST be present in the
+        NETCONF data store, if the element 'Seed' is present.
+        
+        If element 'Seed' is present in a NETCONF <edit-config> operation
+        'create', 'merge' or 'replace' and this element is missing, a
+        'data-missing' error is returned.";
     }
   }
    
   grouping RSAKeyValueType {
+    description "RSA key values have two fields: Modulus and
+      Exponent.";
     leaf Modulus {
       type binary;
       mandatory true;
+      description "This element MUST be present in the NETCONF data
+        store. If this element is not present in a NETCONF
+        <edit-config> operation 'create', 'merge' or 'replace' and the
+        parent element does not exist, a 'data-missing' error is
+        returned.";
     }
     leaf Exponent {
       type binary;
       mandatory true;
+      description "This element MUST be present in the NETCONF data
+        store. If this element is not present in a NETCONF
+        <edit-config> operation 'create', 'merge' or 'replace' and the
+        parent element does not exist, a 'data-missing' error is
+        returned.";
     }
   }
   
   grouping OFFlowTableType {
-    description "Representation of an OpenFlow Flow Table Resource.";
+    description "Representation of an OpenFlow Flow Table Resource.
+
+      Elements in the type OFFlowTableType are not configurable and
+      can only be retrieved by NETCONF <get> operations. Attemps to
+      modify this element and its children with a NETCONF
+      <edit-config> operation MUST result in an
+      'operation-not-supported' error with type 'application'.";
     uses OFResourceType;
     leaf max-entries {
       type uint8;
@@ -1436,16 +1776,20 @@ module of-config1.1.1 {
       description "A unique but locally arbitrary identifier that
         uniquely identifies a Capable Switch within the context of 
         potential OpenFlow Configuration Points.  It MUST be 
-        persistent across reboots of the OpenFlow Capable Switch.";
+        persistent across reboots of the OpenFlow Capable Switch.
+
+        This element MUST be present in the NETCONF data store.
+        If this element is not present in a NETCONF <edit-config>
+        operation 'create', 'merge' or 'replace' and the parent
+        element does not exist, a 'data-missing' error is returned.";
     }
     leaf config-version {
       type string;
       config false;
-      mandatory true;
       description "The maximum supported OF-CONFIG version that is
         supported by the OpenFlow Capable Switch. For switches
         implementing this version of the OF-CONFIG protocol this#
-        must always be 1.1.1.
+        MUST always be 1.1.1.
 
         This object can be used to identify the OF-CONFIG version
         a capable switch supports beginning with version 1.1.1 of 
@@ -1461,7 +1805,10 @@ module of-config1.1.1 {
 	key "id";
 	description "The list of all Configuration Points known to
           the OpenFlow Capable Switch that may manage it using
-          OF-CONFIG.";
+          OF-CONFIG.
+
+          The element 'id' of OFConfigurationType MUST be unique
+          within this list.";
 	uses OFConfigurationPointType;
       }
     }
@@ -1485,31 +1832,46 @@ module of-config1.1.1 {
 	}
 	key "resource-id";
   	description "The list contains all port resources of the
-          OpenFlow Capable Switch.";
+          OpenFlow Capable Switch.
+
+          The element 'resource-id' of OFPortType MUST be unique
+          within this list.";
 	uses OFPortType;
       }
       list queue {
 	key "resource-id";
 	description "The list contains all queue resources of the
-          OpenFlow Capable Switch.";
+          OpenFlow Capable Switch.
+
+          The element 'resource-id' of OFQueueType MUST be unique
+          within this list.";
 	uses OFQueueType;
       }
       list owned-certificate {
 	key "resource-id";
 	description "The list contains all owned certificate
-          resources of the OpenFlow Capable Switch.";
+          resources of the OpenFlow Capable Switch.
+
+          The element 'resource-id' of OFOwnedCertificateType MUST be
+          unique within this list.";
 	uses OFOwnedCertificateType;
       }
       list external-certificate {
 	key "resource-id";
 	description "The list contains all external certificate
-          resources of the OpenFlow Capable Switch.";
+          resources of the OpenFlow Capable Switch.
+
+          The element 'resource-id' of OFExternalCertificateType MUST
+          be unique within this list.";
 	uses OFExternalCertificateType;
       }
       list flow-table {
 	key "resource-id";
 	description "The list contains all flow table resources of
-          the OpenFlow Capable Switch.";
+          the OpenFlow Capable Switch.
+
+          The element 'resource-id' of OFFlowTableType MUST be unique
+          within this list.";
 	uses OFFlowTableType;
       }
     }
@@ -1519,7 +1881,10 @@ module of-config1.1.1 {
       list switch {
 	key "id";
 	description "The list of all OpenFlow Logical Switches on the
-          OpenFlow Capable Switch.";
+          OpenFlow Capable Switch.
+
+          The element 'resource-id' of OFLogicalSwitchType MUST be
+          unique within this list.";
 	uses OFLogicalSwitchType;
       }
     }
