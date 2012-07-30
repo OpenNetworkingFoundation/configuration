@@ -554,6 +554,9 @@
         A group of common elements that are included
         in every supported tunnel type.  Tunnels are modeled as 
         logical ports.
+
+        One pair of local/remote endpoints must exist for a tunnel
+        configuration.
       </xs:documentation>
     </xs:annotation>
 
@@ -568,12 +571,28 @@
               </xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element name="remote-endpoint-ipv4-adress"  type="inet:ipv4-address">
+            <xs:annotation>
+              <xs:documentation>
+                The IPv4 address of the remote tunnel
+                endpoint.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
         <xs:sequence>
           <xs:element name="local-endpoint-ipv6-adress"  type="inet:ipv6-address">
             <xs:annotation>
               <xs:documentation>
                 The IPv6 address of the local tunnel
+                endpoint.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="remote-endpoint-ipv6-adress"  type="inet:ipv6-address">
+            <xs:annotation>
+              <xs:documentation>
+                The IPv6 address of the remote tunnel
                 endpoint.
               </xs:documentation>
             </xs:annotation>
@@ -587,30 +606,6 @@
               </xs:documentation>
             </xs:annotation>
           </xs:element>
-        </xs:sequence>
-      </xs:choice>
-      <xs:choice>
-        <xs:sequence>
-          <xs:element name="remote-endpoint-ipv4-adress"  type="inet:ipv4-address">
-            <xs:annotation>
-              <xs:documentation>
-                The IPv4 address of the remote tunnel
-                endpoint.
-              </xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-        <xs:sequence>
-          <xs:element name="remote-endpoint-ipv6-adress"  type="inet:ipv6-address">
-            <xs:annotation>
-              <xs:documentation>
-                The IPv6 address of the remote tunnel
-                endpoint.
-              </xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-        <xs:sequence>
           <xs:element name="remote-endpoint-mac-adress"  type="yang:mac-address">
             <xs:annotation>
               <xs:documentation>

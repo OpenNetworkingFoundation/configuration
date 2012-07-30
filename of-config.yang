@@ -856,39 +856,45 @@ module of-config1.1.1 {
   grouping OFPortBaseTunnelType {
     description "A group of common elements that are included
       in every supported tunnel type.  Tunnels are modeled as 
-      logical ports.";
-    choice local-endpoint-address {
+      logical ports.
+
+      One pair of local/remote endpoints must exist for a tunnel
+      configuration.";
+    choice endpoints {
       mandatory true;
-      leaf local-endpoint-ipv4-adress {
-	type inet:ipv4-address;
-	description "The IPv4 address of the local tunnel
-          endpoint.";
+      case v4-endpoints {
+	leaf local-endpoint-ipv4-adress {
+	  type inet:ipv4-address;
+	  description "The IPv4 address of the local tunnel
+            endpoint.";
+	}
+	leaf remote-endpoint-ipv4-adress {
+	  type inet:ipv4-address;
+	  description "The IPv4 address of the remote tunnel
+            endpoint.";
+	}
       }
-      leaf local-endpoint-ipv6-adress {
-	type inet:ipv6-address;
-	description "The IPv6 address of the local tunnel
-          endpoint.";
+      case v6-endpoints {
+	leaf local-endpoint-ipv6-adress {
+	  type inet:ipv6-address;
+	  description "The IPv6 address of the local tunnel
+            endpoint.";
+	}
+	leaf remote-endpoint-ipv6-adress {
+	  type inet:ipv6-address;
+	  description "The IPv6 address of the remote tunnel
+            endpoint.";
+	}
       }
-      leaf local-endpoint-mac-adress {
-	type yang:mac-address;
-	description "The MAC address of the local tunnel endpoint.";
-      }
-    }
-    choice remote-endpoint-address {
-      mandatory true;
-      leaf remote-endpoint-ipv4-adress {
-	type inet:ipv4-address;
-	description "The IPv4 address of the remote tunnel
-          endpoint.";
-      }
-      leaf remote-endpoint-ipv6-adress {
-	type inet:ipv6-address;
-	description "The IPv6 address of the remote tunnel
-          endpoint.";
-      }
-      leaf remote-endpoint-mac-adress {
-	type yang:mac-address;
+      case mac-endpoints {
+	leaf local-endpoint-mac-adress {
+	  type yang:mac-address;
+	  description "The MAC address of the local tunnel endpoint.";
+	}
+	leaf remote-endpoint-mac-adress {
+	  type yang:mac-address;
 	  description "The MAC address of the remote tunnel endpoint.";
+	}
       }
     }
   }
@@ -913,6 +919,7 @@ module of-config1.1.1 {
           key-present of this IP GRE Tunnel has value 'true'.";
       }
       type uint32;
+      mandatory true;
       description "The (optional) key of the GRE tunnel.  It MAY
         be used to set the OXM_OF_TUNNEL_ID match field metadata 
         in the OpenFlow protocol";
