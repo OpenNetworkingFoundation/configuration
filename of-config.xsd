@@ -43,6 +43,17 @@
       Attemps to modify non-configurable elements with a NETCONF
       &lt;edit-config&gt; operation MUST result in an
       'operation-not-supported' error with type 'application'.
+
+      When validating an &lt;edit‑config&gt; operation the following 
+      errors MUST be detected:
+
+      * Delete requests for non-existent data. In this case a
+      'data-missing' error is returned.
+      * Create requests for existent data. In this case a 
+      'data-exists' error is returned.
+      * If the NETCONF operation creates data nodes under a
+      'choice', any existing nodes from other branches are
+      deleted.
     </xs:documentation>
   </xs:annotation>
 
@@ -557,6 +568,8 @@
 
         One pair of local/remote endpoints must exist for a tunnel
         configuration.
+
+        Only elements from one choice must exist at a time.
       </xs:documentation>
     </xs:annotation>
 
@@ -2038,6 +2051,8 @@
             this element and its children with a NETCONF &lt;edit-config&gt;
             operation MUST result in an 'operation-not-supported' error
             with type 'application'.
+
+            Only elements from one choice must exist at a time.
           </xs:documentation>
         </xs:annotation>
 

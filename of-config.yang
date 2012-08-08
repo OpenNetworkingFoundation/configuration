@@ -20,7 +20,18 @@ module of-config1.1.1 {
 
      Attemps to modify non-configurable elements with a NETCONF
      <edit-config> operation MUST result in an
-     'operation-not-supported' error with type 'application'.";
+     'operation-not-supported' error with type 'application'.
+
+     When validating an <edit‑config> operation the following 
+     errors MUST be detected:
+
+     * Delete requests for non-existent data. In this case a
+       'data-missing' error is returned.
+     * Create requests for existent data. In this case a 
+       'data-exists' error is returned.
+     * If the NETCONF operation creates data nodes under a
+        'choice', any existing nodes from other branches are
+        deleted.";
 
   revision 2011-12-07 {
     description "First Version";
@@ -859,7 +870,9 @@ module of-config1.1.1 {
       logical ports.
 
       One pair of local/remote endpoints must exist for a tunnel
-      configuration.";
+      configuration.
+
+      Only elements from one choice must exist at a time.";
     choice endpoints {
       mandatory true;
       case v4-endpoints {
@@ -1237,7 +1250,9 @@ module of-config1.1.1 {
         be retrieved by NETCONF <get> operations. Attemps to modify
         this element and its children with a NETCONF <edit-config>
         operation MUST result in an 'operation-not-supported' error
-        with type 'application'.";
+        with type 'application'.
+
+        Only elements from one choice must exist at a time.";
       container tunnel {
 	description "Properties of a basic IP-in-GRE tunnel.";
 	uses OFPortBaseTunnelType;
