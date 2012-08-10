@@ -1252,11 +1252,11 @@
             that uniquely identifies this Logical Switch within the
             context of all OpenFlow Controllers associated with the
             OpenFlow Logical Switch.  The datapath identifier is a
-            string value that MUST be formatted as a sequence of 10
+            string value that MUST be formatted as a sequence of 8
             2-digit hexadecimal numbers that are separated by colons,
-            for example, '01:23:45:67:89:ab:cd:ef:01:23'.  When
-            processing a datapath identifier, the case of the decimal
-            digits MUST be ignored.
+            for example, '01:23:45:67:89:ab:cd:ef'.  When processing a
+            datapath identifier, the case of the decimal digits MUST be
+            ignored.
 
             This element MUST be present in the NETCONF data store.
             If this element is not present in a NETCONF &lt;edit-config&gt;
