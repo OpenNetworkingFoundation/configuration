@@ -1,0 +1,261 @@
+module of-events {
+
+  namespace "urn:opennetworking.org:yang:of-events";
+  prefix ofe;
+
+  import of-config1.1.1 {
+    prefix ofc;
+  }
+
+  // Notes on the X.7XX reference
+  // ----------------------------
+  // Notification identifier - (Invoke Identifer in X.710) eventTime or
+  //   notification-id if needed/wanted. 
+  // 
+  // Mode {confirmed, non-confirmed} (not applicable to us)
+  // 
+  // Managed object MO class - depends on the event
+  // 
+  // MO instance identifier - depends on the event
+
+  // Event type {object creation, object deletion, attribute value change,
+  //   state change, alarm, security alarm} - in the per-event
+  //   semantics/description
+  // 
+  // Event time (optional) - eventTime
+  // 
+  // Event information (optional)
+
+  notification capable-switch-capability-changed {
+    description
+      "This notification is generated when any capability associated with the
+       capable swith is changed";
+    // What are the capabilities that are associated with a capable switch?
+    // There is the ofp_capabilities, but that's per datapath.
+  }
+
+  notification capable-switch-configuration-changed {      
+    description
+      "This notification is generated when any configuration parameter
+       associated with the capable swith is changed";
+  }
+
+  notification logical-switch-instantiated {
+    description
+      "This notification is generated when a new logical-switch has been
+       successfully instantiated.";
+
+    leaf switch-resource-id {
+      type ofc:OFConfigId;
+      description
+	"The resource-id of the newly instantiated logical switch";
+    }
+  }
+
+  notification logical-switch-terminated {
+    description
+      "This notification is generated when a logical-switch has been
+         successfully terminated.";
+
+    leaf switch-resource-id {
+      type ofc:OFConfigId;
+      description
+	"The resource-id of the successfully terminated logical switch";
+    }
+  }
+
+  notification openflow-session-established {
+    description
+      "This notification is generated when an OpenFlow protocol session
+         has been successfully established between a logical switch and
+         a controller";
+
+    leaf switch-resource-id {
+      type ofc:OFConfigId;
+      mandatory true;
+
+      description
+	"The resource-id of the logical-switch participating in the newly
+           established session";
+    }
+      
+    leaf controller {
+      type string;
+      mandatory true;
+
+      description
+	"A string uniquely identifying the controller participating in the
+           newly established session";
+    }
+
+    leaf controller-id {
+      type ofc:OFConfigId;
+      mandatory true;
+
+      description
+	"A unique but locally arbitrary identifier that uniquely identifies the
+           OpenFlow controller participating in the newly established
+           session";
+    }
+
+    leaf role {
+      type enumeration {
+	enum master;
+	enum slave;
+	enum equal;
+      }
+      mandatory true;
+
+      description
+	"The role of the OpenFlow controller participating in the newly
+         established session";
+    }      
+
+    leaf version {
+      type ofc:OFOpenFlowVersionType;
+      mandatory true;
+
+      description
+	"The version of the OpenFlow protocol used in the newly established
+         session";
+    }
+
+    leaf protocol {
+      type enumeration {
+	enum "tcp";
+	enum "tls";
+      }
+      description
+	"The transport protocol used in the newly established session";
+    }
+  }
+
+  notification openflow-session-failed {
+    description
+      "This notification is generated when an OpenFlow session establishment
+       attempt fails.";
+
+    leaf switch-resource-id {
+      type ofc:OFConfigId;
+      mandatory true;
+
+      description
+	"The resource-id of the logical-switch participating in the failed
+           session.";
+    }
+
+    leaf code {
+      type enumeration {
+	enum no-compatible-version;
+	enum permissions-error;
+      }
+	
+      description
+	"Corresponds to the ofp_error_message 'code' values for the
+           OFPET_HELLO_FAILED error type";
+    }
+
+    leaf data {
+      type string;
+
+      description
+	"Corresponds to the ofp_error_message 'data' field for the
+           OFPET_HELLO_FAILED error type";
+    }
+  }
+
+  notification openflow-session-terminated {
+    leaf switch-resource-id {
+      type ofc:OFConfigId;
+      mandatory true;
+
+      description
+	"The resource-id of the logical-switch participating in the terminated
+           session.";
+    }
+
+    leaf controller-id {
+      type ofc:OFConfigId;
+      mandatory true;
+
+      description
+	"A unique but locally arbitrary identifier that uniquely identifies the
+         OpenFlow controller that participated in the terminated session";
+    }
+
+    leaf reason {
+      type string;
+
+      description
+	"The reason for the session termination";
+
+      // Couldn't find any documentation at all on best practices for terminating
+      // openflow switch protocol sessions.
+    }
+
+    leaf switch-mode {
+      type enumeration {
+	enum failSecureMode;
+	enum failStandaloneMode;
+      }
+
+      description
+	"The mode that the logical switch entered at session termination.";
+    }
+  }
+
+  notification openflow-controller-role-changed {
+    description
+      "This notification is generated when an OpenFlow controller has changed
+       role";
+
+    leaf switch-resource-id {
+      type ofc:OFConfigId;
+      mandatory true;
+	
+      description
+	"The resource-id of the logical-switch associated with the OpenFlow
+           controller that has changed role";
+
+    }
+      
+    leaf controller-id {
+      type ofc:OFConfigId;
+      mandatory true;
+	
+      description
+	"A unique but locally arbitrary identifier that uniquely identifies the
+         OpenFlow controller that has changed role";
+    }
+
+    leaf new-role {
+      type enumeration {
+	enum master;
+	enum slave;
+	enum equal;
+      }
+      mandatory true;
+
+      description
+	"The new role of the OpenFlow controller that has changed role";
+    }      
+
+  }
+
+  notification port-status-changed {
+    description
+      "This notification is generated when the status of a port changes.";
+
+    leaf port {
+      type instance-identifier;
+
+      description
+	"The port that has been changed.";
+    }
+
+    // We need to dive into the definition of 'status' here. Ports
+    // include (OFPortType) a lot of information including
+    // admin-state, oper-state, etc.
+
+  }
+}
