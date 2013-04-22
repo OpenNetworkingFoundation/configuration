@@ -1,0 +1,87 @@
+module ndm {
+
+  namespace "urn:opennetworking.org:yang:ndm:base";
+  prefix ndm;
+
+  import of-config {
+    prefix ofc;
+  }
+
+  description
+    "This module contains a draft set of data definitions related to
+     Negotiated Datapath Models (NDMs)";
+
+  revision 2013-03-09 {
+    description
+      "Initial version";
+  }
+
+  identity ndm-type {
+    description
+      "Base NDM name from which all NDMs are derived";
+  }
+
+  augment "/ofc:capable-switch/ofc:resources" {
+      container ndm {
+	presence "This swith supports NDMs";
+
+	list available-ndms {
+	  config false;
+
+	  leaf name {
+	    mandatory true;
+	    type string;
+	  }
+    
+	  leaf type {
+	    mandatory true;
+	    type enumeration {
+	      enum ttp;
+	      enum fpmod;
+	    }
+	  }
+
+	  leaf version {
+	    mandatory true;
+	    type string;
+	  }
+
+	  leaf ndm-type {
+	    mandatory true;
+	    type identityref {
+	      base ndm-type;
+	    }
+	  }
+	}
+
+  
+	container ndm-instances {
+	  presence "This switch support NDMs";
+
+	  description
+	    "Specific NDMs augment their configuration parameters into this
+             container";
+
+	}
+      }
+  }
+
+
+  augment "/ofc:capable-switch/ofc:logical-switches/ofc:switch/ofc:resources" {
+    leaf active-ndm-instance {
+      type instance-identifier;
+    }
+  }
+
+  // rpc pick-parameters {
+  //   // Need to discuss input parameters
+
+  //   output {
+  //     leaf ndm-reference {
+  // 	type identityref {
+  // 	  base ndm-type;
+  // 	}
+  //     }
+  //   }
+  // }  
+}

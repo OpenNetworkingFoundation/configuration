@@ -1,0 +1,76 @@
+module l2l3acl {
+
+  namespace "urn:opennetworking.org:yang:ndm:l2l3acl";
+  prefix "l2l3acl";
+
+  import of-config {
+    prefix ofc;
+  }
+
+  import ndm {
+    prefix ndm;
+  }
+
+  identity l2l3acl {
+    base "ndm:ndm-type";
+  }
+
+  augment "/ofc:capable-switch/ofc:resources/ndm:ndm/ndm:ndm-instances" {
+    list l2l3acl-instances {
+      key instance-name;
+
+      leaf instance-name {
+	type string;
+
+	description
+	  "A unique identifier of the L2+L3+ACL NDM instance";
+      }
+
+      leaf ingress-vlan-table-size {
+	type uint32;
+      }
+
+      leaf acl-table-size {
+	type uint32;
+      }
+
+      leaf router-mac-table-size {
+	type uint32;
+      }
+
+      leaf l3-table-size {
+	type uint32;
+      }
+
+      leaf l2-table-size {
+	type uint32;
+      }
+
+      leaf egress-vlan-table-size {
+	type uint32;
+      }
+
+      leaf acl-counters {
+	type boolean;
+	default true;
+      }
+
+      leaf l3-counters {
+	type boolean;
+	default true;
+      }
+
+      leaf l2-counters {
+	type boolean;
+	default true;
+      }
+
+      leaf ipv6-supported {
+	config false;
+	type boolean;
+	description
+	  "Is this operational state or configurable?";
+      }
+    }
+  }
+}
