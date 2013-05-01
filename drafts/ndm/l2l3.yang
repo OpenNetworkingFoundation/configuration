@@ -11,56 +11,43 @@ module l2l3 {
     prefix ndm;
   }
 
-  identity l2l3 {
-    base "ndm:ndm-type";
-  }
+  augment "/ofc:capable-switch/ofc:logical-switches/ofc:switch/ofc:resources/ndm:ndm-implementation/ndm:ndm-implementation-choice" {
+    case l2l3 {
+      container l2l3 {
+	leaf ingress-vlan-table-size {
+	  type uint32;
+	}
 
-  augment "/ofc:capable-switch/ofc:resources/ndm:ndm/ndm:ndm-instances" {
-    list l2l3-instances {
-      key instance-name;
-      
-      leaf instance-name {
-	type string;
- 
-	description
-	  "A unique identifier of the L2+L3 NDM instance";
-      }
+	leaf router-mac-table-size {
+	  type uint32;
+	}
 
-      leaf ingress-vlan-table-size {
-	type uint32;
-      }
+	leaf l3-table-size {
+	  type uint32;
+	}
 
-      leaf router-mac-table-size {
-	type uint32;
-      }
+	leaf l2-table-size {
+	  type uint32;
+	}
 
-      leaf l3-table-size {
-	type uint32;
-      }
+	leaf egress-vlan-table-size {
+	  type uint32;
+	}
 
-      leaf l2-table-size {
-	type uint32;
-      }
+	leaf l3-counters {
+	  type boolean;
+	  default true;
+	}
 
-      leaf egress-vlan-table-size {
-	type uint32;
-      }
+	leaf l2-counters {
+	  type boolean;
+	  default true;
+	}
 
-      leaf l3-counters {
-	type boolean;
-	default true;
-      }
-
-      leaf l2-counters {
-	type boolean;
-	default true;
-      }
-
-      leaf ipv6-supported {
-	config false;
-	type boolean;
-	description
-	  "Is this operational state or configurable?";
+	leaf ipv6-supported {
+	  config false;
+	  type boolean;
+	}
       }
     }
   }
