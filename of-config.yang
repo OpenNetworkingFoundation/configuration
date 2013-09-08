@@ -1,4 +1,4 @@
-module of-config1.1.1 {
+﻿module of-config1.1.1 {
   namespace "urn:onf:of111:config:yang";
   prefix of11-config;
 
@@ -287,7 +287,7 @@ module of-config1.1.1 {
     description "This grouping specifies all properties of an
       OpenFlow Logical Switch.
 
-      Elements of type OFLogicalSwitchType cannot be created or
+      Elements of type OFLogicalSwitchType can be created or
       deleted with NETCONF <edit-config> operations 'create' or
       'delete'. The other NETCONF <edit-config> operations MUST be
       implemented as follows: 
@@ -450,11 +450,10 @@ module of-config1.1.1 {
         different constraints apply.  These are specified in
         separate descriptions per type.
 
-        At present the elements in this lists are not configurable
-        and can only be retrieved by NETCONF <get> or <get-config>
-        operations. Attemps to modify this element and its children
-        with a NETCONF <edit-config> operation MUST result in an 
-        'operation-not-supported' error with type 'application'.";
+        The elements in this lists can be created, deleted or modified 
+        by NETCONF <create>, <delete>  and                         
+        <edit-config> operations. They can be retrieved by NETCONF 
+        <get> or <get-config> operations.;
       leaf-list port {
         type leafref {
           path "/capable-switch/resources/port/resource-id";
