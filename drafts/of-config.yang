@@ -949,12 +949,12 @@ module of-config {
     leaf vsid {
       type uint32;
       description
-	"Specifies the virtual subnet id used to identify
-	 packets belonging to the NVGRE virtual layer-2 network (24 bit)";
+	"Specifies the virtual subnet id used to identify packets belonging to
+	 the NVGRE virtual layer-2 network (24 bit)";
     }
 
     leaf flow-id {
-      type uint32;
+      type uint8;
       default 0;
       description
 	"8-bit value that is used to provide per-flow entropy for flows in the same VSID";

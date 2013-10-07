@@ -1063,10 +1063,8 @@
                               <xs:element name="udp-dest-port" minOccurs="0"  type="inet:port-number">
                                 <xs:annotation>
                                   <xs:documentation>
-                                    Specifies the outer UDP destination port number.  It is intended to
-                                           reserve a port number for VxLAN at IANA.  As soon as this has
-                                           been reserved, the reserved number SHOULD become the default
-                                           value for this element.
+                                    Specifies the outer UDP destination port number.  It SHOULD
+                                           be set to 4789, the port number reserved for VxLAN at IANA.
                                   </xs:documentation>
                                 </xs:annotation>
                               </xs:element>
@@ -1153,26 +1151,18 @@
                                 <xs:any minOccurs="0" maxOccurs="unbounded"
                                         namespace="##other" processContents="lax"/>
                               </xs:choice>
-                              <xs:element name="tni" minOccurs="0"  type="xs:unsignedInt">
+                              <xs:element name="vsid" minOccurs="0"  type="xs:unsignedInt">
                                 <xs:annotation>
                                   <xs:documentation>
-                                    Specifies the tenant network identifier assigned to all packets sent on
-                                           the tunnel
+                                    Specifies the virtual subnet id used to identify packets belonging to
+                                    the NVGRE virtual layer-2 network (24 bit)
                                   </xs:documentation>
                                 </xs:annotation>
                               </xs:element>
-                              <xs:element name="tni-resv" minOccurs="0"  type="xs:unsignedInt">
+                              <xs:element name="flow-id" minOccurs="0"  type="xs:unsignedByte">
                                 <xs:annotation>
                                   <xs:documentation>
-                                    Used to set the reserved user-defined bits of the GRE key field
-                                  </xs:documentation>
-                                </xs:annotation>
-                              </xs:element>
-                              <xs:element name="tni-multicast-group" minOccurs="0"  type="inet:ip-address">
-                                <xs:annotation>
-                                  <xs:documentation>
-                                    If IP multicast is used to support broadcast on the tunnel this element
-                                           specifies the corresponding multicast IP address
+                                    8-bit value that is used to provide per-flow entropy for flows in the same VSID
                                   </xs:documentation>
                                 </xs:annotation>
                               </xs:element>
