@@ -925,11 +925,10 @@ module of-config {
 
     leaf udp-dest-port {
       type inet:port-number;
+      default 4789;
       description
-	"Specifies the outer UDP destination port number.  It is intended to
-         reserve a port number for VxLAN at IANA.  As soon as this has
-         been reserved, the reserved number SHOULD become the default
-         value for this element.";
+	"Specifies the outer UDP destination port number.  It SHOULD
+         be set to 4789, the port number reserved for VxLAN at IANA.";
     }
 
     leaf udp-checksum {
@@ -947,25 +946,20 @@ module of-config {
 
     uses OFPortBaseTunnelType;
 
-    leaf tni {
+    leaf vsid {
       type uint32;
       description
-	"Specifies the tenant network identifier assigned to all packets sent on
-         the tunnel";
+	"Specifies the virtual subnet id used to identify
+	 packets belonging to the NVGRE virtual layer-2 network (24 bit)";
     }
 
-    leaf tni-resv {
+    leaf flow-id {
       type uint32;
+      default 0;
       description
-	"Used to set the reserved user-defined bits of the GRE key field";
+	"8-bit value that is used to provide per-flow entropy for flows in the same VSID";
     }
 
-    leaf tni-multicast-group {
-      type inet:ip-address;
-      description
-	"If IP multicast is used to support broadcast on the tunnel this element
-         specifies the corresponding multicast IP address";
-    }
   }
 
   grouping OFPortType {
