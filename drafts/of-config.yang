@@ -994,6 +994,17 @@ module of-config {
          Logical Switch.";
     }
 
+    leaf requested-number {
+      type uint64 {
+	range "1..65279";
+      }
+      description
+	"This is the requested OpenFlow Port number for this interface. The switch
+         is expected to try and use the value of this lead as the port number for 
+         the interface. If the switch is unable to use the requested value or if
+         this leaf is not present, it will choose a free port to use.";
+    }
+
     leaf name {
       type string {
 	length "1..16";
