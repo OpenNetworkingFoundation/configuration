@@ -1,11 +1,12 @@
 module ndm {
-
   namespace "urn:opennetworking.org:yang:ndm";
   prefix ndm;
 
-  import of-config {
-    prefix ofc;
-  }
+  import of-config { prefix ofc; }
+
+  organization "ONF Config Management Group";
+
+  contact "mailto:info@opennetworking.org";
 
   description
     "This module contains a collection of data definitions related to
@@ -13,13 +14,24 @@ module ndm {
      to the main OF-CONFIG module.
 
      This module provides a basic structure for NDMs. Modules for
-     specific NDMa are expected to further ugment this module with
-     data definitions related to the specific NDM.";
+     specific NDMs are expected to further ugment this module with
+     data definitions related to the specific NDM.
 
-  revision 2013-04-30 {
+     This module is part of the OF-CONFIG specification.";
+
+  revision 2013-10-05 {
     description
-      "Initial version";
+       "This version of this YANG Module is part of the OF-CONFIG
+        1.2 specification; please see the specification itself for
+        details.";
+
+    reference
+      "OF-CONFIG 1.2";    
   }
+
+/*****************************************************************
+ * Augments
+ *****************************************************************/
 
   augment "/ofc:capable-switch/ofc:resources" {
     container ndm {
