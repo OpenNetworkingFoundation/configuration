@@ -57,16 +57,13 @@ module of-config {
     type enumeration {
       enum "not-applicable";
       enum "1.0";
-      enum "1.0.1";
       enum "1.1";
       enum "1.2";
       enum "1.3";
-      enum "1.3.1";
-      enum "1.3.2";
     }
     description
-      "This enumeration contains the all OpenFlow
-       versions released so far.";
+      "This enumeration contains all OpenFlow major versions supported by
+       this module";
   }
 
   typedef datapath-id-type {
@@ -195,6 +192,16 @@ module of-config {
     description
       "The types of match field defined in OpenFlow Switch Specification
        versions 1.2, 1.3, and 1.3.1.";
+  }
+
+  typedef OFExperimenterId {
+    type uint32;
+    description
+      "The experimenter field is a 32-bit value that uniquely identifies the
+       experimenter. If the most significant byte is zero, the next
+       three bytes are the experimenter's IEEE OUI. If the most
+       significant byte is not zero, it is a value allocated by the
+       Open Networking Foundation.";
   }
 
   typedef hex-binary {
@@ -444,7 +451,7 @@ module of-config {
 
       leaf-list flow-table {
         type leafref {
-          path "/capable-switch/resources/flow-table/resource-id";
+          path "/capable-switch/resources/flow-table/table-id";
         }
         description
 	  "A resource identifier of a flow table of the OpenFlow Capable
@@ -732,8 +739,7 @@ module of-config {
            across reboots of the OpenFlow Logical Switch in such a case.
            If element connection-state has value 'down'and there is no
            information about previous connections to this OpenFlow
-           controller, then this element is not present or has the value
-           '0'.";
+           controller, then this element is not present.";
       }
 
       leaf-list supported-versions {
@@ -741,7 +747,7 @@ module of-config {
         description
 	  "This list of elements includes one entry for each OpenFlow protocol
            version that this OpenFlow controller supports.  It SHOULD
-           contain all";
+           contain all.";
       }
 
       leaf local-ip-address-in-use {
@@ -1250,12 +1256,17 @@ module of-config {
            set.";
       }
 
-      leaf-list experimenter {
-        type uint32;
-        description
-	  "A list of experimenter identifiers of queue properties used.
-
-           This element is optional.";
+      leaf experimenter-id {
+	type OFExperimenterId;
+	description
+	  "Experimenter ID of a currently configured experimenter.";
+      }
+      
+      leaf experimenter-data {
+	type hex-binary;
+	description
+	  "This leaf contains the rest of the experimenter queue property body and
+           is arbitrarily defined by the corresponding experimenter.";
       }
     }
   }
@@ -1534,20 +1545,66 @@ module of-config {
     description
       "Representation of an OpenFlow Flow Table Resource.";
 
-    uses OFResourceType;
-    leaf max-entries {
+    // XXX: OPEN QUESTIONS
+    // - Do we allow configuration of the following data structure, or is this read-only?
+    // - Can't find the OFResourceType in the OF-docs, 
+    // - Don't see the name field in UML, why?
+    // - From 7.3.5.1.1:
+    //    "Each ofp_table_features struct's properties field must contain exactly one of each of the
+    //     ofp_table_feature_prop_type properties s, with two exceptions. First, properties with the _MISS
+    //     suffix may be ommited if it is the same as the corresponding property for regular 
+    //     row entries. Second, properties of type OFPTFPT_EXPERIMENTER and OFPTFPT_EXPERIMENTER_MISS may be
+    //     ommited or included many times."
+    //   ...do we want to mandate the sames strict presence on members in this grouping by adding
+    //   'mandatory true'?
+    // - This grouping used to have 'uses OFResourceType', but I see no reference to that in the OF-wire spec
+    // - This grouping did not used to have 'table-id' or 'name'. Now it does. Table-id is a unique 8-bit
+    //   identifier of the table, it's also the key used in the 'list flow-table' elsewhere
+
+    leaf table-id {
       type uint8;
+
       description
-	"The maximum number of flow entries supported by the flow table.";
+	"Identifier of table.";
     }
 
-    container next-tables {
-      leaf-list table-id {
-        type inet:uri;
-      }
+    leaf name {
+      type string;
+      mandatory true;
+
       description
-	"An array of resource-ids of all flow tables that can be directly reached
-        from this table using the 'goto-table' instruction.";
+	"Table name";
+    }
+
+    leaf metadata-match {
+      type hex-binary {
+	length 16;
+      }
+
+      description
+	"This element indicates the bits of the metadata field on which the flow
+        table can match.  It is represented as 64-bit integer in
+        hexadecimal digits([0-9a-fA-F]) format.";
+    }
+
+    leaf metadata-write {
+      type hex-binary {
+	length 16;
+      }
+	
+      description
+	"This element indicates the bits of the metadata field on which flow
+         table can write using the 'write-metadata' instruction.  It is
+         represented as 64-bit integer in hexadecimal digits([0-9a-fA-F])
+         format.";
+    }
+
+    leaf max-entries {
+      type uint32;
+      mandatory true;
+
+      description
+	"The maximum number of flow entries supported by the flow table.";
     }
 
     container instructions {
@@ -1555,31 +1612,95 @@ module of-config {
         type OFInstructionType;
       }
       description
-	"The list of all instruction types supported by the flow table.";
+ 	"The list of instruction types supported by this table for regular flow
+         entries";
     }
 
-    container matches {
+    container instructions-miss {
       leaf-list type {
-        type OFMatchFieldType;
+        type OFInstructionType;
       }
       description
-	"The list of all match types supported by the flow table.";
+	"The list of all instruction types supported by this table for
+         table-miss flow entries";
+    }
+
+    container next-tables {
+      leaf-list table-id {
+        type uint8;
+      }
+      description
+	"An array of resource-ids of all flow tables that can be directly reached
+         from this table using the 'goto-table' instruction for regular flow
+         entries.";
+    }
+
+    container next-tables-miss {
+      leaf-list table-id {
+        type uint8;
+      }
+      description
+	"An array of resource-ids of all flow tables that can be directly reached
+         from this table using the 'goto-table' instruction for the table-miss flow
+         entry.";
     }
 
     container write-actions {
       leaf-list type {
         type OFActionType;
       }
+
       description
-	"The list of all write action types supported by the flow table.";
+	"The list of all write action types supported by this table for regular
+         flow entries.";
+    }
+
+    container write-actions-miss {
+      leaf-list type {
+        type OFActionType;
+      }
+
+      description
+	"The list of all write action types supported by this table for table-miss
+         flow entries.";
     }
 
     container apply-actions {
       leaf-list type {
         type OFActionType;
       }
+
       description
-	"The list of all apply action types supported by the flow table.";
+	"The list of all apply action types supported by the flow table for
+         regular flow entries.";
+    }
+
+    container apply-actions-miss {
+      leaf-list type {
+        type OFActionType;
+      }
+      description
+	"The list of all apply action types supported by the flow table for
+         table-miss flow entries.";
+    }
+
+    container matches {
+      leaf-list type {
+        type OFMatchFieldType;
+      }
+
+      description
+	"The list of all match types supported by this table for regular
+         flow entries.";
+    }
+
+    container wildcards {
+      leaf-list type {
+        type OFMatchFieldType;
+      }
+
+      description
+	"The list of all fields for which the table supports wildcarding.";
     }
 
     container write-setfields {
@@ -1587,8 +1708,17 @@ module of-config {
         type OFMatchFieldType;
       }
       description
-	"The list of all 'set-field' action types supported by the table using
-         write actions.";
+	"The list of all 'set-field' action types supported by this table using
+         write actions for regular flow entries.";
+    }
+
+    container write-setfields-miss {
+      leaf-list type {
+        type OFMatchFieldType;
+      }
+      description
+	"The list of all 'set-field' action types supported by this table using
+         write actions for table-miss flow entries.";
     }
 
     container apply-setfields {
@@ -1597,32 +1727,34 @@ module of-config {
       }
       description
 	"The list of all 'set-field' action types supported by the table using
-        apply actions.";
+         apply actions for regular flow entries.";
     }
 
-    container wildcards {
+    container apply-setfields-miss {
       leaf-list type {
         type OFMatchFieldType;
       }
       description
-	"The list of all fields for which the table supports wildcarding.";
+	"The list of all 'set-field' action types supported by the table using
+         apply actions for table-miss flow entries.";
     }
 
-    leaf metadata-match {
-      type hex-binary;
+    container experimenter {
+      leaf-list experimenter-id {
+	type OFExperimenterId;
+      }
       description
-	"This element indicates the bits of the metadata field on which the flow
-        table can match.  It is represented as 64-bit integer in
-        hexadecimal digits([0-9a-fA-F]) format.";
+	"The list of all experimenters supported by the table for regular
+         flow entries.";
     }
 
-    leaf metadata-write {
-      type hex-binary;
+    container experimenter-miss {
+      leaf-list experimenter-id {
+	type OFExperimenterId;
+      }
       description
-	"This element indicates the bits of the metadata field on which flow
-         table can write using the 'write-metadata' instruction.  It is
-         represented as 64-bit integer in hexadecimal digits([0-9a-fA-F])
-         format.";
+	"The list of all experimenters supported by the table for table-miss
+         flow entries.";
     }
   }
   
@@ -1730,7 +1862,7 @@ module of-config {
       }
 
       list flow-table {
-        key "resource-id";
+        key table-id;
         description
 	  "The list contains all flow table resources of the OpenFlow Capable
            Switch.";
