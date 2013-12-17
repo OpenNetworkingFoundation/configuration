@@ -1545,21 +1545,7 @@ module of-config {
     description
       "Representation of an OpenFlow Flow Table Resource.";
 
-    // XXX: OPEN QUESTIONS
-    // - Do we allow configuration of the following data structure, or is this read-only?
-    // - Can't find the OFResourceType in the OF-docs, 
-    // - Don't see the name field in UML, why?
-    // - From 7.3.5.1.1:
-    //    "Each ofp_table_features struct's properties field must contain exactly one of each of the
-    //     ofp_table_feature_prop_type properties s, with two exceptions. First, properties with the _MISS
-    //     suffix may be ommited if it is the same as the corresponding property for regular 
-    //     row entries. Second, properties of type OFPTFPT_EXPERIMENTER and OFPTFPT_EXPERIMENTER_MISS may be
-    //     ommited or included many times."
-    //   ...do we want to mandate the sames strict presence on members in this grouping by adding
-    //   'mandatory true'?
-    // - This grouping used to have 'uses OFResourceType', but I see no reference to that in the OF-wire spec
-    // - This grouping did not used to have 'table-id' or 'name'. Now it does. Table-id is a unique 8-bit
-    //   identifier of the table, it's also the key used in the 'list flow-table' elsewhere
+    uses OFResourceType;
 
     leaf table-id {
       type uint8;
@@ -1570,7 +1556,6 @@ module of-config {
 
     leaf name {
       type string;
-      mandatory true;
 
       description
 	"Table name";
@@ -1583,8 +1568,8 @@ module of-config {
 
       description
 	"This element indicates the bits of the metadata field on which the flow
-        table can match.  It is represented as 64-bit integer in
-        hexadecimal digits([0-9a-fA-F]) format.";
+         table can match on.  It is represented as a 64-bit integer in
+         hexadecimal digits([0-9a-fA-F]) format.";
     }
 
     leaf metadata-write {
@@ -1595,169 +1580,194 @@ module of-config {
       description
 	"This element indicates the bits of the metadata field on which flow
          table can write using the 'write-metadata' instruction.  It is
-         represented as 64-bit integer in hexadecimal digits([0-9a-fA-F])
+         represented as a 64-bit integer in hexadecimal digits([0-9a-fA-F])
          format.";
     }
 
     leaf max-entries {
       type uint32;
-      mandatory true;
+      config false;
 
       description
 	"The maximum number of flow entries supported by the flow table.";
     }
 
-    container instructions {
-      leaf-list type {
-        type OFInstructionType;
-      }
-      description
- 	"The list of instruction types supported by this table for regular flow
-         entries";
-    }
+    container properties {
+      presence "This table exposes feature properties";
 
-    container instructions-miss {
-      leaf-list type {
-        type OFInstructionType;
-      }
       description
-	"The list of all instruction types supported by this table for
-         table-miss flow entries";
-    }
+	"Table feature properties representing all possible features of a
+         table. Each container represent a single table feature
+         property.
 
-    container next-tables {
-      leaf-list table-id {
-        type uint8;
-      }
-      description
-	"An array of resource-ids of all flow tables that can be directly reached
-         from this table using the 'goto-table' instruction for regular flow
+         According to the specification, clients should understand that
+         the properties with the -miss suffix may be omitted if it is
+         the same as the corresponding property for regular flow
          entries.";
-    }
 
-    container next-tables-miss {
-      leaf-list table-id {
-        type uint8;
-      }
-      description
-	"An array of resource-ids of all flow tables that can be directly reached
-         from this table using the 'goto-table' instruction for the table-miss flow
-         entry.";
-    }
+      container instructions {
+	leaf-list type {
+	  type OFInstructionType;
 
-    container write-actions {
-      leaf-list type {
-        type OFActionType;
+	  description
+	    "The list of instruction types supported by this table for regular flow
+             entries";
+	}
       }
 
-      description
-	"The list of all write action types supported by this table for regular
-         flow entries.";
-    }
+      container instructions-miss {
+	leaf-list type {
+	  type OFInstructionType;
 
-    container write-actions-miss {
-      leaf-list type {
-        type OFActionType;
+	  description
+	    "The list of all instruction types supported by this table for
+             table-miss flow entries";
+	}
       }
 
-      description
-	"The list of all write action types supported by this table for table-miss
-         flow entries.";
-    }
+      container next-tables {
+	leaf-list table-id {
+	  type uint8;
 
-    container apply-actions {
-      leaf-list type {
-        type OFActionType;
+	  description
+	    "An array of resource-ids of all flow tables that can be directly reached
+             from this table using the 'goto-table' instruction for regular flow
+             entries.";
+	}
       }
 
-      description
-	"The list of all apply action types supported by the flow table for
-         regular flow entries.";
-    }
+      container next-tables-miss {
+	leaf-list table-id {
+	  type uint8;
 
-    container apply-actions-miss {
-      leaf-list type {
-        type OFActionType;
-      }
-      description
-	"The list of all apply action types supported by the flow table for
-         table-miss flow entries.";
-    }
-
-    container matches {
-      leaf-list type {
-        type OFMatchFieldType;
+	  description
+	    "An array of resource-ids of all flow tables that can be directly reached
+             from this table using the 'goto-table' instruction for the table-miss flow
+             entry.";
+	}
       }
 
-      description
-	"The list of all match types supported by this table for regular
-         flow entries.";
-    }
+      container write-actions {
+	leaf-list type {
+	  type OFActionType;
 
-    container wildcards {
-      leaf-list type {
-        type OFMatchFieldType;
+	  description
+	    "The list of all write action types supported by this table for regular
+             flow entries.";
+	}
       }
 
-      description
-	"The list of all fields for which the table supports wildcarding.";
-    }
+      container write-actions-miss {
+	leaf-list type {
+	  type OFActionType;
 
-    container write-setfields {
-      leaf-list type {
-        type OFMatchFieldType;
+	  description
+	    "The list of all write action types supported by this table for table-miss
+             flow entries.";
+	}
       }
-      description
-	"The list of all 'set-field' action types supported by this table using
-         write actions for regular flow entries.";
-    }
 
-    container write-setfields-miss {
-      leaf-list type {
-        type OFMatchFieldType;
-      }
-      description
-	"The list of all 'set-field' action types supported by this table using
-         write actions for table-miss flow entries.";
-    }
+      container apply-actions {
+	leaf-list type {
+	  type OFActionType;
 
-    container apply-setfields {
-      leaf-list type {
-        type OFMatchFieldType;
+	  description
+	    "The list of all apply action types supported by the flow table for
+             regular flow entries.";
+	}
       }
-      description
-	"The list of all 'set-field' action types supported by the table using
-         apply actions for regular flow entries.";
-    }
 
-    container apply-setfields-miss {
-      leaf-list type {
-        type OFMatchFieldType;
-      }
-      description
-	"The list of all 'set-field' action types supported by the table using
-         apply actions for table-miss flow entries.";
-    }
+      container apply-actions-miss {
+	leaf-list type {
+	  type OFActionType;
 
-    container experimenter {
-      leaf-list experimenter-id {
-	type OFExperimenterId;
+	  description
+	    "The list of all apply action types supported by the flow table for
+             table-miss flow entries.";
+	}
       }
-      description
-	"The list of all experimenters supported by the table for regular
-         flow entries.";
-    }
 
-    container experimenter-miss {
-      leaf-list experimenter-id {
-	type OFExperimenterId;
+      container matches {
+	leaf-list type {
+	  type OFMatchFieldType;
+
+	  description
+	    "The list of all match types supported by this table for regular
+             flow entries.";
+	}
       }
-      description
-	"The list of all experimenters supported by the table for table-miss
-         flow entries.";
+
+      container wildcards {
+	leaf-list type {
+	  type OFMatchFieldType;
+
+	  description
+	    "The list of all fields for which the table supports wildcarding.";
+	}
+      }
+
+      container write-setfields {
+	leaf-list type {
+	  type OFMatchFieldType;
+
+	  description
+	    "The list of all 'set-field' action types supported by this table using
+             write actions for regular flow entries.";
+	}
+      }
+
+      container write-setfields-miss {
+	leaf-list type {
+	  type OFMatchFieldType;
+
+	  description
+	    "The list of all 'set-field' action types supported by this table using
+             write actions for table-miss flow entries.";
+	}
+      }
+
+      container apply-setfields {
+	leaf-list type {
+	  type OFMatchFieldType;
+
+	  description
+	    "The list of all 'set-field' action types supported by the table using
+             apply actions for regular flow entries.";
+	}
+      }
+
+      container apply-setfields-miss {
+	leaf-list type {
+	  type OFMatchFieldType;
+
+	  description
+	    "The list of all 'set-field' action types supported by the table using
+             apply actions for table-miss flow entries.";
+	}
+      }
+
+      container experimenter {
+	leaf-list experimenter-id {
+	  type OFExperimenterId;
+
+	description
+	  "The list of all experimenters supported by the table for regular
+           flow entries.";
+        }
+      }
+
+      container experimenter-miss {
+	leaf-list experimenter-id {
+	  type OFExperimenterId;
+
+	  description
+	    "The list of all experimenters supported by the table for table-miss
+             flow entries.";
+	}
+      }
     }
   }
-  
+
 /*****************************************************************
  * Main container
  *****************************************************************/
