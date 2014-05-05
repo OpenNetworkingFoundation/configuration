@@ -52,17 +52,6 @@ module of-config {
       "Generic type of an identifier in OF-CONFIG";
   }
 
-  typedef OFConfigurationPointProtocolType {
-    type enumeration {
-      enum "ssh";
-      enum "soap";
-      enum "tls";
-      enum "beep";
-    }
-    description
-      "Possible protocols to connect ot an OF Configuration Point";
-  }
-
   typedef OFOpenFlowVersionType {
     type enumeration {
       enum "not-applicable";
@@ -386,70 +375,6 @@ module of-config {
          capable-switch) that is present in all OF-CONFIG versions
          specified so far. This is the only possiblity to identify
          OF-CONFIG versions prior to OF-CONFIG 1.1.1.";
-    }
-
-    container configuration-points {
-      list configuration-point {
-        key "id";
-        description
-	  "The list of all Configuration Points known to the OpenFlow Capable
-           Switch that may manage it using OF-CONFIG.
-
-    OLD: description
-      Representation of an OpenFlow Configuration Point.
-       Instances of the Configuration Point class SHOULD be stored 
-       persistently across reboots of the OpenFlow Capable Switch.
-    
-       When a connection is established between an OpenFlow Capable 
-       Switch and a Configuration Point the switch  MUST store the 
-       connection information in an instance of the Configuration 
-       Point class. If such an instance does not exist, the OpenFlow
-       Capable Switch MUST create an instance where it then stores 
-       the connection information.
-    
-       An OpenFlow Capable Switch that cannot initiate a connection 
-       to a configuration point does not have to implement the 
-       Configuration Point class. It SHOULD block attempts to write
-       to instances of the Configuration Point class with NETCONF 
-       <edit-config> operations.";
-
-        leaf id {
-          type OFConfigIdType;
-          mandatory true;
-          description
-            "A unique but locally arbitrary identifier that
-         identifies a Configuration Point within the context of an 
-         OpenFlow Capable Switch.";
-        }
-
-        leaf uri {
-          type inet:uri;
-          mandatory true;
-          description
-            "A locator of the Configuration Point.  It 
-         identifies the location of the Configuration Point as a 
-         service resource and MUST include all information necessary
-         for the OpenFlow Capable Switch to connect to the 
-         Configuration Point or re-connect to it should it become 
-         disconnected.  Such information MAY include, for example, 
-         protocol, fully qualified domain name, IP address, port 
-         number, etc.";
-        }
-
-        leaf protocol {
-          type OFConfigurationPointProtocolType;
-          default "ssh";
-          description
-            "The transport protocol that the Configuration
-         Point uses when communicating via NETCONF with the OpenFlow
-         Capable Switch.";
-
-          reference
-            "The mappings of NETCONF to different transport
-         protocols are defined in RFC 6242 for SSH, RFC 4743 for
-         SOAP, RFC 4744 for BEEP, and RFC 5539 for TLS";
-        }
-      }
     }
 
     container resources {
