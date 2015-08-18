@@ -1,0 +1,2287 @@
+<head><title> onf-of-config 
+</title>
+<style type="text/css" media="all">
+
+body, h1, h2, h3, h4, h5, h6, p, td, table td, input, select {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size: 10pt;
+}
+
+body, ol, li, h2 {padding:0; margin: 0;}
+
+ol#root  {padding-left: 5px; margin-top: 2px; margin-bottom: 1px;
+          list-style: none;}
+
+#root ol {padding-left: 5px; margin-top: 2px; margin-bottom: 1px;
+          list-style: none;}
+
+#root li {margin-bottom: 1px; padding-left: 5px;  margin-top: 2px;
+          font-size: x-small;}
+
+.panel   {border-bottom: 1px solid #999; margin-bottom: 2px; margin-top: 2px;
+          background: #eee;}
+
+#root ul {margin-bottom: 1px; margin-top: 2px; list-style-position: inside;}
+
+#root a {text-decoration: none;}
+
+.folder {
+   
+background:url(data:image/gif;base64,R0lGODlhGgAOALMLAJmZmYuLi3p6ev///+zs7MzMzGZmZqqqqrS0tLq6uuHh4f///wAAAAAAAAAAAAAAACH5BAEAAAsALAAAAAAaAA4AAASJcMlJq714qgROKUtxAABBgJkUFMQwFEhyFoFAKini7idSHwGDQXAYYAADxQdBOjiBQqGgYKx4AomCYoYAHqLRVVUCKCBdSthhCgYDKIDuTpnoGgptgxged3FHBgpgU2MTASsmdCM1gkNFGDVaHx91QQQ3KZGSZocHBCEpEgIrCYdxn6EVAnoIGREAOw==)  no-repeat; float: left; padding-right: 30px;margin-left: 3px;
+          
+}
+
+.doc {
+   
+background:url(data:image/gif;base64,R0lGODlhDAAOALMJAMzMzODg4P///+np6a+vr+7u7jMzM5mZmYmJif///wAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAkALAAAAAAMAA4AAARFEEhyCAEjackPCESwBRxwCKD4BSSACCgxrKyJ3B42sK2FSINgsAa4AApI4W5yFCCTywts+txJp9TC4IrFcruwi2FMLgMiADs=)
+no-repeat; float: left; padding-right: 10px; margin-left: 3px;
+cursor: pointer;
+          
+}
+
+.leaf {
+   
+background:url(data:image/gif;base64,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)
+no-repeat; float: left; padding-right: 10px;margin-left: 3px;
+          
+}
+
+.leaf-list {
+   
+background:url(data:image/gif;base64,R0lGODlhEAAQANUAAAAAAAAtAAk3CQA5AABDAAFPAQBVAAFaAQBhAAFrAgJzAglzCRx7Gyd8JgCCCyeCIgCMDSWMIjqPNzySOwCUDwWUFECVQEOYQQCbEUidQ0OePx6fJk2hSgCiEg2iG1ClTEimRFKnUg6oHVesVSatL1muWVqvVF6zXFu1UmG2YWK3X2O4XGi9ZG3CY3TJbHbNZ3jNbHzRboDVcYPYdIjddxrfKyziPUHnUlXrZmTudf///wAAAAAAAAAAAAAAAAAAACH5BAkKADsAIf8LSUNDUkdCRzEwMTL/AAAHqGFwcGwCIAAAbW50clJHQiBYWVogB9kAAgAZAAsAGgALYWNzcEFQUEwAAAAAYXBwbAAAAAAAAAAAAAAAAAAAAAAAAPbWAAEAAAAA0y1hcHBsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALZGVzYwAAAQgAAABvZHNjbQAAAXgAAAVsY3BydAAABuQAAAA4d3RwdAAABxwAAAAUclhZWgAABzAAAAAUZ1hZWgAAB0QAAAAUYlhZWgAAB1gAAAAUclRSQwAAB2wAAAAOY2hhZAAAB3wAAAAsYlRSQwAAB2wAAAAOZ1RS/0MAAAdsAAAADmRlc2MAAAAAAAAAFEdlbmVyaWMgUkdCIFByb2ZpbGUAAAAAAAAAAAAAABRHZW5lcmljIFJHQiBQcm9maWxlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABtbHVjAAAAAAAAAB4AAAAMc2tTSwAAACgAAAF4aHJIUgAAACgAAAGgY2FFUwAAACQAAAHIcHRCUgAAACYAAAHsdWtVQQAAACoAAAISZnJGVQAAACgAAAI8emhUVwAAABYAAAJkaXRJVAAAACgAAAJ6bmJOTwAAACYAAAKia29LUgAAABYAAP8CyGNzQ1oAAAAiAAAC3mhlSUwAAAAeAAADAGRlREUAAAAsAAADHmh1SFUAAAAoAAADSnN2U0UAAAAmAAAConpoQ04AAAAWAAADcmphSlAAAAAaAAADiHJvUk8AAAAkAAADomVsR1IAAAAiAAADxnB0UE8AAAAmAAAD6G5sTkwAAAAoAAAEDmVzRVMAAAAmAAAD6HRoVEgAAAAkAAAENnRyVFIAAAAiAAAEWmZpRkkAAAAoAAAEfHBsUEwAAAAsAAAEpHJ1UlUAAAAiAAAE0GFyRUcAAAAmAAAE8mVuVVMAAAAmAAAFGGRhREsAAAAuAAAFPgBWAWEAZQBvAGIAZQD/YwBuAP0AIABSAEcAQgAgAHAAcgBvAGYAaQBsAEcAZQBuAGUAcgBpAQ0AawBpACAAUgBHAEIAIABwAHIAbwBmAGkAbABQAGUAcgBmAGkAbAAgAFIARwBCACAAZwBlAG4A6AByAGkAYwBQAGUAcgBmAGkAbAAgAFIARwBCACAARwBlAG4A6QByAGkAYwBvBBcEMAQzBDAEOwRMBD0EOAQ5ACAEPwRABD4ERAQwBDkEOwAgAFIARwBCAFAAcgBvAGYAaQBsACAAZwDpAG4A6QByAGkAcQB1AGUAIABSAFYAQpAadSgAIABSAEcAQgAggnJfaWPPj/AAUAByAG8AZgBp/wBsAG8AIABSAEcAQgAgAGcAZQBuAGUAcgBpAGMAbwBHAGUAbgBlAHIAaQBzAGsAIABSAEcAQgAtAHAAcgBvAGYAaQBsx3y8GAAgAFIARwBCACDVBLhc0wzHfABPAGIAZQBjAG4A/QAgAFIARwBCACAAcAByAG8AZgBpAGwF5AXoBdUF5AXZBdwAIABSAEcAQgAgBdsF3AXcBdkAQQBsAGwAZwBlAG0AZQBpAG4AZQBzACAAUgBHAEIALQBQAHIAbwBmAGkAbADBAGwAdABhAGwA4QBuAG8AcwAgAFIARwBCACAAcAByAG8AZgBpAGxmbpAaACAAUgBHAEIAIGPPj//wZYdO9k4AgiwAIABSAEcAQgAgMNcw7TDVMKEwpDDrAFAAcgBvAGYAaQBsACAAUgBHAEIAIABnAGUAbgBlAHIAaQBjA5MDtQO9A7kDugPMACADwAPBA78DxgOvA7sAIABSAEcAQgBQAGUAcgBmAGkAbAAgAFIARwBCACAAZwBlAG4A6QByAGkAYwBvAEEAbABnAGUAbQBlAGUAbgAgAFIARwBCAC0AcAByAG8AZgBpAGUAbA5CDhsOIw5EDh8OJQ5MACAAUgBHAEIAIA4XDjEOSA4nDkQOGwBHAGUAbgBlAGwAIABSAEcAQgAgAFAAcgBvAGYAaQBsAGkAWQBsAGX/AGkAbgBlAG4AIABSAEcAQgAtAHAAcgBvAGYAaQBpAGwAaQBVAG4AaQB3AGUAcgBzAGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAFIARwBCBB4EMQRJBDgEOQAgBD8EQAQ+BEQEOAQ7BEwAIABSAEcAQgZFBkQGQQAgBioGOQYxBkoGQQAgAFIARwBCACAGJwZEBjkGJwZFAEcAZQBuAGUAcgBpAGMAIABSAEcAQgAgAFAAcgBvAGYAaQBsAGUARwBlAG4AZQByAGUAbAAgAFIARwBCAC0AYgBlAHMAawByAGkAdgBlAGwAcwBldGV4dAAAAABDb3B5cmlnaHQgMjAwrzcgQXBwbGUgSW5jLiwgYWxsIHJpZ2h0cyByZXNlcnZlZC4AWFlaIAAAAAAAAPNSAAEAAAABFs9YWVogAAAAAAAAdE0AAD3uAAAD0FhZWiAAAAAAAABadQAArHMAABc0WFlaIAAAAAAAACgaAAAVnwAAuDZjdXJ2AAAAAAAAAAEBzQAAc2YzMgAAAAAAAQxCAAAF3v//8yYAAAeSAAD9kf//+6L///2jAAAD3AAAwGwALAAAAAAQABAAAAaFwJ1wSCwaj8jkTnFUOJ9PoyKCarlcsBmNSVyAWKmUqhWTzRLEhOZUKplasPgLLUQwRiHOp8XnoxBDCBMcFhkrh4ctD4BCBxcTEiaSkiQiEEQGEw16H50mHjkdRAUNFxx6HBsVFDgYrkIEsbIEEDe2thQ7AwNGEL42vpcBSQ41DkpDCcpCQQA7)
+no-repeat; float: left; padding-right: 10px; margin-left: 3px;
+          
+}
+
+.action {
+   
+background:url(data:image/gif;base64,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)
+no-repeat; float: left; height: 14px; width: 12px; padding-right: 10px; margin-left: 3px;
+          
+}
+
+.tier1  {margin-left: 0;     }
+.tier2  {margin-left: 1.5em; }
+.tier3  {margin-left: 3em;   }
+.tier4  {margin-left: 4.5em; }
+.tier5  {margin-left: 6em;   }
+.tier6  {margin-left: 7.5em; }
+.tier7  {margin-left: 9em;   }
+.tier8  {margin-left: 10.5em;}
+.tier9  {margin-left: 12em;  }
+.tier10 {margin-left: 13.5em;}
+.tier11 {margin-left: 15em;  }
+.tier12 {margin-left: 16.5em;}
+
+.level1 {padding-left: 0;    }
+.level2 {padding-left: 1em;  }
+.level3 {padding-left: 2em;  }
+.level4 {padding-left: 3em;  }
+</style>
+
+<script language="javascript1.2">
+function toggleRows(elm) {
+ var rows = document.getElementsByTagName("TR");
+ elm.style.backgroundImage = "url(data:image/gif;base64,R0lGODlhGgAOALMLAJmZmYuLi3p6ev///+zs7MzMzGZmZqqqqrS0tLq6uuHh4f///wAAAAAAAAAAAAAAACH5BAEAAAsALAAAAAAaAA4AAASJcMlJq714qgROKUtxAABBgJkUFMQwFEhyFoFAKini7idSHwGDQXAYYAADxQdBOjiBQqGgYKx4AomCYoYAHqLRVVUCKCBdSthhCgYDKIDuTpnoGgptgxged3FHBgpgU2MTASsmdCM1gkNFGDVaHx91QQQ3KZGSZocHBCEpEgIrCYdxn6EVAnoIGREAOw==)";
+ var newDisplay = "none";
+ var thisID = elm.parentNode.parentNode.parentNode.id + "-";
+ // Are we expanding or contracting? If the first child is hidden, we expand
+  for (var i = 0; i < rows.length; i++) {
+   var r = rows[i];
+   if (matchStart(r.id, thisID, true)) {
+    if (r.style.display == "none") {
+     if (document.all) newDisplay = "block"; //IE4+ specific code
+     else newDisplay = "table-row"; //Netscape and Mozilla
+     elm.style.backgroundImage = "url(data:image/gif;base64,R0lGODlhGgAOALMLAJmZmYqKiv///+zs7MzMzGZmZrOzs7q6uqqqqnZ2duHh4f///wAAAAAAAAAAAAAAACH5BAEAAAsALAAAAAAaAA4AAASScMlJq714qgMMIQuBAMAwZBRADIJAGMfwBQE6GW0uGzRS2wuAQPHhABAIAyBAABSe0IJKgiAEDgSF7OVDBKNQwEQlbBG5CZAiAA4oxsoc8WBAFEALe9SQ6rS2dU5vCwJsTwECKUwmcyMBCYMhUHgTj1kfRTwFJxKFBYgVlpdNNCUVBHcWCUwHpQacFgJCqp98GBEAOw==)";
+    }
+    break;
+   }
+ }
+
+ // When expanding, only expand one level.  Collapse all desendants.
+ var matchDirectChildrenOnly = (newDisplay != "none");
+
+ for (var j = 0; j < rows.length; j++) {
+   var s = rows[j];
+   if (matchStart(s.id, thisID, matchDirectChildrenOnly)) {
+     s.style.display = newDisplay;
+     var cell = s.getElementsByTagName("TD")[0];
+     var tier = cell.getElementsByTagName("DIV")[0];
+     var folder = tier.getElementsByTagName("A")[0];
+     if (folder.getAttribute("onclick") != null) {
+     folder.style.backgroundImage = "url(data:image/gif;base64,R0lGODlhGgAOALMLAJmZmYuLi3p6ev///+zs7MzMzGZmZqqqqrS0tLq6uuHh4f///wAAAAAAAAAAAAAAACH5BAEAAAsALAAAAAAaAA4AAASJcMlJq714qgROKUtxAABBgJkUFMQwFEhyFoFAKini7idSHwGDQXAYYAADxQdBOjiBQqGgYKx4AomCYoYAHqLRVVUCKCBdSthhCgYDKIDuTpnoGgptgxged3FHBgpgU2MTASsmdCM1gkNFGDVaHx91QQQ3KZGSZocHBCEpEgIrCYdxn6EVAnoIGREAOw==)";
+     }
+   }
+ }
+}
+
+function matchStart(target, pattern, matchDirectChildrenOnly) {
+ var pos = target.indexOf(pattern);
+ if (pos != 0)
+    return false;
+ if (!matchDirectChildrenOnly)
+    return true;
+ if (target.slice(pos + pattern.length, target.length).indexOf("-") >= 0)
+    return false;
+ return true;
+}
+
+function collapseAllRows() {
+ var rows = document.getElementsByTagName("TR");
+ for (var i = 0; i < rows.length; i++) {
+   var r = rows[i];
+   if (r.id.indexOf("-") >= 0) {
+     r.style.display = "none";
+   }
+ }
+}
+
+function expandAllRows() {
+  var rows = document.getElementsByTagName("TR");
+  for (var i = 0; i < rows.length; i ++) {
+    var r = rows[i];
+    if (r.id.indexOf("-") >= 0) {
+      r.style.display = "table-row";
+    }
+  }
+}
+</script>
+
+<body onload="collapseAllRows();">
+<a href="http://www.tail-f.com">
+   <img src= "data:image/gif;base64,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"  />
+</a>
+<div class="app">
+<div style="background: #eee; border: dashed 1px #000;">
+<h1> Module: <font color=blue>onf-of-config</font>, Namespace:
+                    <font color=blue>http://opennetworking.org/config</font>, Prefix:
+                    <font color=blue>of-config</font></h1> 
+
+ <table width="100%">
+
+ <tr>
+  <!-- specifing one or more widths keeps columns
+       constant despite changes in visible content -->
+  <th align=left>
+     Element
+     <a href='#' onclick='expandAllRows();'>[+]Expand all</a>
+     <a href='#' onclick='collapseAllRows();'>[-]Collapse all</a>
+  </th>
+  <th align=left>Schema</th>
+  <th align=left>Type</th>
+  <th align=left>Flags</th>
+  <th align=left>Opts</th>
+  <th align=left>Status</th>
+  <th align=left>Path</th>
+</tr>
+<tr id="1" class="a">
+                     <td id="p1">
+                        <div id="p2" class="tier1">
+                           <a href="#" id="p3"
+                              onclick="toggleRows(this);return false;"
+                              class="folder">&nbsp;
+                           </a>
+                           <font color=blue>onf-of-config</font>
+                        </div>
+                     </td> 
+<td>module</td><td></td><td></td><td></td><td>
+                    </td></tr>
+<tr id="1-1" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier2">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The OpenFlow Capable Switch serves as the root element for an
+OpenFlow configuration.  It contains logical switches and
+resources that can be assigned to logical switches.  It may
+have relations to OpenFlow Configuration Points.">capable-switch</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch</td>
+                    </tr> 
+<tr id="1-1-1" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier3>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A unique but locally arbitrary identifier that uniquely
+identifies a  Capable Switch within the context of potential
+OpenFlow Configuration Points.  It MUST be persistent across
+reboots of the OpenFlow Capable Switch.">  id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="string
+">string</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:id</td</tr> 
+<tr id="1-1-2" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier3>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The maximum supported OF-CONFIG version that is supported by the
+       OpenFlow Capable Switch. For switches implementing this version
+       of the OF-CONFIG protocol this MUST always be 1.2.
+
+       This object can be used to identify the OF-CONFIG version
+       a capable switch supports beginning with version 1.1.1 of
+       OF-CONFIG. In addtion the supported version can be
+       determined by the namespace the OpenFlow Capable Switch
+       returns to configuration request of an element (like
+       capable-switch) that is present in all OF-CONFIG versions
+       specified so far. This is the only possiblity to identify
+       OF-CONFIG versions prior to OF-CONFIG 1.1.1."> <em> config-version </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="string
+">string</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:config-version</td</tr> 
+<tr id="1-1-3" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier3">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="No description">configuration-points</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:configuration-points</td>
+                    </tr> 
+<tr id="1-1-3-1" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier4">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The list of all Configuration Points known to the OpenFlow Capable
+       Switch that may manage it using OF-CONFIG.">configuration-point[id]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:configuration-points/of-config:configuration-point</td>
+                    </tr> 
+<tr id="1-1-3-1-1" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A unique but locally arbitrary identifier that
+identifies a Configuration Point within the context of an
+OpenFlow Capable Switch.">  id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="OFConfigId
+string
+">OFConfigId</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:configuration-points/of-config:configuration-point/of-config:id</td</tr> 
+<tr id="1-1-3-1-2" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A locator of the Configuration Point.  It
+identifies the location of the Configuration Point as a
+service resource and MUST include all information necessary
+for the OpenFlow Capable Switch to connect to the
+Configuration Point or re-connect to it should it become
+disconnected.  Such information MAY include, for example,
+protocol, fully qualified domain name, IP address, port
+number, etc.">  uri </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="inet:uri
+string
+">inet:uri</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:configuration-points/of-config:configuration-point/of-config:uri</td</tr> 
+<tr id="1-1-3-1-3" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The transport protocol that the Configuration
+Point uses when communicating via NETCONF with the OpenFlow
+Capable Switch."> <em> protocol </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="OFConfigurationPointProtocolType
+enumeration
+ : {ssh,soap,tls,beep,}">OFConfigurationPointProtocolType</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:configuration-points/of-config:configuration-point/of-config:protocol</td</tr> 
+<tr id="1-1-4" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier3">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="A lists containing all resources of the OpenFlow Capable
+Switch that can be used by OpenFlow Logical Switches.
+Resources are listed here independent of their actual
+assignment to OpenFlow Logical Switches.  They may be
+available to be assigned to an OpenFlow Logical Switch or
+already in use by an OpenFlow Logical Switch.">resources</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources</td>
+                    </tr> 
+<tr id="1-1-4-2" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier4">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The list contains all owned certificate resources of the
+OpenFlow Capable Switch.">owned-certificate[resource-id]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:owned-certificate</td>
+                    </tr> 
+<tr id="1-1-4-2-4" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A unique but locally arbitrary identifier that uniquely
+identifies an OpenFlow Port within the context of an OpenFlow
+Logical Switch. It MUST be persistent across reboots of the
+OpenFlow Capable Switch.">  resource-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="of-config-resource-id-type
+inet:uri
+">of-config-resource-id-type</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:owned-certificate/of-config:resource-id</td</tr> 
+<tr id="1-1-4-2-5" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="An X.509 certificate in DER format base64 encoded.">  certificate </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="string
+">string</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:owned-certificate/of-config:certificate</td</tr> 
+<tr id="1-1-4-2-6" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier5">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="This element contains the private key corresponding to the
+      certificate. The private key is encoded as specified in
+      XML-Signature Syntax and Processing
+      (http://www.w3.org/TR/2001/PR-xmldsig-core-20010820/).
+      Currently the specification only support DSA and RSA keys.">private-key</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:owned-certificate/of-config:private-key</td>
+                    </tr> 
+<tr id="1-1-4-2-6-1" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="No description">(key-type)</abbr>
+                          </div>
+                       </td> 
+<td nowrap>choice</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/capable-switch/resources/owned-certificate/private-key</td>
+                    </tr> 
+<tr id="1-1-4-2-6-1-1" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier7">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="No description">:(dsa)</abbr>
+                          </div>
+                       </td> 
+<td nowrap>case</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/capable-switch/resources/owned-certificate/private-key</td>
+                    </tr> 
+<tr id="1-1-4-2-6-1-1-1" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier8">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="No description">DSAKeyValue</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue</td>
+                    </tr> 
+<tr id="1-1-4-2-6-1-1-1-1" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A prime modulus meeting the requirements of the standard
+       above">  P </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:P</td</tr> 
+<tr id="1-1-4-2-6-1-1-1-2" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="An integer in the range 2**159 < Q < 2**160 which is a
+       prime divisor of P-1">  Q </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:Q</td</tr> 
+<tr id="1-1-4-2-6-1-1-1-3" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="(P - 1) / Q"> <em> J </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:J</td</tr> 
+<tr id="1-1-4-2-6-1-1-1-4" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="An integer with certain properties with respect to P and Q"> <em> G </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:G</td</tr> 
+<tr id="1-1-4-2-6-1-1-1-5" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="G**X mod P (where X is part of the private key and not made
+       public)">  Y </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:Y</td</tr> 
+<tr id="1-1-4-2-6-1-1-1-6" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A DSA prime generation seed">  Seed </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:Seed</td</tr> 
+<tr id="1-1-4-2-6-1-1-1-7" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A DSA prime generation counter">  PgenCounter </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:PgenCounter</td</tr> 
+<tr id="1-1-4-2-6-1-2" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier7">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="No description">:(rsa)</abbr>
+                          </div>
+                       </td> 
+<td nowrap>case</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/capable-switch/resources/owned-certificate/private-key</td>
+                    </tr> 
+<tr id="1-1-4-2-6-1-2-2" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier8">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="No description">RSAKeyValue</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:RSAKeyValue</td>
+                    </tr> 
+<tr id="1-1-4-2-6-1-2-2-8" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="No description">  Modulus </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:RSAKeyValue/of-config:Modulus</td</tr> 
+<tr id="1-1-4-2-6-1-2-2-9" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier9>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="No description">  Exponent </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="binary
+">binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:RSAKeyValue/of-config:Exponent</td</tr> 
+<tr id="1-1-4-3" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier4">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The list contains all external certificate resources of the OpenFlow
+       Capable Switch.">external-certificate[resource-id]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:external-certificate</td>
+                    </tr> 
+<tr id="1-1-4-3-7" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A unique but locally arbitrary identifier that uniquely
+identifies an OpenFlow Port within the context of an OpenFlow
+Logical Switch. It MUST be persistent across reboots of the
+OpenFlow Capable Switch.">  resource-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="of-config-resource-id-type
+inet:uri
+">of-config-resource-id-type</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:external-certificate/of-config:resource-id</td</tr> 
+<tr id="1-1-4-3-8" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="An X.509 certificate in DER format base64 encoded.">  certificate </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="string
+">string</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:external-certificate/of-config:certificate</td</tr> 
+<tr id="1-1-4-4" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier4">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The list contains all flow table resources of the OpenFlow
+Capable Switch.">flow-table[resource-id]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table</td>
+                    </tr> 
+<tr id="1-1-4-4-9" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A unique but locally arbitrary identifier that uniquely
+identifies an OpenFlow Port within the context of an OpenFlow
+Logical Switch. It MUST be persistent across reboots of the
+OpenFlow Capable Switch.">  resource-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="of-config-resource-id-type
+inet:uri
+">of-config-resource-id-type</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:resource-id</td</tr> 
+<tr id="1-1-4-4-10" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Table name at the capable switch level"> <em> name </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="string
+">string</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:name</td</tr> 
+<tr id="1-1-4-4-11" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This element indicates the bits of the metadata field on
+which flow table can match. It is represented as a 64-bit
+integer in hexadecimal digits([0-9a-fA-F]) format."> <em> metadata-match </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="hex-binary
+ {length = 16}binary
+">hex-binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:metadata-match</td</tr> 
+<tr id="1-1-4-4-12" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This element indicates the bits of the metadata field on
+which flow table can write using the 'write-metadata'
+instruction. It is represented as a 64-bit integer in
+hexadecimal digits([0-9a-fA-F]) format."> <em> metadata-write </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="hex-binary
+ {length = 16}binary
+">hex-binary</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:metadata-write</td</tr> 
+<tr id="1-1-4-4-13" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The maximum number of flow entries supported by the
+flow table."> <em> max-entries </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="uint32
+">uint32</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:max-entries</td</tr> 
+<tr id="1-1-4-4-14" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier5">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Table feature properties representing all possible features of a
+table. Each container represent a single table feature
+property.
+
+According to the specification, clients should understand that
+the properties with the -miss suffix may be omitted if it is
+the same as the corresponding property for regular flow
+entries.">properties</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties</td>
+                    </tr> 
+<tr id="1-1-4-4-14-2" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Instructions property">instructions</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:instructions</td>
+                    </tr> 
+<tr id="1-1-4-4-14-2-3" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of instruction types supported by this table
+for regular flow entries">  instruction </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFInstructionType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:instructions/of-config:instruction</td</tr> 
+<tr id="1-1-4-4-14-3" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Instructions for table-miss">instructions-miss</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:instructions-miss</td>
+                    </tr> 
+<tr id="1-1-4-4-14-3-4" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all instruction types supported by this
+table for table-miss flow entries">  instruction </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFInstructionType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:instructions-miss/of-config:instruction</td</tr> 
+<tr id="1-1-4-4-14-4" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Next Table property">next-tables</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:next-tables</td>
+                    </tr> 
+<tr id="1-1-4-4-14-4-5" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="List of tables that can be directly reached from the
+present table using the goto-table instruction. Table ids
+reference the identifiers in the logical switch scope.">  table-resource-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="of-config-resource-id-type
+inet:uri
+">of-config-resource-id-type</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:next-tables/of-config:table-resource-id</td</tr> 
+<tr id="1-1-4-4-14-5" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Next Table for table-miss">next-tables-miss</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:next-tables-miss</td>
+                    </tr> 
+<tr id="1-1-4-4-14-5-6" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="List of tables that can be directly reached from the
+present table using the goto-table instruction on a
+table-miss. Table ids reference the identifiers in the
+logical switch scope.">  table-resource-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="of-config-resource-id-type
+inet:uri
+">of-config-resource-id-type</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:next-tables-miss/of-config:table-resource-id</td</tr> 
+<tr id="1-1-4-4-14-6" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Write Actions property">write-actions</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-actions</td>
+                    </tr> 
+<tr id="1-1-4-4-14-6-7" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all write action types supported by this
+table for normal flow entries.">  action </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFActionType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-actions/of-config:action</td</tr> 
+<tr id="1-1-4-4-14-7" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Write Actions for table-miss">write-actions-miss</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-actions-miss</td>
+                    </tr> 
+<tr id="1-1-4-4-14-7-8" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all write action types supported by this
+table for normal flow entries.">  action </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFActionType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-actions-miss/of-config:action</td</tr> 
+<tr id="1-1-4-4-14-8" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Apply Actions property">apply-actions</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-actions</td>
+                    </tr> 
+<tr id="1-1-4-4-14-8-9" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all write action types supported by this
+table for normal flow entries.">  action </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFActionType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-actions/of-config:action</td</tr> 
+<tr id="1-1-4-4-14-9" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Apply Actions for table-miss">apply-actions-miss</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-actions-miss</td>
+                    </tr> 
+<tr id="1-1-4-4-14-9-10" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all write action types supported by this
+table for normal flow entries.">  action </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFActionType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-actions-miss/of-config:action</td</tr> 
+<tr id="1-1-4-4-14-10" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Match property">match</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:match</td>
+                    </tr> 
+<tr id="1-1-4-4-14-10-11" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all match fields supported by the table">  oxm-type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFMatchFieldType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:match/of-config:oxm-type</td</tr> 
+<tr id="1-1-4-4-14-11" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Wildcards property">wildcards</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:wildcards</td>
+                    </tr> 
+<tr id="1-1-4-4-14-11-12" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all match fields supported by the table">  oxm-type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFMatchFieldType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:wildcards/of-config:oxm-type</td</tr> 
+<tr id="1-1-4-4-14-12" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Write Set-Field property">write-setfield</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-setfield</td>
+                    </tr> 
+<tr id="1-1-4-4-14-12-13" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all match fields supported by the table">  oxm-type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFMatchFieldType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-setfield/of-config:oxm-type</td</tr> 
+<tr id="1-1-4-4-14-13" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Write Set-Field for table-miss">write-setfield-miss</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-setfield-miss</td>
+                    </tr> 
+<tr id="1-1-4-4-14-13-14" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all match fields supported by the table">  oxm-type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFMatchFieldType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-setfield-miss/of-config:oxm-type</td</tr> 
+<tr id="1-1-4-4-14-14" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Apply Set-Field property">apply-setfield</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-setfield</td>
+                    </tr> 
+<tr id="1-1-4-4-14-14-15" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all match fields supported by the table">  oxm-type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFMatchFieldType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-setfield/of-config:oxm-type</td</tr> 
+<tr id="1-1-4-4-14-15" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Apply Set-Field for table-miss">apply-setfield-miss</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-setfield-miss</td>
+                    </tr> 
+<tr id="1-1-4-4-14-15-16" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="The list of all match fields supported by the table">  oxm-type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFMatchFieldType}">identityref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-setfield-miss/of-config:oxm-type</td</tr> 
+<tr id="1-1-4-4-14-16" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Experimenter property">experimenter</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:experimenter</td>
+                    </tr> 
+<tr id="1-1-4-4-14-16-17" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="List of all experimenters supported by the table for
+normal flow entries.">  experimenter-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="of-types:OFExperimenterId
+uint32
+">of-types:OFExperimenterId</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:experimenter/of-config:experimenter-id</td</tr> 
+<tr id="1-1-4-4-14-17" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Experimenter property for table-miss">experimenter-miss</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:experimenter-miss</td>
+                    </tr> 
+<tr id="1-1-4-4-14-17-18" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="List of all experimenters supported by the table
+on table-miss flow entries.">  experimenter-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="of-types:OFExperimenterId
+uint32
+">of-types:OFExperimenterId</abbr></td>
+                       <td nowrap>config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:experimenter-miss/of-config:experimenter-id</td</tr> 
+<tr id="1-1-5" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier3">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="This element contains a list of all OpenFlow Logical Switches available
+       at the OpenFlow Capable Switch.">logical-switches</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches</td>
+                    </tr> 
+<tr id="1-1-5-5" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier4">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The list of all OpenFlow Logical Switches on the OpenFlow
+Capable Switch.">switch[id]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch</td>
+                    </tr> 
+<tr id="1-1-5-5-15" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A unique but locally arbitrary identifier that
+identifies a Logical Switch within the context of an
+OpenFlow Capable Switch. It MUST be persistent across
+reboots of the OpenFlow Capable Switch.">  id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="OFConfigId
+string
+">OFConfigId</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:id</td</tr> 
+<tr id="1-1-5-5-16" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier5">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="This element contains all capability items that
+an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>no config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities</td>
+                    </tr> 
+<tr id="1-1-5-5-16-18" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The maximum number of packets the logical switch
+       can buffer when sending packets to the controller using
+       packet-in messages."> <em> max-buffered-packets </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="uint32
+">uint32</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:max-buffered-packets</td</tr> 
+<tr id="1-1-5-5-16-19" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The number of flow tables supported by the logical switch."> <em> max-tables </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="uint8
+">uint8</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:max-tables</td</tr> 
+<tr id="1-1-5-5-16-20" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The number of flow tables supported by the logical switch."> <em> max-ports </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="uint32
+">uint32</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:max-ports</td</tr> 
+<tr id="1-1-5-5-16-21" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Specifies if the logical switch supports flow statistics."> <em> flow-statistics </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:flow-statistics</td</tr> 
+<tr id="1-1-5-5-16-22" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Specifies if the logical switch supports table statistics."> <em> table-statistics </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:table-statistics</td</tr> 
+<tr id="1-1-5-5-16-23" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Specifies if the logical switch supports port statistics."> <em> port-statistics </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:port-statistics</td</tr> 
+<tr id="1-1-5-5-16-24" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Specifies if the logical switch supports group statistics."> <em> group-statistics </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-statistics</td</tr> 
+<tr id="1-1-5-5-16-25" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Specifies if the logical switch supports queue statistics."> <em> queue-statistics </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:queue-statistics</td</tr> 
+<tr id="1-1-5-5-16-26" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Specifies if the logical switch supports reassemble IP fragments."> <em> reassemble-ip-fragments </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:reassemble-ip-fragments</td</tr> 
+<tr id="1-1-5-5-16-27" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="'true' indicates that a switch protocol outside of OpenFlow, such as
+       802.1D Spanning Tree, will detect topology loops and block ports
+       to prevent packet loops."> <em> block-looping-ports </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:block-looping-ports</td</tr> 
+<tr id="1-1-5-5-16-28" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Specify generic forwarding actions such as sending to the controller,
+       flooding, or forwarding using non-OpenFlow methods, such as
+       'normal' switch processing.">reserved-port-types</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>no config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:reserved-port-types</td>
+                    </tr> 
+<tr id="1-1-5-5-16-28-19" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="No description">  type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="enumeration
+ : {all,controller,table,inport,any,normal,flood,}">enumeration</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:reserved-port-types/of-config:type</td</tr> 
+<tr id="1-1-5-5-16-29" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Specify the group types supported by the logical switch.">group-types</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>no config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-types</td>
+                    </tr> 
+<tr id="1-1-5-5-16-29-20" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="No description">  type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="enumeration
+ : {all,select,indirect,fast-failover,}">enumeration</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-types/of-config:type</td</tr> 
+<tr id="1-1-5-5-16-30" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Specify the group capabilities supported by the logical switch.">group-capabilities</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>no config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-capabilities</td>
+                    </tr> 
+<tr id="1-1-5-5-16-30-21" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="No description">  capability </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="enumeration
+ : {select-weight,select-liveness,chaining,chaining-check,}">enumeration</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-capabilities/of-config:capability</td</tr> 
+<tr id="1-1-5-5-16-31" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Specify the action types supported by the logical switch.">action-types</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>no config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:action-types</td>
+                    </tr> 
+<tr id="1-1-5-5-16-31-22" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="No description">  type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFActionType}">identityref</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:action-types/of-config:type</td</tr> 
+<tr id="1-1-5-5-16-32" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="Specify the instruction types supported by the logical switch.">instruction-types</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>no config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:instruction-types</td>
+                    </tr> 
+<tr id="1-1-5-5-16-32-23" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="No description">  type </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFInstructionType}">identityref</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:instruction-types/of-config:type</td</tr> 
+<tr id="1-1-5-5-17" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The datapath identifier of the Logical Switch
+       that uniquely identifies this Logical Switch within the
+       context of all OpenFlow Controllers associated with the
+       OpenFlow Logical Switch.  The datapath identifier is a
+       string value that MUST be formatted as a sequence of 8
+       2-digit hexadecimal numbers that are separated by colons,
+       for example, '01:23:45:67:89:ab:cd:ef'.  When processing a
+       datapath identifier, the case of the decimal digits MUST be
+       ignored.">  datapath-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="datapath-id-type
+string
+ {pattern = [0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){7}}">datapath-id-type</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:datapath-id</td</tr> 
+<tr id="1-1-5-5-18" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This element indicates the administrative state
+of the OpenFlow Logical Switch.  A value of 'false' means
+the OpenFlow Logical Switch MUST NOT communicate with any
+OpenFlow Controllers, MUST NOT conduct any OpenFlow
+processing, and SHOULD NOT be utilizing computational or
+network resources of the underlying platform."> <em> enabled </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:enabled</td</tr> 
+<tr id="1-1-5-5-19" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This element indicates the behavior of the
+       OpenFlow Logical Switch when connecting to an OpenFlow
+       Controller.
+
+       If set to value 'false', the logical switch will connect to
+       a controller without checking any controller certificate.
+
+       If set to value 'true', then the logical switch will
+       connect to a controller with element <protocol> set to
+       'TLS', only if the controller provides a certificate that
+       can be verified with one of the certificates stored in the
+       list called external-certificates in the OpenFlow Capable
+       Switch.
+
+       If a certificate cannot be validated, the OpenFlow Logical
+       Switch MUST terminate communication with the corresponding
+       OpenFlow Controller, MUST NOT conduct any OpenFlow
+       processing on requests of this OpenFlow controller, and
+       SHOULD NOT further utilize any computational or network
+       resources of for dealing with this connection.
+
+       If set to value 'true', the OpenFlow Logical Switch MUST
+       NOT connect to any OpenFlow Controller that does not
+       provide a certificate. This implies that it cannot connect
+       to an OpenFlow controller that has the value of element
+       protocol set to 'TCP'. Only connections with protocol 'TLS'
+       are possible in this case."> <em> check-controller-certificate </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="boolean
+">boolean</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:check-controller-certificate</td</tr> 
+<tr id="1-1-5-5-20" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier5>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This element indicates the the behavior of the
+       OpenFlow Logical Switch in case it loses contact with all
+       OpenFlow Controllers.  There are two alternative modes in
+       such a case: fails secure mode and fail standalone mode as
+       defined by the OpenFlow protocol specification version 1.2,
+       section 6.4.  These are the only allowed values for this
+       element. Default is the fail secure mode."> <em> lost-connection-behavior </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="enumeration
+ : {failSecureMode,failStandaloneMode,}">enumeration</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:lost-connection-behavior</td</tr> 
+<tr id="1-1-5-5-21" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier5">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The list of controllers for this Logical switch.">controllers</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers</td>
+                    </tr> 
+<tr id="1-1-5-5-21-33" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The list of OpenFlow Controllers that are
+assigned to the OpenFlow Logical Switch.  The switch MUST
+NOT connect to any OpenFlow Controller that is not
+contained in this list.">controller[id]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller</td>
+                    </tr> 
+<tr id="1-1-5-5-21-33-24" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="A unique but locally arbitrary identifier that uniquely identifies an
+       OpenFlow Controller within the context of an OpenFlow Capable
+       Switch.  It MUST be persistent across reboots of the OpenFlow
+       Capable Switch.">  id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="OFConfigId
+string
+">OFConfigId</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:id</td</tr> 
+<tr id="1-1-5-5-21-33-25" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This element indicates the role of the OpenFlow Controller. Semantics of
+       these roles are specified in the OpenFlow specifications 1.0 -
+       1.3.1.  It is RECOMMENDED that the roles of controllers are not
+       configured by OF-CONFIG 1.1.1 but determined using the OpenFlow
+       protocol.  OpenFlow Controllers configured by OF-CONFIG 1.1.1
+       have the default role 'equal'.  A role other than 'equal' MAY be
+       assigned to a controller.  Roles 'slave' and 'equal' MAY be
+       assigned to multiple controllers.  Role 'master' MUST NOT be
+       assigned to more than one controller."> <em> role </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="enumeration
+ : {master,slave,equal,}">enumeration</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:role</td</tr> 
+<tr id="1-1-5-5-21-33-26" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The IP address of the OpenFlow Controller.  This IP address is used by
+       the OpenFlow Logical Switch when connecting to the OpenFlow
+       Controller.">  ip-address </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="inet:ip-address
+union
+{inet:ipv4-address, inet:ipv6-address}">inet:ip-address</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:ip-address</td</tr> 
+<tr id="1-1-5-5-21-33-27" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The TCP port number at the OpenFlow Controller.  This port number is
+       used by the OpenFlow Logical Switch when connecting to the
+       OpenFlow Controller using TCP or TLS.  The default value is
+       6633."> <em> port </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="inet:port-number
+uint16
+ [0..65535]">inet:port-number</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:port</td</tr> 
+<tr id="1-1-5-5-21-33-28" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The local IP address of the OpenFlow Logical Switch when connecting to
+      this OpenFlow Controller.  It is the source IP address of
+      packets sent to this OpenFlow Controller.  If present, this
+      element overrides any default IP address.
+
+      This element is optional. Attempts to set this element to an IP
+      address that cannot be used by the OpenFlow Logical Switch MUST
+      result in an 'bad-element' error with type 'application'. The
+      <error-info> element MUST contain the name of this element in
+      the <bad-element> element."> <em> local-ip-address </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="inet:ip-address
+union
+{inet:ipv4-address, inet:ipv6-address}">inet:ip-address</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:local-ip-address</td</tr> 
+<tr id="1-1-5-5-21-33-29" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The local TCP port number of the OpenFlow Logical Switch when connecting
+       to this OpenFlow Controller.  It is the source TCP port number
+       of packets sent to this OpenFlow Controller.  If this element is
+       not present, then the port number is chosen arbitrarily by the
+       OpenFlow Logical Switch.
+
+       This element is optional. Attempts to set this element to a
+       port number that cannot be used by the OpenFlow Logical
+       Switch MUST result in an 'bad-element' error with type
+       'application'. The <error-info> element MUST contain the
+       name of this element in the <bad-element> element."> <em> local-port </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="inet:port-number
+uint16
+ [0..65535]">inet:port-number</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:local-port</td</tr> 
+<tr id="1-1-5-5-21-33-30" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The default protocol that the OpenFlow Logical Switch uses to connect to
+       this OpenFlow Controller."> <em> protocol </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="enumeration
+ : {tcp,tls,}">enumeration</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:protocol</td</tr> 
+<tr id="1-1-5-5-21-33-31" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier7">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="This container holds connection state information that indicate the
+       connection state of the OpenFlow Logical Switch and the OpenFlow
+       protocol version used for the connection.">state</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>no config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state</td>
+                    </tr> 
+<tr id="1-1-5-5-21-33-31-3" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier8>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This object indicates the connections state of the OpenFlow Logical
+       Switch to this controller."> <em> connection-state </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="OFUpDownStateType
+enumeration
+ : {up,down,}">OFUpDownStateType</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:connection-state</td</tr> 
+<tr id="1-1-5-5-21-33-31-4" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier8>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This object indicates the version of the OpenFlow protocol used between
+       the OpenFlow Logical Switch and this Controller.  If element
+       connection-state has value 'up', then this element indicates
+       the actual version in use.  If element connection-state has
+       value 'down', then this element indicates the version number
+       of the last established connection with this OpenFlow
+       Controller.  The value of this element MAY be persistent
+       across reboots of the OpenFlow Logical Switch in such a case.
+       If element connection-state has value 'down'and there is no
+       information about previous connections to this OpenFlow
+       controller, then this element is not present."> <em> current-version </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFOpenFlowVersionType}">identityref</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:current-version</td</tr> 
+<tr id="1-1-5-5-21-33-31-5" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier8>
+                             <a class="leaf-list">&nbsp;</a>
+                             <abbr title="This list of elements includes one entry for each OpenFlow protocol
+       version that this OpenFlow controller supports.  It SHOULD
+       contain all.">  supported-versions </abbr>
+                          </div>
+                       </td>
+                       <td>leaf-list</td>
+                       <td nowrap><abbr title="identityref
+ {of-types:OFOpenFlowVersionType}">identityref</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>*</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:supported-versions</td</tr> 
+<tr id="1-1-5-5-21-33-31-6" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier8>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The local IP address of the OpenFlow Logical Switch when connecting to
+       this OpenFlow Controller.  It is the source IP address of
+       packets sent to this OpenFlow Controller.  If present, this
+       element overrides any default IP address."> <em> local-ip-address-in-use </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="inet:ip-address
+union
+{inet:ipv4-address, inet:ipv6-address}">inet:ip-address</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:local-ip-address-in-use</td</tr> 
+<tr id="1-1-5-5-21-33-31-7" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier8>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The local TCP port number of the OpenFlow Logical Switch.  If element
+       connection-state has value 'up', then this element indicates
+       the actual port number in use.  If element connection-state
+       has value 'down', then this element indicates the port number
+       used for the last attempt to establish a connection with this
+       OpenFlow Controller.???  When connecting to this OpenFlow
+       Controller, it is the source TCP port number of packets sent
+       to this OpenFlow Controller.  If this element has its defaqult
+       value 0, then port number is chosen arbitrarily by the
+       OpenFlow Logical Switch."> <em> local-port-in-use </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="inet:port-number
+uint16
+ [0..65535]">inet:port-number</abbr></td>
+                       <td nowrap>no config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:local-port-in-use</td</tr> 
+<tr id="1-1-5-5-22" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier5">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="The list of identifiers of all resources of the
+       OpenFlow Capable Switch that the OpenFlow Logical Switch
+       has exclusive or non-exclusive access to.  A resource is
+       identified by the value of its resource-identifier element.
+       For each resource identifier value in this list, there MUST
+       be an element with a matching resource identifier value in
+       the resources list of the OpenFlow Capable Switch.
+
+       Identifiers of this list are contained in elements
+       indicating the type of resource: 'port', 'queue',
+       'certificate', or 'flow-table'.  Depending on the type,
+       different constraints apply.  These are specified in
+       separate descriptions per type.">resources</abbr>
+                          </div>
+                       </td> 
+<td nowrap>container</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources</td>
+                    </tr> 
+<tr id="1-1-5-5-22-34" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="List of the ports assigned to the logical switch from the
+capable switch.  These ports reference interfaces in the
+base interfaces model.">port[number]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port</td>
+                    </tr> 
+<tr id="1-1-5-5-22-34-32" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="This number identifies the OpenFlow Port to OpenFlow
+Controllers. It is local in scope to the logical switch, and
+hence must be unique within the context of the OpenFlow
+Logical Switch.  Ports assigned to different logical switches
+may have the same port number.
+
+OpenFlow Capable Switch implementations may allow this number
+to be set, whiler others may choose to assign a value to the
+port when it is assigned to a logical switch.">  number </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="uint32
+">uint32</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port/of-config:number</td</tr> 
+<tr id="1-1-5-5-22-34-33" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="References the capable switch port corresponding to this
+logical switch port."> <em> port-reference </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="if:interface-ref
+leafref
+ : /if:interfaces/if:interface/if:name">if:interface-ref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port/of-config:port-reference</td</tr> 
+<tr id="1-1-5-5-22-35" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier6>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="The resource identifier of the owned certificate in the OpenFlow Capable
+      Switch that the OpenFlow Logical Switch uses to identify
+      itself.  This element MUST NOT occur more than once in an
+      OpenFlow Logical Switch's resource list.
+
+      If no such element is in an OpenFlow Logical Switch's resource
+      list, then the OpenFlow Logical Switch does not authenticate
+      itself towards an OpenFloe Controller with a certificate.  If
+      this element is present, then the OpenFlow Logical Switch MUST
+      provide this certificate for authentication to an OpenFlow
+      Controller when setting up a TLS connection.
+
+      For TCP connections this element is irrelevant."> <em> certificate </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="leafref
+ : /capable-switch/resources/owned-certificate/resource-id">leafref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:certificate</td</tr> 
+<tr id="1-1-5-5-22-36" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier6">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="List of flow tables of the OpenFlow Capable
+Switch that the OpenFlow Logical Switch has access to.
+Elements in this list MUST be unique. In most
+implementations it is expected that the logical switch
+has exclusive access to the reference capable switch flow
+table.">flow-table[table-id]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table</td>
+                    </tr> 
+<tr id="1-1-5-5-22-36-34" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="OpenFlow table id.  This must be unique within each
+logical switch.">  table-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="uint8
+">uint8</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:table-id</td</tr> 
+<tr id="1-1-5-5-22-36-35" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Table name at the logical switch level"> <em> name </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="string
+">string</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:name</td</tr> 
+<tr id="1-1-5-5-22-36-36" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier7>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="Reference to the capable switch flow table that should be
+used for the corresponding table id"> <em> flow-table-resource </em></abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="leafref
+ : /capable-switch/resources/flow-table/resource-id">leafref</abbr></td>
+                       <td nowrap>config</td>
+                       <td>?</td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:flow-table-resource</td</tr> 
+
+</table>
+</div>
+</body>
+</html>
+

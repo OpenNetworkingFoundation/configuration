@@ -1,0 +1,1853 @@
+module onf-of-config {
+
+
+  namespace "http://opennetworking.org/config";
+  //TODO: updated namespace to "urn:onf:config:yang"
+  //when available
+
+  prefix of-config;
+
+  import ietf-yang-types { prefix yang; }
+  import ietf-inet-types { prefix inet; }
+  import ietf-interfaces { prefix if; }
+  import onf-of-types { prefix of-types; }
+
+  organization
+    "Configuration and Management Working Group
+    Open Networking Foundation";
+
+  contact
+    "Open Networking Foundation
+    Configuration and Management Project
+    http://www.opennetworking.org
+    <mailto:info@opennetworking.org>";
+
+  description
+    "This module defines a data model for OF-CONFIG, the
+    OpenFlow Managagment and Configuration Protocol.  OF-CONFIG
+    defines a standard interface for remote configuration of
+    OpenFlow switches.
+
+    OF-CONFIG defines an OpenFlow switch as an abstraction called
+    an OpenFlow Logical Switch. The OF-CONFIG protocol  enables
+    configuration of essential artifacts of an OpenFlow Logical
+    Switch so that an OpenFlow controller can communicate and control
+    the OpenFlow Logical switch via the OpenFlow protocol.
+
+    OF-CONFIG introduces an operating context called an OpenFlow
+    Capable Switch for one or more OpenFlow switches.  An OpenFlow
+    Capable Switch is intended to be equivalent to an actual physical
+    or virtual network element (e.g. an Ethernet  switch) which is
+    hosting one or more OpenFlow Logical Switches by partitioning a
+    set of OpenFlow related resources such as ports and queues among
+    the hosted OpenFlow Logical Switches.";
+
+  revision 2015-07-31 {
+    description
+      "This version of the YANG Module is the basis of the
+      OF-CONFIG 1.3 specification; please see the specification for
+      details.";
+
+    reference
+      "ONF OF-CONFIG 1.3";
+  }
+
+  revision 2013-10-05 {
+    description
+       "This version of this YANG Module is part of the OF-CONFIG
+        1.2 specification; please see the specification itself for
+        details.";
+
+    reference
+      "OF-CONFIG 1.2";
+  }
+
+  revision 2011-12-07 {
+    description
+      "First Version";
+
+    reference
+      "OF-CONFIG 1.1.1";
+  }
+
+/*****************************************************************
+ * Type definitions
+ *****************************************************************/
+
+  typedef OFConfigId {
+    type string;
+    description
+      "Generic type of an identifier in OF-CONFIG";
+  }
+
+  typedef of-config-resource-id-type {
+    type inet:uri;
+    description
+      "Generic type for use as a unique resource identifier in OF
+      capable or logical switches.";
+  }
+
+  typedef OFConfigurationPointProtocolType {
+    type enumeration {
+      enum "ssh";
+      enum "soap";
+      enum "tls";
+      enum "beep";
+    }
+    description
+      "Possible protocols to connect ot an OF Configuration Point";
+  }
+
+  typedef datapath-id-type {
+    type string {
+      pattern '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){7}';
+    }
+    description
+      "The datapath-id type represents an OpenFlow
+       datapath identifier.";
+  }
+
+  typedef OFTenthOfAPercentType {
+    type uint16 {
+      range "0..1000";
+    }
+    units "1/10 of a percent";
+    description
+      "This type defines a value in tenth of a percent.";
+  }
+
+  typedef OFUpDownStateType {
+    type enumeration {
+      enum up;
+      enum down;
+    }
+    description
+      "Type to specify state information for a port or a
+       connection.";
+  }
+
+
+
+  typedef hex-binary {
+    type binary;
+    description
+      "Hex binary encoded string";
+    reference
+      "http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/datatypes.html#hexBinary";
+  }
+
+/*****************************************************************
+ * Groupings
+ *****************************************************************/
+
+  grouping of-config-resource-id {
+    description
+      "This element specifies a generic OpenFlow resource
+       that is used as a basis for specific resources. Even though
+       this element is not used on its own the following rules for
+       NETCONF operations MUST be obeyed also by elemnts using this
+       element.";
+
+    leaf resource-id {
+      type of-config-resource-id-type;
+      mandatory true;
+      description
+        "A unique but locally arbitrary identifier that uniquely
+      identifies an OpenFlow Port within the context of an OpenFlow
+      Logical Switch. It MUST be persistent across reboots of the
+      OpenFlow Capable Switch.";
+
+    }
+  }
+
+  grouping configuration-point-config {
+    description
+      "Representation of an OpenFlow Configuration Point.
+       Instances of the Configuration Point class SHOULD be stored
+       persistently across reboots of the OpenFlow Capable Switch.
+
+       When a connection is established between an OpenFlow Capable
+       Switch and a Configuration Point the switch  MUST store the
+       connection information in an instance of the Configuration
+       Point class. If such an instance does not exist, the OpenFlow
+       Capable Switch MUST create an instance where it then stores
+       the connection information.
+
+       An OpenFlow Capable Switch that cannot initiate a connection
+       to a configuration point does not have to implement the
+       Configuration Point class. It SHOULD block attempts to write
+       to instances of the Configuration Point class with NETCONF
+       <edit-config> operations.";
+
+    leaf id {
+      type OFConfigId;
+      mandatory true;
+      description
+        "A unique but locally arbitrary identifier that
+        identifies a Configuration Point within the context of an
+        OpenFlow Capable Switch.";
+    }
+
+    leaf uri {
+      type inet:uri;
+      mandatory true;
+      description
+        "A locator of the Configuration Point.  It
+        identifies the location of the Configuration Point as a
+        service resource and MUST include all information necessary
+        for the OpenFlow Capable Switch to connect to the
+        Configuration Point or re-connect to it should it become
+        disconnected.  Such information MAY include, for example,
+        protocol, fully qualified domain name, IP address, port
+        number, etc.";
+    }
+
+    leaf protocol {
+      type OFConfigurationPointProtocolType;
+      default "ssh";
+      description
+        "The transport protocol that the Configuration
+        Point uses when communicating via NETCONF with the OpenFlow
+        Capable Switch.";
+
+      reference
+        "The mappings of NETCONF to different transport
+        protocols are defined in RFC 6242 for SSH, RFC 4743 for
+        SOAP, RFC 4744 for BEEP, and RFC 5539 for TLS";
+    }
+  }
+
+  grouping openflow-logical-switch {
+    description
+      "This grouping specifies all properties of an OpenFlow
+       Logical Switch.";
+
+    leaf id {
+      type OFConfigId;
+      mandatory true;
+      description
+        "A unique but locally arbitrary identifier that
+        identifies a Logical Switch within the context of an
+        OpenFlow Capable Switch. It MUST be persistent across
+        reboots of the OpenFlow Capable Switch.";
+    }
+
+    container capabilities {
+      config false;
+      description
+        "This element contains all capability items that
+        an OpenFlow Logical Switch MAY implement.";
+
+      uses OFLogicalSwitchCapabilitiesType;
+    }
+
+    leaf datapath-id {
+      type datapath-id-type;
+      mandatory true;
+      description
+	"The datapath identifier of the Logical Switch
+         that uniquely identifies this Logical Switch within the
+         context of all OpenFlow Controllers associated with the
+         OpenFlow Logical Switch.  The datapath identifier is a
+         string value that MUST be formatted as a sequence of 8
+         2-digit hexadecimal numbers that are separated by colons,
+         for example, '01:23:45:67:89:ab:cd:ef'.  When processing a
+         datapath identifier, the case of the decimal digits MUST be
+         ignored.";
+    }
+
+    leaf enabled {
+      type boolean;
+      default false;
+      description
+        "This element indicates the administrative state
+        of the OpenFlow Logical Switch.  A value of 'false' means
+        the OpenFlow Logical Switch MUST NOT communicate with any
+        OpenFlow Controllers, MUST NOT conduct any OpenFlow
+        processing, and SHOULD NOT be utilizing computational or
+        network resources of the underlying platform.";
+     }
+
+   leaf check-controller-certificate {
+      type boolean;
+      default false;
+      description
+	"This element indicates the behavior of the
+         OpenFlow Logical Switch when connecting to an OpenFlow
+         Controller.
+
+         If set to value 'false', the logical switch will connect to
+         a controller without checking any controller certificate.
+
+         If set to value 'true', then the logical switch will
+         connect to a controller with element <protocol> set to
+         'TLS', only if the controller provides a certificate that
+         can be verified with one of the certificates stored in the
+         list called external-certificates in the OpenFlow Capable
+         Switch.
+
+         If a certificate cannot be validated, the OpenFlow Logical
+         Switch MUST terminate communication with the corresponding
+         OpenFlow Controller, MUST NOT conduct any OpenFlow
+         processing on requests of this OpenFlow controller, and
+         SHOULD NOT further utilize any computational or network
+         resources of for dealing with this connection.
+
+         If set to value 'true', the OpenFlow Logical Switch MUST
+         NOT connect to any OpenFlow Controller that does not
+         provide a certificate. This implies that it cannot connect
+         to an OpenFlow controller that has the value of element
+         protocol set to 'TCP'. Only connections with protocol 'TLS'
+         are possible in this case.";
+    }
+
+    leaf lost-connection-behavior {
+      type enumeration {
+        enum failSecureMode;
+        enum failStandaloneMode;
+      }
+      default failSecureMode;
+      description
+	"This element indicates the the behavior of the
+         OpenFlow Logical Switch in case it loses contact with all
+         OpenFlow Controllers.  There are two alternative modes in
+         such a case: fails secure mode and fail standalone mode as
+         defined by the OpenFlow protocol specification version 1.2,
+         section 6.4.  These are the only allowed values for this
+         element. Default is the fail secure mode.";
+    }
+
+    container controllers {
+      description
+	"The list of controllers for this Logical switch.";
+
+      list controller {
+        key "id";
+        description
+          "The list of OpenFlow Controllers that are
+          assigned to the OpenFlow Logical Switch.  The switch MUST
+          NOT connect to any OpenFlow Controller that is not
+          contained in this list.";
+
+        uses OFControllerType;
+      }
+    }
+
+    container resources {
+      description
+	"The list of identifiers of all resources of the
+         OpenFlow Capable Switch that the OpenFlow Logical Switch
+         has exclusive or non-exclusive access to.  A resource is
+         identified by the value of its resource-identifier element.
+         For each resource identifier value in this list, there MUST
+         be an element with a matching resource identifier value in
+         the resources list of the OpenFlow Capable Switch.
+
+         Identifiers of this list are contained in elements
+         indicating the type of resource: 'port', 'queue',
+         'certificate', or 'flow-table'.  Depending on the type,
+         different constraints apply.  These are specified in
+         separate descriptions per type.";
+
+      list port {
+        description
+          "List of the ports assigned to the logical switch from the
+          capable switch.  These ports reference interfaces in the
+          base interfaces model.";
+
+        key number;
+
+        uses openflow-logical-switch-ports;
+      }
+
+      leaf certificate {
+        type leafref {
+          path "/capable-switch/resources/owned-certificate/resource-id";
+        }
+        description
+	  "The resource identifier of the owned certificate in the OpenFlow Capable
+          Switch that the OpenFlow Logical Switch uses to identify
+          itself.  This element MUST NOT occur more than once in an
+          OpenFlow Logical Switch's resource list.
+
+          If no such element is in an OpenFlow Logical Switch's resource
+          list, then the OpenFlow Logical Switch does not authenticate
+          itself towards an OpenFloe Controller with a certificate.  If
+          this element is present, then the OpenFlow Logical Switch MUST
+          provide this certificate for authentication to an OpenFlow
+          Controller when setting up a TLS connection.
+
+          For TCP connections this element is irrelevant.";
+      }
+
+      list flow-table {
+
+        key table-id;
+
+        description
+          "List of flow tables of the OpenFlow Capable
+          Switch that the OpenFlow Logical Switch has access to.
+          Elements in this list MUST be unique. In most
+          implementations it is expected that the logical switch
+          has exclusive access to the reference capable switch flow
+          table.";
+
+        uses openflow-logical-switch-table;
+
+      }
+    }
+  }
+
+  grouping OFLogicalSwitchCapabilitiesType {
+    description
+      "This grouping specifies all properties of an OpenFlow logical switch's
+      capabilities.";
+
+    leaf max-buffered-packets {
+      type uint32;
+      description
+	"The maximum number of packets the logical switch
+         can buffer when sending packets to the controller using
+         packet-in messages.";
+    }
+
+    leaf max-tables {
+      type uint8;
+      description
+        "The number of flow tables supported by the logical switch.";
+    }
+
+    leaf max-ports {
+      type uint32;
+      description
+        "The number of flow tables supported by the logical switch.";
+    }
+
+    leaf flow-statistics {
+      type boolean;
+      default false;
+      description
+	"Specifies if the logical switch supports flow statistics.";
+    }
+
+    leaf table-statistics {
+      type boolean;
+      default false;
+      description
+	"Specifies if the logical switch supports table statistics.";
+    }
+
+    leaf port-statistics {
+      type boolean;
+      default false;
+      description
+	"Specifies if the logical switch supports port statistics.";
+    }
+
+    leaf group-statistics {
+      type boolean;
+      default false;
+      description
+	"Specifies if the logical switch supports group statistics.";
+    }
+
+    leaf queue-statistics {
+      type boolean;
+      default false;
+      description
+	"Specifies if the logical switch supports queue statistics.";
+    }
+
+    leaf reassemble-ip-fragments {
+      type boolean;
+      default false;
+      description
+	"Specifies if the logical switch supports reassemble IP fragments.";
+    }
+
+    leaf block-looping-ports {
+      type boolean;
+      default false;
+      description
+	"'true' indicates that a switch protocol outside of OpenFlow, such as
+         802.1D Spanning Tree, will detect topology loops and block ports
+         to prevent packet loops.";
+    }
+
+    container reserved-port-types {
+      description
+	"Specify generic forwarding actions such as sending to the controller,
+         flooding, or forwarding using non-OpenFlow methods, such as
+         'normal' switch processing.";
+
+      reference
+	"The types of reserved ports are defined in OpenFlow Switch Specification
+         versions 1.2, 1.3, and 1.3.1.";
+
+      leaf-list type {
+        type enumeration {
+          enum all;
+          enum controller;
+          enum table;
+          enum inport;
+          enum any;
+          enum normal;
+          enum flood;
+        }
+      }
+    }
+
+    container group-types {
+      description
+	"Specify the group types supported by the logical switch.";
+
+      reference
+	"The types of groups are defined in OpenFlow Switch Specification
+         versions 1.2, 1.3, and 1.3.1.";
+
+      leaf-list type {
+        type enumeration {
+          enum all;
+          enum select;
+          enum indirect;
+          enum fast-failover;
+        }
+      }
+    }
+
+    container group-capabilities {
+      description
+	"Specify the group capabilities supported by the logical switch.";
+
+      reference
+	"The types of group capability are defined in OpenFlow Switch
+         Specification versions 1.2, 1.3, and 1.3.1.";
+
+      leaf-list capability {
+        type enumeration {
+          enum select-weight;
+          enum select-liveness;
+          enum chaining;
+          enum chaining-check;
+        }
+      }
+    }
+
+    container action-types {
+      description
+	"Specify the action types supported by the logical switch.";
+
+      leaf-list type {
+        type of-types:OFActionType;
+      }
+    }
+
+    container instruction-types {
+      description
+	"Specify the instruction types supported by the logical switch.";
+
+      leaf-list type {
+        type of-types:OFInstructionType;
+      }
+    }
+  }
+
+  grouping OFControllerType {
+    description
+      "This grouping specifies all properties of an OpenFlow Logical Switch
+       Controller.";
+
+    leaf id {
+      type OFConfigId;
+      mandatory true;
+      description
+	"A unique but locally arbitrary identifier that uniquely identifies an
+         OpenFlow Controller within the context of an OpenFlow Capable
+         Switch.  It MUST be persistent across reboots of the OpenFlow
+         Capable Switch.";
+    }
+
+    leaf role {
+      type enumeration {
+        enum master;
+        enum slave;
+        enum equal;
+      }
+      default equal;
+
+      description
+	"This element indicates the role of the OpenFlow Controller. Semantics of
+         these roles are specified in the OpenFlow specifications 1.0 -
+         1.3.1.  It is RECOMMENDED that the roles of controllers are not
+         configured by OF-CONFIG 1.1.1 but determined using the OpenFlow
+         protocol.  OpenFlow Controllers configured by OF-CONFIG 1.1.1
+         have the default role 'equal'.  A role other than 'equal' MAY be
+         assigned to a controller.  Roles 'slave' and 'equal' MAY be
+         assigned to multiple controllers.  Role 'master' MUST NOT be
+         assigned to more than one controller.";
+    }
+
+    leaf ip-address {
+      type inet:ip-address;
+      mandatory true;
+      description
+	"The IP address of the OpenFlow Controller.  This IP address is used by
+         the OpenFlow Logical Switch when connecting to the OpenFlow
+         Controller.";
+    }
+
+    leaf port {
+      type inet:port-number;
+      default 6633;
+      description
+	"The TCP port number at the OpenFlow Controller.  This port number is
+         used by the OpenFlow Logical Switch when connecting to the
+         OpenFlow Controller using TCP or TLS.  The default value is
+         6633.";
+    }
+
+    leaf local-ip-address {
+      type inet:ip-address;
+      description
+	"The local IP address of the OpenFlow Logical Switch when connecting to
+        this OpenFlow Controller.  It is the source IP address of
+        packets sent to this OpenFlow Controller.  If present, this
+        element overrides any default IP address.
+
+        This element is optional. Attempts to set this element to an IP
+        address that cannot be used by the OpenFlow Logical Switch MUST
+        result in an 'bad-element' error with type 'application'. The
+        <error-info> element MUST contain the name of this element in
+        the <bad-element> element.";
+    }
+
+    leaf local-port {
+      type inet:port-number;
+      description
+	"The local TCP port number of the OpenFlow Logical Switch when connecting
+         to this OpenFlow Controller.  It is the source TCP port number
+         of packets sent to this OpenFlow Controller.  If this element is
+         not present, then the port number is chosen arbitrarily by the
+         OpenFlow Logical Switch.
+
+         This element is optional. Attempts to set this element to a
+         port number that cannot be used by the OpenFlow Logical
+         Switch MUST result in an 'bad-element' error with type
+         'application'. The <error-info> element MUST contain the
+         name of this element in the <bad-element> element.";
+    }
+
+    leaf protocol {
+      type enumeration {
+        enum "tcp";
+        enum "tls";
+      }
+      default "tls";
+      description
+	"The default protocol that the OpenFlow Logical Switch uses to connect to
+         this OpenFlow Controller.";
+    }
+
+    container state {
+      config false;
+      description
+	"This container holds connection state information that indicate the
+         connection state of the OpenFlow Logical Switch and the OpenFlow
+         protocol version used for the connection.";
+
+      leaf connection-state {
+        type OFUpDownStateType;
+        description
+	  "This object indicates the connections state of the OpenFlow Logical
+           Switch to this controller.";
+      }
+      leaf current-version {
+        type identityref {
+          base of-types:OFOpenFlowVersionType;
+        }
+        description
+	  "This object indicates the version of the OpenFlow protocol used between
+           the OpenFlow Logical Switch and this Controller.  If element
+           connection-state has value 'up', then this element indicates
+           the actual version in use.  If element connection-state has
+           value 'down', then this element indicates the version number
+           of the last established connection with this OpenFlow
+           Controller.  The value of this element MAY be persistent
+           across reboots of the OpenFlow Logical Switch in such a case.
+           If element connection-state has value 'down'and there is no
+           information about previous connections to this OpenFlow
+           controller, then this element is not present.";
+      }
+
+      leaf-list supported-versions {
+        type identityref {
+          base of-types:OFOpenFlowVersionType;
+        }
+        description
+	  "This list of elements includes one entry for each OpenFlow protocol
+           version that this OpenFlow controller supports.  It SHOULD
+           contain all.";
+      }
+
+      leaf local-ip-address-in-use {
+        type inet:ip-address;
+        description
+	  "The local IP address of the OpenFlow Logical Switch when connecting to
+           this OpenFlow Controller.  It is the source IP address of
+           packets sent to this OpenFlow Controller.  If present, this
+           element overrides any default IP address.";
+      }
+
+      leaf local-port-in-use {
+        type inet:port-number;
+        description
+	  "The local TCP port number of the OpenFlow Logical Switch.  If element
+           connection-state has value 'up', then this element indicates
+           the actual port number in use.  If element connection-state
+           has value 'down', then this element indicates the port number
+           used for the last attempt to establish a connection with this
+           OpenFlow Controller.???  When connecting to this OpenFlow
+           Controller, it is the source TCP port number of packets sent
+           to this OpenFlow Controller.  If this element has its defaqult
+           value 0, then port number is chosen arbitrarily by the
+           OpenFlow Logical Switch.";
+      }
+    }
+  }
+
+  grouping OFPortBaseTunnelType {
+    description
+      "A group of common elements that are included in every supported tunnel
+       type. Tunnels are modeled as logical ports.
+
+       One pair of local/remote endpoints must exist for a tunnel
+       configuration.
+
+      Only elements from one choice must exist at a time.";
+
+    choice endpoints {
+      mandatory true;
+
+      case v4-endpoints {
+        leaf local-endpoint-ipv4-adress {
+          type inet:ipv4-address;
+          description
+	    "The IPv4 address of the local tunnel endpoint.";
+        }
+
+        leaf remote-endpoint-ipv4-adress {
+          type inet:ipv4-address;
+          description
+	    "The IPv4 address of the remote tunnel endpoint.";
+        }
+      }
+
+      case v6-endpoints {
+        leaf local-endpoint-ipv6-adress {
+          type inet:ipv6-address;
+          description
+	    "The IPv6 address of the local tunnel endpoint.";
+        }
+
+        leaf remote-endpoint-ipv6-adress {
+          type inet:ipv6-address;
+          description
+	    "The IPv6 address of the remote tunnel endpoint.";
+        }
+      }
+
+      case mac-endpoints {
+        leaf local-endpoint-mac-adress {
+          type yang:mac-address;
+          description
+	    "The MAC address of the local tunnel endpoint.";
+        }
+
+        leaf remote-endpoint-mac-adress {
+          type yang:mac-address;
+          description
+	    "The MAC address of the remote tunnel endpoint.";
+        }
+      }
+    }
+  }
+
+  grouping OFPortIPGRETunnelType {
+    description
+      "Properties of a IP-in-GRE tunnel with key, checksum, and sequence number
+      information.";
+
+    uses OFPortBaseTunnelType;
+
+    leaf checksum-present {
+      type boolean;
+      default true;
+      description
+	"Indicates presence of the GRE checksum.";
+    }
+
+    leaf key-present {
+      type boolean;
+      default true;
+      description
+	"Indicates presence of the GRE key.";
+    }
+
+    leaf key {
+      when "../key-present='true'" {
+        description
+	  "This element is only relevant if element key-present of this IP GRE
+          Tunnel has value 'true'.";
+      }
+      type uint32;
+      mandatory true;
+      description
+	"The (optional) key of the GRE tunnel.  It MAY be used to set the
+        OXM_OF_TUNNEL_ID match field metadata in the OpenFlow protocol";
+    }
+
+    leaf sequence-number-present {
+      type boolean;
+      default false;
+      description
+	"Indicates presence of the GRE sequence number.";
+    }
+  }
+
+  grouping OFPortVXLANTunnelType {
+    description
+      "Properties of a VxLAN tunnel.";
+    uses OFPortBaseTunnelType;
+
+    leaf vni-valid {
+      type boolean;
+      default true;
+      description
+	"Indicates how the corresponding flag should be set in packets sent on
+         the tunnel.";
+    }
+
+    leaf vni {
+      type uint32;
+      description
+	"Virtual network identifier assigned to all packets sent on the tunnel.
+         A VxLAN implementation MAY use the this element to set the
+         OXM_OF_TUNNEL_ID match field metadata in the OpenFlow protocol.";
+    }
+
+    leaf vni-multicast-group {
+      type inet:ip-address;
+      description
+	"If IP multicast is used to support broadcast on the tunnel this
+         specifies the corresponding multicast IP address";
+    }
+
+    leaf udp-source-port {
+      type inet:port-number;
+      description
+	"Specifies the outer UDP source port number.  If this element is absent,
+         the port number MAY be chosen dynamically.";
+    }
+
+    leaf udp-dest-port {
+      type inet:port-number;
+      default 4789;
+      description
+	"Specifies the outer UDP destination port number.  It SHOULD
+         be set to 4789, the port number reserved for VxLAN at IANA.";
+    }
+
+    leaf udp-checksum {
+      type boolean;
+      default false;
+      description
+	"Boolean flag to indicate whether or not the outer UDP checksum should be
+         set";
+    }
+  }
+
+  grouping OFPortNVGRETunnelType {
+    description
+      "Properties of an NVGRE tunnel.";
+
+    uses OFPortBaseTunnelType;
+
+    leaf vsid {
+      type uint32;
+      description
+	"Specifies the virtual subnet id used to identify packets belonging to
+	 the NVGRE virtual layer-2 network (24 bit)";
+    }
+
+    leaf flow-id {
+      type uint8;
+      default 0;
+      description
+	"8-bit value that is used to provide per-flow entropy for flows in the same VSID";
+    }
+
+  }
+
+  grouping openflow-logical-switch-ports {
+    description
+      "Port properties that are scoped to an OpenFlow port when
+      assigned to a logical switch. A logical port represents a tunnel
+      endpoint as described in the OpenFlow protocol specification.";
+
+    leaf number {
+      type uint32;
+      description
+
+        "This number identifies the OpenFlow Port to OpenFlow
+        Controllers. It is local in scope to the logical switch, and
+        hence must be unique within the context of the OpenFlow
+        Logical Switch.  Ports assigned to different logical switches
+        may have the same port number.
+
+        OpenFlow Capable Switch implementations may allow this number
+        to be set, whiler others may choose to assign a value to the
+        port when it is assigned to a logical switch.";
+    }
+
+    leaf port-reference {
+      type if:interface-ref;
+      description
+        "References the capable switch port corresponding to this
+        logical switch port.";
+    }
+  }
+
+  grouping OFPortType {
+
+
+    choice tunnel-type {
+      description
+	"Tunnels are modeled as logical ports.";
+
+      container tunnel {
+        description
+	  "Properties of a basic IP-in-GRE tunnel.";
+        uses OFPortBaseTunnelType;
+      }
+
+      container ipgre-tunnel {
+        description
+	  "Properties of a IP-in-GRE tunnel.";
+        uses OFPortIPGRETunnelType;
+      }
+
+      container vxlan-tunnel {
+        description
+	  "Properties of a VxLAN tunnel.";
+        uses OFPortVXLANTunnelType;
+      }
+
+      container nvgre-tunnel {
+        description
+	  "Properties of a NVGRE tunnel.";
+        uses OFPortNVGRETunnelType;
+      }
+    }
+  }
+
+  grouping openflow-queue {
+    description
+      "This grouping specifies properties of a queue resource.";
+
+    leaf queue-id {
+      type uint32;
+      description
+        "This id identifies the OpenFlow Queue to OpenFlow
+        Controllers. It is assigned to an OpenFlow Queue latest when
+        the OpenFlow Queue is associated with and OpenFlow Logical
+        Switch.  If the OpenFlow Queue is associated with an OpenFlow
+        Logical Switch, this element MUST be unique within the context
+        of the OpenFlow Logical Switch.
+
+        OpenFlow Capable Switch implementations may choose to assign
+        values to OpenFlow Queues that are unique within the context
+        of the OpenFlow Logical Switch.  These id can be used
+        independent of assignments to OpenFlow Logical Switches.
+
+        Other implementations may assign values to this element only
+        if the OpenFlow Queue is assigned to an OpenFlow Logical
+        Switch.";
+    }
+
+/**
+
+  // TODO: port leafref should be removed. The queue resource is
+  // assumed to not be independently assignable
+  // i.e., the queue is implicitly associated with its port.
+
+    leaf port {
+      type leafref {
+        path "/capable-switch/resources/port/resource-id";
+      }
+      description
+        "Reference to port resources in the Capable Switch.
+
+        This element associates an OpenFlow Queue with an OpenFlow
+        Port. If the OpenFlow Queue is associated with an OpenFlow
+        Logical Switch S and this element is present, then it MUST be
+        set to the value of element resource-id of an OpenFlow Port
+        which is associated with the OpenFlow Logical Switch.";
+    }
+**/
+
+
+    leaf min-rate {
+      type union {
+        type uint16 {
+          range 0..1000;
+        }
+        type enumeration {
+          enum OFPQ_MIN_RATE_UNCFG {
+            description
+              "Value when the queue min rate is unspecified,
+              corresponds to 0xffff.";
+          }
+        }
+      }
+      // if unspecified, it is set to OFPQ_MIN_RATE_UNCFG,
+      // which is 0xffff
+      default OFPQ_MIN_RATE_UNCFG;
+      description
+        "The minimal rate that is reserved for this queue in 1/10 of a
+        percent (i.e., increments of 1/1000ths).  The rate is
+        expresseed as a fraction of the current speed of the output
+        port.";
+    }
+
+    leaf max-rate {
+      type union {
+        type uint16 {
+          range 0..1000;
+        }
+        type enumeration {
+          enum OFPQ_MAX_RATE_UNCFG {
+            description
+              "Value when the queue max rate is unspecified,
+              corresponds to 0xffff.";
+          }
+        }
+        // if unspecified, it is set to OFPQ_MAX_RATE_UNCFG,
+        // which is 0xffff
+      }
+      default OFPQ_MAX_RATE_UNCFG;
+      description
+        "The maximum rate that is reserved for this queue in 1/10 of a
+        percent (i.e., increments of 1/1000ths).  The rate is
+        expressed as a fraction of the current speed of the output
+        port.";
+    }
+
+    leaf experimenter-id {
+    	type uint32;
+    	description
+    	  "Experimenter ID of a currently configured experimenter.";
+    }
+
+    leaf experimenter-data {
+    	type hex-binary;
+    	description
+        "This leaf contains the rest of the experimenter queue
+        property body and is arbitrarily defined by the corresponding
+        experimenter.";
+    }
+  }
+
+  grouping openflow-port-features-current {
+    description
+      "The current features of a port.
+
+      Elements in the type OFPortCurrentFeatureListType are not
+      configurable and can only be retrieved by NETCONF <get>
+      operations.";
+
+    leaf rate {
+      type of-types:OFPortRateType;
+      description
+        "Transmission rate and duplex mode that is being used
+        currently on the port.
+
+        The rate should be the same as the 'speed' state variable
+        in the base interface model";
+        //TODO: consider removing the rate -- it is kept in for now
+        //because it's part of the OF-Switch 1.3.5 spec.
+    }
+
+    leaf medium {
+      type identityref {
+        base of-types:OFPortMediumType;
+      }
+      description
+        "Transmission media in use by the port.";
+    }
+  }
+
+
+  grouping openflow-port-features-supported {
+    description
+      "Port features supported or advertised -- used by port
+      features containers except the 'current' container";
+
+    leaf-list rate {
+      type of-types:OFPortRateType;
+      description
+        "List of transmission rates and duplex modes that are
+        supported or advertised.
+
+        The rate should be the same as the 'speed' state variable
+        in the base interface model";
+    }
+
+    leaf-list medium {
+      type identityref {
+        base of-types:OFPortMediumType;
+      }
+      description
+        "Transmission media supported by the port.";
+    }
+  }
+
+  grouping openflow-port-features-common {
+    description
+      "Port features supported or advertised -- used by all port
+      feature containers.";
+
+    leaf auto-negotiate {
+      type boolean;
+      description
+        "Specifies if auto-negotiation of transmission parameters
+        is enabled for the port.";
+    }
+
+    leaf pause {
+      type identityref {
+        base of-types:OFPortPauseType;
+      }
+      description
+        "Specifies the flow control mode on the port, i.e., sending
+        of pause frames and whether support for symmetric or
+        asymmetric.";
+    }
+  }
+
+  grouping OFExternalCertificateType {
+    description
+      "This grouping specifies a certificate that can be used by an OpenFlow
+       Logical Switch for authenticating a controller when a TLS
+       connection is established.";
+
+    uses of-config-resource-id;
+
+    leaf certificate {
+      type string;
+      mandatory true;
+      description
+	"An X.509 certificate in DER format base64 encoded.";
+    }
+  }
+
+  grouping OFOwnedCertificateType {
+    description
+      "This grouping specifies a certificate and a private key. It can be used
+      by an OpenFlow Logical Switch for authenticating itself to a
+      controller when a TLS connection is established.";
+    uses of-config-resource-id;
+
+    leaf certificate {
+      type string;
+      mandatory true;
+      description
+	"An X.509 certificate in DER format base64 encoded.";
+    }
+
+    container private-key {
+      uses KeyValueType;
+      description
+	"This element contains the private key corresponding to the
+        certificate. The private key is encoded as specified in
+        XML-Signature Syntax and Processing
+        (http://www.w3.org/TR/2001/PR-xmldsig-core-20010820/).
+        Currently the specification only support DSA and RSA keys.";
+    }
+  }
+
+  grouping KeyValueType {
+    description
+      "The KeyValue element contains a single public key that may be useful in
+       validating the signature.";
+
+    choice key-type {
+      mandatory true;
+      case dsa {
+        container DSAKeyValue {
+          uses DSAKeyValueType;
+        }
+      }
+      case rsa {
+        container RSAKeyValue {
+          uses RSAKeyValueType;
+        }
+      }
+    }
+  }
+
+  grouping DSAKeyValueType {
+    description
+      "DSA keys and the DSA signature algorithm are specified in 'FIPS PUB
+    186-2, Digital Signature Standard (DSS), U.S. Department of
+    Commerce/National Institute of Standards and Technology,
+    http://csrc.nist.gov/publications/fips/fips186-2/fips186-2.pdf'.
+    DSA public key values can have the following fields:
+
+    P
+        a prime modulus meeting the requirements of the standard
+        above
+    Q
+        an integer in the range 2**159 < Q < 2**160 which is a
+        prime divisor of P-1
+    G
+        an integer with certain properties with respect to P and Q
+    J
+        (P - 1) / Q
+    Y
+        G**X mod P (where X is part of the private key and not made
+        public)
+    seed
+        a DSA prime generation seed
+    pgenCounter
+        a DSA prime generation counter
+
+    Parameter J is avilable for inclusion solely for efficiency as
+    it is calculatable from P and Q. Parameters seed and
+    pgenCounter are used in the DSA prime number generation
+    algorithm specified in the above standard. As such, they are
+    optional but MUST either both be present or both be absent.
+    This prime generation algorithm is designed to provide
+    assurance that a weak prime is not being used and it yields a P
+    and Q value. Parameters P, Q, and G can be public and common to
+    a group of users. They might be known from application context.
+    As such, they are optional but P and Q MUST either both appear
+    or both be absent. If all of P, Q, seed, and pgenCounter are
+    present, implementations are not required to check if they are
+    consistent and are free to use either P and Q or seed and
+    pgenCounter. All parameters are encoded as base64 values.";
+
+    leaf P {
+      when "count(../Q) != 0";
+      type binary;
+      mandatory true;
+      description
+	"A prime modulus meeting the requirements of the standard
+         above";
+    }
+
+    leaf Q {
+      when "count(../P) != 0";
+      type binary;
+      mandatory true;
+      description
+	"An integer in the range 2**159 < Q < 2**160 which is a
+         prime divisor of P-1";
+    }
+
+    leaf J {
+      type binary;
+      description
+	"(P - 1) / Q";
+    }
+
+    leaf G {
+      type binary;
+      description
+	"An integer with certain properties with respect to P and Q";
+    }
+
+    leaf Y {
+      type binary;
+      mandatory true;
+      description
+	"G**X mod P (where X is part of the private key and not made
+         public)";
+    }
+
+    leaf Seed {
+      when "count(../PgenCounter) != 0";
+      type binary;
+      mandatory true;
+      description
+	"A DSA prime generation seed";
+
+    }
+    leaf PgenCounter {
+      when "count(../Seed) != 0";
+      type binary;
+      mandatory true;
+      description
+	"A DSA prime generation counter";
+    }
+  }
+
+  grouping RSAKeyValueType {
+    description
+      "RSA key values have two fields: Modulus and Exponent.";
+
+    leaf Modulus {
+      type binary;
+      mandatory true;
+    }
+
+    leaf Exponent {
+      type binary;
+      mandatory true;
+    }
+  }
+
+  grouping openflow-table-actions {
+    description
+      "List of actions supported by an OF table";
+
+    leaf-list action {
+      type identityref {
+        base of-types:OFActionType;
+      }
+      description
+        "The list of all write action types supported by this
+        table for normal flow entries.";
+    }
+  }
+
+  grouping openflow-table-match-fields {
+    description
+      "List of match fields supported by an OF table";
+
+    leaf-list oxm-type {
+      type identityref {
+        base of-types:OFMatchFieldType;
+      }
+      description
+        "The list of all match fields supported by the table";
+    }
+  }
+
+  grouping openflow-capable-switch-table {
+    description
+      "Representation of an OpenFlow Flow Table Resource.";
+
+    uses of-config-resource-id;
+
+    leaf name {
+      type string;
+
+      description
+        "Table name at the capable switch level";
+    }
+
+    leaf metadata-match {
+      type hex-binary {
+        length 16;
+      }
+      description
+        "This element indicates the bits of the metadata field on
+        which flow table can match. It is represented as a 64-bit
+        integer in hexadecimal digits([0-9a-fA-F]) format.";
+    }
+
+    leaf metadata-write {
+      type hex-binary {
+        length 16;
+      }
+      description
+        "This element indicates the bits of the metadata field on
+        which flow table can write using the 'write-metadata'
+        instruction. It is represented as a 64-bit integer in
+        hexadecimal digits([0-9a-fA-F]) format.";
+    }
+
+    leaf max-entries {
+      type uint32;
+      config false;
+      description
+        "The maximum number of flow entries supported by the
+        flow table.";
+    }
+
+    container properties {
+
+      description
+        "Table feature properties representing all possible features of a
+        table. Each container represent a single table feature
+        property.
+
+        According to the specification, clients should understand that
+        the properties with the -miss suffix may be omitted if it is
+        the same as the corresponding property for regular flow
+        entries.";
+
+      container instructions {
+        description "Instructions property";
+
+      	leaf-list instruction {
+      	  type identityref {
+            base of-types:OFInstructionType;
+          }
+      	  description
+      	    "The list of instruction types supported by this table
+            for regular flow entries";
+      	}
+      }
+
+      container instructions-miss {
+        description "Instructions for table-miss";
+
+      	leaf-list instruction {
+      	  type identityref {
+            base of-types:OFInstructionType;
+          }
+      	  description
+      	    "The list of all instruction types supported by this
+            table for table-miss flow entries";
+      	}
+      }
+
+      container next-tables {
+        description "Next Table property";
+
+        leaf-list table-resource-id {
+          type of-config-resource-id-type;
+          description
+            "List of tables that can be directly reached from the
+            present table using the goto-table instruction. Table ids
+            reference the identifiers in the logical switch scope.";
+        }
+      }
+
+      container next-tables-miss {
+        description "Next Table for table-miss";
+
+        leaf-list table-resource-id {
+          type of-config-resource-id-type;
+          description
+            "List of tables that can be directly reached from the
+            present table using the goto-table instruction on a
+            table-miss. Table ids reference the identifiers in the
+            logical switch scope.";
+        }
+      }
+
+      container write-actions {
+        description "Write Actions property";
+
+        uses openflow-table-actions;
+
+      }
+
+      container write-actions-miss {
+        description "Write Actions for table-miss";
+
+        uses openflow-table-actions;
+      }
+
+      container apply-actions {
+        description "Apply Actions property";
+
+        uses openflow-table-actions;
+      }
+
+      container apply-actions-miss {
+        description "Apply Actions for table-miss";
+
+        uses openflow-table-actions;
+      }
+
+      container match {
+        description "Match property";
+
+        uses openflow-table-match-fields;
+      }
+
+      container wildcards {
+        description "Wildcards property";
+
+        uses openflow-table-match-fields;
+      }
+
+      container write-setfield {
+        description "Write Set-Field property";
+
+        uses openflow-table-match-fields;
+      }
+
+      container write-setfield-miss {
+        description "Write Set-Field for table-miss";
+
+        uses openflow-table-match-fields;
+      }
+
+      container apply-setfield {
+        description "Apply Set-Field property";
+
+        uses openflow-table-match-fields;
+      }
+
+      container apply-setfield-miss {
+        description "Apply Set-Field for table-miss";
+
+        uses openflow-table-match-fields;
+      }
+
+      container experimenter {
+        description "Experimenter property";
+
+        leaf-list experimenter-id {
+          type of-types:OFExperimenterId;
+          description
+            "List of all experimenters supported by the table for
+            normal flow entries.";
+        }
+      }
+
+      container experimenter-miss {
+        description "Experimenter property for table-miss";
+
+        leaf-list experimenter-id {
+          type of-types:OFExperimenterId;
+          description
+            "List of all experimenters supported by the table
+            on table-miss flow entries.";
+        }
+      }
+    }
+  }
+
+  grouping openflow-logical-switch-table {
+    description
+      "Data for OpenFlow tables assigned to a logical switch";
+
+    leaf table-id {
+      type uint8;
+      description
+        "OpenFlow table id.  This must be unique within each
+        logical switch.";
+    }
+
+    leaf name {
+      type string;
+      description
+        "Table name at the logical switch level";
+    }
+
+    leaf flow-table-resource {
+      type leafref {
+        path "/capable-switch/resources/flow-table/resource-id";
+      }
+      description
+        "Reference to the capable switch flow table that should be
+        used for the corresponding table id";
+    }
+
+  }
+
+/*****************************************************************
+ * Main container
+ *****************************************************************/
+
+  container capable-switch {
+    description
+      "The OpenFlow Capable Switch serves as the root element for an
+      OpenFlow configuration.  It contains logical switches and
+      resources that can be assigned to logical switches.  It may
+      have relations to OpenFlow Configuration Points.";
+
+    leaf id {
+      type string;
+      mandatory true;
+      description
+        "A unique but locally arbitrary identifier that uniquely
+        identifies a  Capable Switch within the context of potential
+        OpenFlow Configuration Points.  It MUST be persistent across
+        reboots of the OpenFlow Capable Switch.";
+    }
+
+    leaf config-version {
+      type string;
+      config false;
+      description
+	"The maximum supported OF-CONFIG version that is supported by the
+         OpenFlow Capable Switch. For switches implementing this version
+         of the OF-CONFIG protocol this MUST always be 1.2.
+
+         This object can be used to identify the OF-CONFIG version
+         a capable switch supports beginning with version 1.1.1 of
+         OF-CONFIG. In addtion the supported version can be
+         determined by the namespace the OpenFlow Capable Switch
+         returns to configuration request of an element (like
+         capable-switch) that is present in all OF-CONFIG versions
+         specified so far. This is the only possiblity to identify
+         OF-CONFIG versions prior to OF-CONFIG 1.1.1.";
+    }
+
+    container configuration-points {
+      list configuration-point {
+        key "id";
+        description
+	  "The list of all Configuration Points known to the OpenFlow Capable
+           Switch that may manage it using OF-CONFIG.";
+
+        uses configuration-point-config;
+      }
+    }
+
+    container resources {
+      description
+        "A lists containing all resources of the OpenFlow Capable
+        Switch that can be used by OpenFlow Logical Switches.
+        Resources are listed here independent of their actual
+        assignment to OpenFlow Logical Switches.  They may be
+        available to be assigned to an OpenFlow Logical Switch or
+        already in use by an OpenFlow Logical Switch.";
+
+      list owned-certificate {
+        key "resource-id";
+        description
+          "The list contains all owned certificate resources of the
+          OpenFlow Capable Switch.";
+        uses OFOwnedCertificateType;
+      }
+
+      list external-certificate {
+        key "resource-id";
+        description
+	  "The list contains all external certificate resources of the OpenFlow
+           Capable Switch.";
+        uses OFExternalCertificateType;
+      }
+
+      list flow-table {
+        key resource-id;
+        description
+          "The list contains all flow table resources of the OpenFlow
+          Capable Switch.";
+
+        uses openflow-capable-switch-table;
+      }
+    }
+
+    container logical-switches {
+      description
+	"This element contains a list of all OpenFlow Logical Switches available
+         at the OpenFlow Capable Switch.";
+
+      list switch {
+        key "id";
+        description
+          "The list of all OpenFlow Logical Switches on the OpenFlow
+          Capable Switch.";
+
+        uses openflow-logical-switch;
+      }
+    }
+  }
+
+  grouping openflow-port-config {
+    description
+      "General adminitrative configuration of the OpenFlow Port.";
+
+    leaf admin-state {
+      type leafref {
+        path "/if:interfaces/if:interface/if:enabled";
+      }
+      description
+        "The administrative state of the port.  If true, the port
+        has been administratively brought down and SHOULD not be used
+        by OpenFlow.
+
+        This field references the 'enabled' interface configuration
+        in the base interface model.
+
+        Corresponds to OFPPC_PORT_DOWN configuration in OF switch.";
+    }
+
+    leaf no-receive {
+      type boolean;
+      default false;
+      description
+        "If true, packets received at this OpenFlow port SHOULD
+        be dropped.
+
+        Corresponds to OFPPC_NO_RECV configuration in OF switch.";
+    }
+
+    leaf no-forward {
+      type boolean;
+      default false;
+      description
+        "If true, packets forwarded to this OpenFlow port
+        SHOULD be dropped.
+
+        Corresponds to OFPPC_NO_FWD configuration in OF switch.";
+    }
+
+    leaf no-packet-in {
+      type boolean;
+      default false;
+      description
+        "If true, packets received on that port that generate a
+        table miss should never trigger a packet-in message to the
+        OpenFlow Controller.
+
+        Corresponds to OFPPC_NO_PACKET_IN configuration in
+        OF switch.";
+    }
+
+    list queue {
+      description
+        "List of OpenFlow queues associated with the port.";
+
+      key queue-id;
+
+      uses openflow-queue;
+    }
+
+  }
+
+  grouping openflow-port-state {
+    description
+      "Operational state data associated with OpenFlow ports";
+
+    leaf current-speed {
+      type uint32;
+      units "kbps";
+      description
+        "This element indicates the current bit rate of the port in
+        kbps. This element is used if the port speed is not otherwise
+        set in port features.";
+    }
+
+    leaf max-speed {
+      type uint32;
+      units "kbps";
+      description
+        "This element indicates the maximum bit rate of the port in
+        kbps. This element is used if the port speed is not otherwise
+        set in port features.";
+    }
+
+    // the OFPPS_LINK_DOWN variable is not included in the model
+    // since the base interface model already has an oper-state and
+    // admin-state flag which provides more detailed information
+    // about the state of the port, including not-present.
+
+
+    leaf blocked {
+      type boolean;
+      description
+        "If the value of this element is 'true', it indicates that a
+        switch protocol outside of OpenFlow, such as 802.1D Spanning
+        Tree, is preventing the use of this OpenFlow port for
+         OpenFlow flooding.";
+    }
+
+    leaf live {
+      type boolean;
+      description
+        "If the value of this element is 'true', it indicates that
+        this OpenFlow Port is live and can be used for fast
+        failover.";
+    }
+
+    container features {
+      description
+        "Port features describing link modes (speed and duplexity),
+        link type (copper/fiber) and link features
+        (autonegotiation and pause).";
+
+      container current {
+        config false;
+        description
+          "The features (rates, duplex, etc.) of the port, that are
+          currently in use.";
+
+        uses openflow-port-features-current;
+        uses openflow-port-features-common;
+
+      }
+
+      container advertised {
+        // TODO: are advertised values directly configurable?  The
+        // OF-switch spec says  "features being advertised" -- this
+        // does not sound like configurable data
+        config false;
+        description
+          "The features (rates, duplex, etc.) of the port, that are
+          advertised to the peer port.";
+
+        uses openflow-port-features-supported;
+        uses openflow-port-features-common;
+      }
+
+      container supported {
+        config false;
+        description
+          "The features (rates, duplex, etc.) of the port, that are
+          supported on the port.";
+
+        uses openflow-port-features-supported;
+        uses openflow-port-features-common;
+      }
+
+      container peer {
+        config false;
+        description
+          "The features (rates, duplex, etc.) that are currently
+          advertised by the peer port.";
+
+        uses openflow-port-features-supported;
+        uses openflow-port-features-common;
+      }
+    }
+
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "if:type = 'openflowEnabled'" {
+      description
+        "Additional interface configuration parameters when
+        the interface type is OpenFlow";
+    }
+    description
+      "Adds OF-Config configuration data to base interfaces model.";
+
+    container openflow {
+      description
+        "OpenFlow-specific configuration data for interfaces.";
+
+      uses openflow-port-config;
+    }
+  }
+
+
+  augment "/if:interfaces-state/if:interface" {
+    when "if:type = 'openflowEnabled'" {
+      description
+        "Additional interface operational state data when
+        the interface type is OpenFlow";
+    }
+    description
+      "Adds OF-Config opstate data to base interfaces model.";
+
+    container openflow {
+      description
+        "OpenFlow-specific operational state data for interfaces";
+
+      config false;
+
+      uses openflow-port-state;
+    }
+
+  }
+
+}

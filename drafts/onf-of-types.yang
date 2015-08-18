@@ -1,0 +1,518 @@
+module onf-of-types {
+
+
+  namespace "http://opennetworking.org/openflow";
+  //TODO: updated namespace to "urn:onf:config:yang"
+  //when available
+
+  prefix of-types;
+
+  import ietf-interfaces { prefix if; }
+
+  organization
+    "Configuration and Management Working Group
+    Open Networking Foundation";
+
+  contact
+    "Open Networking Foundation
+    Configuration and Management Project
+    http://www.opennetworking.org
+    <mailto:info@opennetworking.org>";
+
+  description
+    "This module defines types based on the OpenFlow Switch
+    Specification";
+
+  revision 2015-07-31 {
+    description
+      "This version is based on the long-term stable OpenFlow
+      Switch Protocol specification, currently 1.3.5";
+
+    reference
+      "ONF OF-CONFIG 1.3";
+  }
+
+
+  identity OFOpenFlowVersionType {
+    description
+      "Identity to represent major OpenFlow versions";
+  }
+
+  identity OFOpenFlowVersion1.0 {
+    base OFOpenFlowVersionType;
+    description
+      "OpenFlow v 1.0";
+  }
+
+  identity OFOpenFlowVersion1.1 {
+    base OFOpenFlowVersionType;
+    description
+      "OpenFlow v 1.1";
+  }
+
+  identity OFOpenFlowVersion1.2 {
+    base OFOpenFlowVersionType;
+    description
+      "OpenFlow v 1.2";
+  }
+
+  identity OFOpenFlowVersion1.3 {
+    base OFOpenFlowVersionType;
+    description
+      "OpenFlow v 1.3";
+  }
+
+  identity openflowEnabled {
+    base if:interface-type;
+    description
+      "Indicates a OpenFlow-enabled physical interface";
+  }
+
+  identity OFMatchFieldType {
+    description
+      "The types of match field defined in OpenFlow Switch
+      Specification";
+  }
+
+  identity in-port {
+    base OFMatchFieldType;
+    description "Switch input port";
+  }
+
+  identity in-phy-port {
+    base OFMatchFieldType;
+    description "Switch physical input port";
+  }
+
+  identity metadata {
+    base OFMatchFieldType;
+    description "Metadata passed between tables";
+  }
+
+  identity eth-dst {
+    base OFMatchFieldType;
+    description "Ethernet destination address";
+  }
+
+  identity eth-src {
+    base OFMatchFieldType;
+    description "Ethernet source address";
+  }
+
+  identity eth-type {
+    base OFMatchFieldType;
+    description "Ethernet frame type";
+  }
+
+  identity vlan-id {
+    base OFMatchFieldType;
+    description "VLAN id";
+  }
+
+  identity vlan-priority {
+    base OFMatchFieldType;
+    description "VLAN priority";
+  }
+
+  identity ip-dscp {
+    base OFMatchFieldType;
+    description "IP DSCP (6 bits in ToS field)";
+  }
+
+  identity ip-ecn {
+    base OFMatchFieldType;
+    description "IP ECN (2 bits in ToS field)";
+  }
+
+  identity ip-proto {
+    base OFMatchFieldType;
+    description "IP protocol";
+  }
+
+  identity ipv4-src {
+    base OFMatchFieldType;
+    description "IPv4 source address";
+  }
+
+  identity ipv4-dst {
+    base OFMatchFieldType;
+    description "IPv4 destination address";
+  }
+
+  identity tcp-src {
+    base OFMatchFieldType;
+    description "TCP source port";
+  }
+
+  identity tcp-dst {
+    base OFMatchFieldType;
+    description "TCP destination port";
+  }
+
+  identity udp-src {
+    base OFMatchFieldType;
+    description "UDP source port";
+  }
+
+  identity udp-dst {
+    base OFMatchFieldType;
+    description "UDP destination port";
+  }
+
+  identity sctp-src {
+    base OFMatchFieldType;
+    description "SCTP source port";
+  }
+
+  identity sctp-dst {
+    base OFMatchFieldType;
+    description "SCTP destination port";
+  }
+
+  identity icmpv4-type {
+    base OFMatchFieldType;
+    description "ICMP type";
+  }
+
+  identity icmpv4-code {
+    base OFMatchFieldType;
+    description "ICMP code";
+  }
+
+  identity arp-op {
+    base OFMatchFieldType;
+    description "ARP opcode";
+  }
+
+  identity arp-src-addr {
+    base OFMatchFieldType;
+    description "ARP source IPv4 address";
+  }
+
+  identity arp-target-addr {
+    base OFMatchFieldType;
+    description "ARP target IPv4 address";
+  }
+
+  identity arp-src-hw-addr {
+    base OFMatchFieldType;
+    description "ARP source hardware address";
+  }
+
+  identity arp-target-hw-addr {
+    base OFMatchFieldType;
+    description "ARP target hardware address";
+  }
+
+  identity ipv6-src {
+    base OFMatchFieldType;
+    description "IPv6 source address";
+  }
+
+  identity ipv6-dst {
+    base OFMatchFieldType;
+    description "IPv6 destination address";
+  }
+
+  identity ipv6-flow-label {
+    base OFMatchFieldType;
+    description "IPv6 Flow Label";
+  }
+
+  identity icmpv6-type {
+    base OFMatchFieldType;
+    description "ICMPv6 type";
+  }
+
+  identity icmpv6-code {
+    base OFMatchFieldType;
+    description "ICMPv6 code";
+  }
+
+  identity ipv6-nd-target {
+    base OFMatchFieldType;
+    description "Target address for ND";
+  }
+
+  identity ipv6-nd-source-link-layer {
+    base OFMatchFieldType;
+    description "Source link-layer for ND";
+  }
+
+  identity ipv6-nd-target-link-layer {
+    base OFMatchFieldType;
+    description "Target link-layer for ND";
+  }
+
+  identity mpls-label {
+    base OFMatchFieldType;
+    description "MPLS label";
+  }
+
+  identity mpls-tc {
+    base OFMatchFieldType;
+    description "MPLS TC";
+  }
+
+  identity pbb-isid {
+    base OFMatchFieldType;
+    description "PBB I-SID";
+  }
+
+  identity tunnel-id {
+    base OFMatchFieldType;
+    description "Logical Port Metadata";
+  }
+
+  identity ipv6-exthdr {
+    base OFMatchFieldType;
+    description "IPv6 Extension Header pseudo-field";
+  }
+
+
+  typedef OFPortRateType {
+    type enumeration {
+      enum 10Mb-HD;
+      enum 10Mb-FD;
+      enum 100Mb-HD;
+      enum 100Mb-FD;
+      enum 1Gb-HD;
+      enum 1Gb-FD;
+      enum 10Gb;
+      enum 40Gb;
+      enum 100Gb;
+      enum 1Tb;
+      enum other;
+    }
+    description
+      "Type to specify the rate of a port including the
+       duplex transmission feature. Possible rates are 10Mb, 100Mb,
+       1Gb, 10Gb, 40Gb, 100Gb, 1Tb or other. Rates of 10Mb, 100Mb
+       and 1 Gb can support half or full duplex transmission.";
+  }
+
+  identity OFPortMediumType {
+    description
+      "Base identity to describe the media type of an OpenFlow
+      port";
+  }
+
+  identity OFPortMediumCopper {
+    base OFPortMediumType;
+    description
+      "Port connected with copper media";
+  }
+
+  identity OFPortMediumFiber {
+    base OFPortMediumType;
+    description
+      "Port connected with fiber media";
+  }
+
+  identity OFPortPauseType {
+    description
+      "Base identity to indicate the flow control mode supported by
+      the OpenFlow port";
+  }
+
+  identity OFPortPauseNone {
+    base OFPortPauseType;
+    description
+      "Flow control / PAUSE frames not supported";
+  }
+
+  identity OFPortPauseSym {
+    base OFPortPauseType;
+    description
+      "Symmetric Flow control / PAUSE supported";
+  }
+
+  identity OFPortPauseAsym {
+    base OFPortPauseType;
+    description
+      "Asymmetric Flow control / PAUSE supported";
+  }
+
+  identity OFInstructionType {
+    description
+      "The types of instructions defined in OpenFlow
+       Switch Specification";
+  }
+
+  identity meter {
+    base OFInstructionType;
+    description
+      "Direct packet to the specified meter (optional)";
+  }
+
+  identity apply-actions {
+    base OFInstructionType;
+    description
+      "Applies the specific action(s) immediately,
+      without any change to the Action Set (optional)";
+  }
+
+  identity clear-actions {
+    base OFInstructionType;
+    description
+      "Clears all the actions in the action set immediately
+      (required)";
+  }
+
+  identity write-actions {
+    base OFInstructionType;
+    description
+      "Merges the specified set of action(s) into the
+      current action set (required)";
+  }
+
+  identity write-metadata {
+    base OFInstructionType;
+    description
+      "Writes the masked metadata value into the metadata
+      field (optional)";
+  }
+
+  identity goto-table {
+    base OFInstructionType;
+    description
+      "Indicates the next table in the processing
+      pipeline (required)";
+  }
+
+  identity OFActionType {
+    description
+      "Types of actions available for inclusion in an action
+      set";
+  }
+
+  identity output {
+    base OFActionType;
+    description
+      "Forwards a packet to a specified OpenFlow physical ports,
+      switch-defined logical ports, or required reserved ports
+      (required)";
+  }
+
+  identity group {
+    base OFActionType;
+    description
+      "Process the packet through the specified group (required)";
+  }
+
+  identity drop {
+    base OFActionType;
+    description
+      "There is no explicit action to represent drops. Instead,
+      packets whose action sets have no output action and no group
+      action should be dropped (required).  The action type is included here
+      for completeness of the list of required OF actions.";
+  }
+
+  identity set-queue {
+    base OFActionType;
+    description
+      "Sets the queue id for a packet (optional)";
+  }
+
+  identity push-mpls-tag {
+    base OFActionType;
+    description
+      "Push a new MPLS shim header onto the packet (optional)";
+  }
+
+  identity pop-mpls-tag {
+    base OFActionType;
+    description
+      "Pop the outer-most MPLS tag or shim header from the packet
+      (optional)";
+  }
+
+  identity push-pbb-tag {
+    base OFActionType;
+    description
+      "Push a new PBB service instance header (I-TAG TCI) onto
+      the packet (optional)";
+  }
+
+  identity pop-pbb-tag {
+    base OFActionType;
+    description
+      "Pop the outer-most PBB service instance header (I-TAG TCI)
+      from the packet (optional)";
+  }
+
+  identity push-vlan-tag {
+    base OFActionType;
+    description
+      "Push a new VLAN header onto the packet (optional)";
+  }
+
+  identity pop-vlan-tag {
+    base OFActionType;
+    description
+      "Pop the outer-most VLAN header from the packet (optional)";
+  }
+
+  identity set-field {
+    base OFActionType;
+    description
+      "Set-Field actions are identified by their field type and
+      modify the values of respective header fields in the packet
+      (optional)";
+  }
+
+  identity mpls-ttl-set {
+    base OFActionType;
+    description
+      "Replace the existing MPLS TTL (optional)";
+  }
+
+  identity mpls-ttl-decrement {
+    base OFActionType;
+    description
+      "Decrement the MPLS TTL (optional)";
+  }
+
+  identity ip-ttl-set {
+    base OFActionType;
+    description
+      "Replace the existing IPv4 TTL or IPv6 Hop Limit and
+      update the IP checksum (optional)";
+  }
+
+  identity ip-ttl-decrement {
+    base OFActionType;
+    description
+      "Decrement the IPv4 TTL or IPv6 Hop Limit field and
+      update the IP checksum (optional)";
+  }
+
+  identity copy-ttl-outward {
+    base OFActionType;
+    description
+      "Copy the TTL from next-to-outermost to outermost
+      header with TTL (optional). Copy can be IP-to-IP, MPLS-to-MPLS,
+      or IP-to-MPLS.";
+  }
+
+  identity copy-ttl-inward {
+    base OFActionType;
+    description
+      "Copy the TTL from outermost to next-to-outermost
+      header with TTL (optional). Copy can be IP-to-IP, MPLS-to-MPLS,
+      or MPLS-to-IP.";
+  }
+
+
+  typedef OFExperimenterId {
+    type uint32;
+    description
+      "The experimenter field is a 32-bit value that uniquely identifies the
+       experimenter. If the most significant byte is zero, the next
+       three bytes are the experimenter's IEEE OUI. If the most
+       significant byte is not zero, it is a value allocated by the
+       Open Networking Foundation.";
+  }
+
+}
