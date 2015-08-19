@@ -538,7 +538,9 @@ module onf-of-config {
 	"Specify the action types supported by the logical switch.";
 
       leaf-list type {
-        type of-types:OFActionType;
+        type identityref {
+          base of-types:OFActionType;
+        }
       }
     }
 
@@ -547,7 +549,9 @@ module onf-of-config {
 	"Specify the instruction types supported by the logical switch.";
 
       leaf-list type {
-        type of-types:OFInstructionType;
+        type identityref {
+          base of-types:OFInstructionType;
+        }
       }
     }
   }
