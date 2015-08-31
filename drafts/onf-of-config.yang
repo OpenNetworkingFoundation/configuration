@@ -372,7 +372,7 @@ module onf-of-config {
 
           If no such element is in an OpenFlow Logical Switch's resource
           list, then the OpenFlow Logical Switch does not authenticate
-          itself towards an OpenFloe Controller with a certificate.  If
+          itself towards an OpenFlow Controller with a certificate.  If
           this element is present, then the OpenFlow Logical Switch MUST
           provide this certificate for authentication to an OpenFlow
           Controller when setting up a TLS connection.
@@ -380,17 +380,16 @@ module onf-of-config {
           For TCP connections this element is irrelevant.";
       }
 
+
       list flow-table {
 
         key table-id;
 
         description
-          "List of flow tables of the OpenFlow Capable
-          Switch that the OpenFlow Logical Switch has access to.
-          Elements in this list MUST be unique. In most
+          "List of flow tables available on the OpenFlow Logical
+          Switch.  Elements in this list MUST be unique. In most
           implementations it is expected that the logical switch
-          has exclusive access to the reference capable switch flow
-          table.";
+          has exclusive access to these table resources.";
 
         uses openflow-logical-switch-table;
 
@@ -1337,17 +1336,22 @@ module onf-of-config {
     }
   }
 
-  grouping openflow-capable-switch-table {
+  grouping openflow-logical-switch-table {
     description
       "Representation of an OpenFlow Flow Table Resource.";
 
-    uses of-config-resource-id;
+    leaf table-id {
+      type uint8;
+      description
+        "OpenFlow table id.  This must be unique within each
+        logical switch.";
+    }
 
     leaf name {
       type string;
 
       description
-        "Table name at the capable switch level";
+        "Table name at the logical switch level";
     }
 
     leaf metadata-match {
@@ -1420,8 +1424,8 @@ module onf-of-config {
       container next-tables {
         description "Next Table property";
 
-        leaf-list table-resource-id {
-          type of-config-resource-id-type;
+        leaf-list table-id {
+          type uint8;
           description
             "List of tables that can be directly reached from the
             present table using the goto-table instruction. Table ids
@@ -1432,8 +1436,8 @@ module onf-of-config {
       container next-tables-miss {
         description "Next Table for table-miss";
 
-        leaf-list table-resource-id {
-          type of-config-resource-id-type;
+        leaf-list table-id {
+          type uint8;
           description
             "List of tables that can be directly reached from the
             present table using the goto-table instruction on a
@@ -1527,34 +1531,6 @@ module onf-of-config {
     }
   }
 
-  grouping openflow-logical-switch-table {
-    description
-      "Data for OpenFlow tables assigned to a logical switch";
-
-    leaf table-id {
-      type uint8;
-      description
-        "OpenFlow table id.  This must be unique within each
-        logical switch.";
-    }
-
-    leaf name {
-      type string;
-      description
-        "Table name at the logical switch level";
-    }
-
-    leaf flow-table-resource {
-      type leafref {
-        path "/capable-switch/resources/flow-table/resource-id";
-      }
-      description
-        "Reference to the capable switch flow table that should be
-        used for the corresponding table id";
-    }
-
-  }
-
 /*****************************************************************
  * Main container
  *****************************************************************/
@@ -1628,15 +1604,6 @@ module onf-of-config {
 	  "The list contains all external certificate resources of the OpenFlow
            Capable Switch.";
         uses OFExternalCertificateType;
-      }
-
-      list flow-table {
-        key resource-id;
-        description
-          "The list contains all flow table resources of the OpenFlow
-          Capable Switch.";
-
-        uses openflow-capable-switch-table;
       }
     }
 
