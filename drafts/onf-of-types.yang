@@ -515,4 +515,45 @@ module onf-of-types {
        Open Networking Foundation.";
   }
 
+  identity OFLogicalPortType {
+    description
+      "Base identity for supported OpenFlow tunnel types (logical
+      ports)";
+  }
+
+  identity OFTunnelPortType {
+    base OFLogicalPortType;
+    description
+      "Logical ports representing various types of OF tunnel
+      endpoints";
+  }
+
+  identity ipgre-tunnel {
+    base OFTunnelPortType;
+    description
+      "Basic GRE tunnel type";
+    reference
+      "RFC 2784 - Generic Routing Encapsulation (GRE)
+      RFC 2890 - Key and Sequence Number Extensions to GRE";
+  }
+
+  identity vxlan-tunnel {
+    base OFTunnelPortType;
+    description
+      "VxLAN tunnel type";
+    reference
+      "RFC 7348 - Virtual eXtensible Local Area Network (VXLAN):
+      A Framework for Overlaying Virtualized Layer 2 Networks over
+      Layer 3 Networks";
+  }
+
+  identity nvgre-tnnel {
+    base OFTunnelPortType;
+    description
+      "NVGRE tunnel type";
+    reference
+      "draft-sridharan-virtualization-nvgre - NVGRE: Network
+      Virtualization using Generic Routing Encapsulation";
+  }
+
 }
