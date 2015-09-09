@@ -7,7 +7,6 @@ module onf-of-config {
 
   prefix of-config;
 
-  import ietf-yang-types { prefix yang; }
   import ietf-inet-types { prefix inet; }
   import ietf-interfaces { prefix if; }
   import onf-of-types { prefix of-types; }
@@ -365,17 +364,19 @@ module onf-of-config {
           path "/capable-switch/resources/owned-certificate/resource-id";
         }
         description
-	  "The resource identifier of the owned certificate in the OpenFlow Capable
-          Switch that the OpenFlow Logical Switch uses to identify
-          itself.  This element MUST NOT occur more than once in an
-          OpenFlow Logical Switch's resource list.
 
-          If no such element is in an OpenFlow Logical Switch's resource
-          list, then the OpenFlow Logical Switch does not authenticate
-          itself towards an OpenFlow Controller with a certificate.  If
-          this element is present, then the OpenFlow Logical Switch MUST
-          provide this certificate for authentication to an OpenFlow
-          Controller when setting up a TLS connection.
+          "The resource identifier of the owned certificate in the
+          OpenFlow Capable Switch that the OpenFlow Logical Switch
+          uses to identify itself.  This element MUST NOT occur more
+          than once in an OpenFlow Logical Switch's resource list.
+
+          If no such element is in an OpenFlow Logical Switch's
+          resource list, then the OpenFlow Logical Switch does not
+          authenticate itself towards an OpenFlow Controller with a
+          certificate.  If this element is present, then the OpenFlow
+          Logical Switch MUST provide this certificate for
+          authentication to an OpenFlow Controller when setting up a
+          TLS connection.
 
           For TCP connections this element is irrelevant.";
       }
@@ -718,175 +719,147 @@ module onf-of-config {
     }
   }
 
-  grouping OFPortBaseTunnelType {
+  grouping openflow-tunnel-common {
     description
-      "A group of common elements that are included in every supported tunnel
-       type. Tunnels are modeled as logical ports.
+      "A group of common elements that are common in supported
+      tunnel types. Tunnels are modeled as logical ports.
 
-       One pair of local/remote endpoints must exist for a tunnel
-       configuration.
+      One pair of local/remote endpoints must exist for a tunnel
+      configuration.";
 
-      Only elements from one choice must exist at a time.";
+    leaf local-endpoint-address {
+      type inet:ip-address;
+      description
+        "The IP address of the local tunnel endpoint. Note that the
+        local and remote endpoint addresses should use the same
+        address family (i.e., IPv4 or IPv6).";
+    }
 
-    choice endpoints {
-      mandatory true;
-
-      case v4-endpoints {
-        leaf local-endpoint-ipv4-adress {
-          type inet:ipv4-address;
-          description
-	    "The IPv4 address of the local tunnel endpoint.";
-        }
-
-        leaf remote-endpoint-ipv4-adress {
-          type inet:ipv4-address;
-          description
-	    "The IPv4 address of the remote tunnel endpoint.";
-        }
-      }
-
-      case v6-endpoints {
-        leaf local-endpoint-ipv6-adress {
-          type inet:ipv6-address;
-          description
-	    "The IPv6 address of the local tunnel endpoint.";
-        }
-
-        leaf remote-endpoint-ipv6-adress {
-          type inet:ipv6-address;
-          description
-	    "The IPv6 address of the remote tunnel endpoint.";
-        }
-      }
-
-      case mac-endpoints {
-        leaf local-endpoint-mac-adress {
-          type yang:mac-address;
-          description
-	    "The MAC address of the local tunnel endpoint.";
-        }
-
-        leaf remote-endpoint-mac-adress {
-          type yang:mac-address;
-          description
-	    "The MAC address of the remote tunnel endpoint.";
-        }
-      }
+    leaf remote-endpoint-address {
+      type inet:ip-address;
+      description
+	     "The IP address of the remote tunnel endpoint. Note that the
+        local and remote endpoint addresses should use the same
+        address family (i.e., IPv4 or IPv6).";
     }
   }
 
-  grouping OFPortIPGRETunnelType {
+  grouping openflow-tunnel-ipgre {
     description
-      "Properties of a IP-in-GRE tunnel with key, checksum, and sequence number
-      information.";
+      "Properties of a IP-in-GRE tunnel with key, checksum, and
+      sequence number information.";
 
-    uses OFPortBaseTunnelType;
+    uses openflow-tunnel-common;
 
     leaf checksum-present {
       type boolean;
       default true;
       description
-	"Indicates presence of the GRE checksum.";
+        "Indicates presence of the GRE checksum.";
     }
 
     leaf key-present {
       type boolean;
       default true;
       description
-	"Indicates presence of the GRE key.";
+        "Indicates presence of the GRE key.";
     }
 
     leaf key {
       when "../key-present='true'" {
-        description
-	  "This element is only relevant if element key-present of this IP GRE
-          Tunnel has value 'true'.";
+      description
+        "This element is only relevant if element key-present of
+        this IP GRE Tunnel has value 'true'.";
       }
       type uint32;
-      mandatory true;
       description
-	"The (optional) key of the GRE tunnel.  It MAY be used to set the
-        OXM_OF_TUNNEL_ID match field metadata in the OpenFlow protocol";
+        "The (optional) key of the GRE tunnel.  It MAY be used to
+        set the OXM_OF_TUNNEL_ID match field metadata in the
+        OpenFlow protocol";
     }
 
     leaf sequence-number-present {
       type boolean;
       default false;
       description
-	"Indicates presence of the GRE sequence number.";
+        "Indicates presence of the GRE sequence number.";
     }
   }
 
-  grouping OFPortVXLANTunnelType {
+  grouping openflow-tunnel-vxlan {
     description
       "Properties of a VxLAN tunnel.";
-    uses OFPortBaseTunnelType;
+
+    uses openflow-tunnel-common;
 
     leaf vni-valid {
       type boolean;
       default true;
       description
-	"Indicates how the corresponding flag should be set in packets sent on
-         the tunnel.";
+        "Indicates how the corresponding flag should be set in
+        packets sent on the tunnel.";
     }
 
     leaf vni {
       type uint32;
       description
-	"Virtual network identifier assigned to all packets sent on the tunnel.
-         A VxLAN implementation MAY use the this element to set the
-         OXM_OF_TUNNEL_ID match field metadata in the OpenFlow protocol.";
+      	"Virtual network identifier assigned to all packets sent on
+        the tunnel.  A VxLAN implementation MAY use the this element
+        to set the OXM_OF_TUNNEL_ID match field metadata in the
+        OpenFlow protocol.";
     }
 
     leaf vni-multicast-group {
       type inet:ip-address;
       description
-	"If IP multicast is used to support broadcast on the tunnel this
-         specifies the corresponding multicast IP address";
+        "If IP multicast is used to support broadcast on the
+        tunnel this specifies the corresponding multicast IP
+        address";
     }
 
     leaf udp-source-port {
       type inet:port-number;
       description
-	"Specifies the outer UDP source port number.  If this element is absent,
-         the port number MAY be chosen dynamically.";
+        "Specifies the outer UDP source port number.  If this element
+        is absent, the port number MAY be chosen dynamically.";
     }
 
     leaf udp-dest-port {
       type inet:port-number;
       default 4789;
       description
-	"Specifies the outer UDP destination port number.  It SHOULD
-         be set to 4789, the port number reserved for VxLAN at IANA.";
+        "Specifies the outer UDP destination port number.  It SHOULD
+        be set to 4789, the port number reserved for VxLAN at IANA.";
     }
 
     leaf udp-checksum {
       type boolean;
       default false;
       description
-	"Boolean flag to indicate whether or not the outer UDP checksum should be
-         set";
+        "Boolean flag to indicate whether or not the outer UDP
+        checksum should be set";
     }
   }
 
-  grouping OFPortNVGRETunnelType {
+  grouping openflow-tunnel-nvgre {
     description
       "Properties of an NVGRE tunnel.";
 
-    uses OFPortBaseTunnelType;
+    uses openflow-tunnel-common;
 
     leaf vsid {
       type uint32;
       description
-	"Specifies the virtual subnet id used to identify packets belonging to
-	 the NVGRE virtual layer-2 network (24 bit)";
+        "Specifies the virtual subnet id used to identify packet
+        belonging to the NVGRE virtual layer-2 network (24 bit)";
     }
 
     leaf flow-id {
       type uint8;
       default 0;
       description
-	"8-bit value that is used to provide per-flow entropy for flows in the same VSID";
+        "8-bit value that is used to provide per-flow entropy for
+        flows in the same VSID";
     }
 
   }
@@ -920,36 +893,59 @@ module onf-of-config {
     }
   }
 
-  grouping OFPortType {
+  grouping openflow-tunnel-ports {
+    description
+      "Data nodes corresponding to OF logical ports representing
+      tunnels";
 
-
-    choice tunnel-type {
+    container tunnel {
       description
-	"Tunnels are modeled as logical ports.";
+        "Configuration data for supported tunnel types.  Each
+        encapsulation specific container is active only when
+        the tunnel type is set to the correspoinding value.";
 
-      container tunnel {
+      leaf tunnel-type {
+        type identityref {
+          base of-types:OFTunnelPortType;
+        }
         description
-	  "Properties of a basic IP-in-GRE tunnel.";
-        uses OFPortBaseTunnelType;
+          "Indicates the type of tunnel / encapsulation";
       }
 
       container ipgre-tunnel {
+        when "../tunnel-type=ipgre-tunnel";
         description
-	  "Properties of a IP-in-GRE tunnel.";
-        uses OFPortIPGRETunnelType;
+          "Properties of a IP-in-GRE tunnel.";
+        uses openflow-tunnel-ipgre;
       }
 
       container vxlan-tunnel {
+        when "../tunnel-type=vxlan-tunnel";
         description
-	  "Properties of a VxLAN tunnel.";
-        uses OFPortVXLANTunnelType;
+          "Properties of a VxLAN tunnel.";
+        uses openflow-tunnel-vxlan;
       }
 
       container nvgre-tunnel {
+        when "../tunnel-type=nvgre-tunnel";
         description
-	  "Properties of a NVGRE tunnel.";
-        uses OFPortNVGRETunnelType;
+          "Properties of a NVGRE tunnel.";
+        uses openflow-tunnel-nvgre;
       }
+    }
+  }
+
+  grouping openflow-logical-ports {
+    description
+      "Configuration data for OpenFlow logical ports, incl.
+      tunnels.";
+
+    container logical-ports {
+      description
+        "Container for all types of OF logical ports defined on
+        an interface";
+
+      uses openflow-tunnel-ports;
     }
   }
 
@@ -1796,7 +1792,13 @@ module onf-of-config {
       description
         "OpenFlow-specific configuration data for interfaces.";
 
+      leaf of_port_no {
+        type uint32;
+
+      }
+
       uses openflow-port-config;
+      uses openflow-logical-ports;
     }
   }
 
