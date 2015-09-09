@@ -1792,11 +1792,6 @@ module onf-of-config {
       description
         "OpenFlow-specific configuration data for interfaces.";
 
-      leaf of_port_no {
-        type uint32;
-
-      }
-
       uses openflow-port-config;
       uses openflow-logical-ports;
     }
