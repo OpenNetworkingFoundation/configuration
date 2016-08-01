@@ -126,7 +126,6 @@ module onf-of-config {
   }
 
 
-
   typedef hex-binary {
     type binary;
     description
@@ -144,7 +143,7 @@ module onf-of-config {
       "This element specifies a generic OpenFlow resource
        that is used as a basis for specific resources. Even though
        this element is not used on its own the following rules for
-       NETCONF operations MUST be obeyed also by elemnts using this
+       NETCONF operations MUST be obeyed also by elements using this
        element.";
 
     leaf resource-id {
@@ -334,19 +333,19 @@ module onf-of-config {
 
     container resources {
       description
-	"The list of identifiers of all resources of the
-         OpenFlow Capable Switch that the OpenFlow Logical Switch
-         has exclusive or non-exclusive access to.  A resource is
-         identified by the value of its resource-identifier element.
-         For each resource identifier value in this list, there MUST
-         be an element with a matching resource identifier value in
-         the resources list of the OpenFlow Capable Switch.
+        "The list of identifiers of all resources of the
+        OpenFlow Capable Switch that the OpenFlow Logical Switch
+        has exclusive or non-exclusive access to.  A resource is
+        identified by the value of its resource-identifier element.
+        For each resource identifier value in this list, there MUST
+        be an element with a matching resource identifier value in
+        the resources list of the OpenFlow Capable Switch.
 
-         Identifiers of this list are contained in elements
-         indicating the type of resource: 'port', 'queue',
-         'certificate', or 'flow-table'.  Depending on the type,
-         different constraints apply.  These are specified in
-         separate descriptions per type.";
+        Identifiers of this list are contained in elements
+        indicating the type of resource: 'port', 'queue',
+        'certificate', or 'flow-table'.  Depending on the type,
+        different constraints apply.  These are specified in
+        separate descriptions per type.";
 
       list port {
         description
@@ -357,6 +356,19 @@ module onf-of-config {
         key number;
 
         uses openflow-logical-switch-ports;
+
+        list queue {
+          description
+            "List of queues associated with the logical switch port.
+            A queue is identified by its id within a port, and
+            contains a reference to a queue in the base interfaces
+            model.";
+
+          key queue-id;
+
+          uses openflow-logical-switch-queues;
+
+        }
       }
 
       leaf certificate {
@@ -893,6 +905,30 @@ module onf-of-config {
     }
   }
 
+  grouping openflow-logical-switch-queues {
+    description
+      "Ports on a logical switch may have associated queues to
+      support OpenFlow QoS. Queues are identified by a combination
+      of OpenFlow port number and queue id.";
+
+    leaf queue-id {
+      type uint32;
+      description
+        "The queue id identifies a queue associated with the
+        corresponding port.";
+    }
+
+    leaf queue-reference {
+      type leafref {
+        path "/if:interfaces/" +
+        "if:interface[if:name=current()/../../port-reference]/openflow/" +
+        "queue/id";
+      }
+      description
+        "References a queue associated with the current port.";
+    }
+  }
+
   grouping openflow-tunnel-ports {
     description
       "Data nodes corresponding to OF logical ports representing
@@ -953,24 +989,16 @@ module onf-of-config {
     description
       "This grouping specifies properties of a queue resource.";
 
-    leaf queue-id {
+    leaf id {
       type uint32;
       description
-        "This id identifies the OpenFlow Queue to OpenFlow
-        Controllers. It is assigned to an OpenFlow Queue latest when
-        the OpenFlow Queue is associated with and OpenFlow Logical
-        Switch.  If the OpenFlow Queue is associated with an OpenFlow
-        Logical Switch, this element MUST be unique within the context
-        of the OpenFlow Logical Switch.
+        "This id identifies a queue associated with an interface
+        in the base interfaces model.  The id may be used to
+        associate a queue in an OpenFlow logical switch (based on
+        its queue-id) with the corresponding interface queue.
 
-        OpenFlow Capable Switch implementations may choose to assign
-        values to OpenFlow Queues that are unique within the context
-        of the OpenFlow Logical Switch.  These id can be used
-        independent of assignments to OpenFlow Logical Switches.
-
-        Other implementations may assign values to this element only
-        if the OpenFlow Queue is assigned to an OpenFlow Logical
-        Switch.";
+        Queues are assumed to be part of a parent interface, i.e.,
+        they are not independently assignable.";
     }
 
 /**
@@ -1058,11 +1086,7 @@ module onf-of-config {
 
   grouping openflow-port-features-current {
     description
-      "The current features of a port.
-
-      Elements in the type OFPortCurrentFeatureListType are not
-      configurable and can only be retrieved by NETCONF <get>
-      operations.";
+      "The current features of a port.";
 
     leaf rate {
       type of-types:OFPortRateType;
@@ -1674,7 +1698,7 @@ module onf-of-config {
       description
         "List of OpenFlow queues associated with the port.";
 
-      key queue-id;
+      key id;
 
       uses openflow-queue;
     }
