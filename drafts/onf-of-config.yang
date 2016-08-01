@@ -94,7 +94,9 @@ module onf-of-config {
       enum "beep";
     }
     description
-      "Possible protocols to connect ot an OF Configuration Point";
+      "Possible protocols to connect ot an OF Configuration Point.
+      Note that confguration of required certificates, authentication
+      keys, etc. is expected to be handled by a separate data model.";
   }
 
   typedef datapath-id-type {
@@ -270,19 +272,22 @@ module onf-of-config {
       type boolean;
       default false;
       description
-	"This element indicates the behavior of the
+	       "This element indicates the behavior of the
          OpenFlow Logical Switch when connecting to an OpenFlow
          Controller.
 
          If set to value 'false', the logical switch will connect to
          a controller without checking any controller certificate.
 
+         Note that configuration of certificates is expected to be
+         done using a separate data model which provides capabilities
+         for system-wide security configuration, i.e., not in
+         OF-Config.
+
          If set to value 'true', then the logical switch will
          connect to a controller with element <protocol> set to
          'TLS', only if the controller provides a certificate that
-         can be verified with one of the certificates stored in the
-         list called external-certificates in the OpenFlow Capable
-         Switch.
+         can be verified.
 
          If a certificate cannot be validated, the OpenFlow Logical
          Switch MUST terminate communication with the corresponding
@@ -306,7 +311,7 @@ module onf-of-config {
       }
       default failSecureMode;
       description
-	"This element indicates the the behavior of the
+	       "This element indicates the the behavior of the
          OpenFlow Logical Switch in case it loses contact with all
          OpenFlow Controllers.  There are two alternative modes in
          such a case: fails secure mode and fail standalone mode as
@@ -317,7 +322,7 @@ module onf-of-config {
 
     container controllers {
       description
-	"The list of controllers for this Logical switch.";
+	     "The list of controllers for this Logical switch.";
 
       list controller {
         key "id";
@@ -370,29 +375,6 @@ module onf-of-config {
 
         }
       }
-
-      leaf certificate {
-        type leafref {
-          path "/capable-switch/resources/owned-certificate/resource-id";
-        }
-        description
-
-          "The resource identifier of the owned certificate in the
-          OpenFlow Capable Switch that the OpenFlow Logical Switch
-          uses to identify itself.  This element MUST NOT occur more
-          than once in an OpenFlow Logical Switch's resource list.
-
-          If no such element is in an OpenFlow Logical Switch's
-          resource list, then the OpenFlow Logical Switch does not
-          authenticate itself towards an OpenFlow Controller with a
-          certificate.  If this element is present, then the OpenFlow
-          Logical Switch MUST provide this certificate for
-          authentication to an OpenFlow Controller when setting up a
-          TLS connection.
-
-          For TCP connections this element is irrelevant.";
-      }
-
 
       list flow-table {
 
@@ -616,7 +598,7 @@ module onf-of-config {
       type inet:port-number;
       default 6633;
       description
-	"The TCP port number at the OpenFlow Controller.  This port number is
+	       "The TCP port number at the OpenFlow Controller.  This port number is
          used by the OpenFlow Logical Switch when connecting to the
          OpenFlow Controller using TCP or TLS.  The default value is
          6633.";
@@ -660,16 +642,18 @@ module onf-of-config {
       }
       default "tls";
       description
-	"The default protocol that the OpenFlow Logical Switch uses to connect to
-         this OpenFlow Controller.";
+	      "The default protocol that the OpenFlow Logical Switch uses to connect to
+        this OpenFlow Controller.  Configuration of required certificates
+        and keys for using TLS is expected to be done via a separate
+        data model, i.e., not in OF-Config.";
     }
 
     container state {
       config false;
       description
-	"This container holds connection state information that indicate the
-         connection state of the OpenFlow Logical Switch and the OpenFlow
-         protocol version used for the connection.";
+        "This container holds connection state information that indicate the
+        connection state of the OpenFlow Logical Switch and the OpenFlow
+        protocol version used for the connection.";
 
       leaf connection-state {
         type OFUpDownStateType;
@@ -1157,178 +1141,6 @@ module onf-of-config {
     }
   }
 
-  grouping OFExternalCertificateType {
-    description
-      "This grouping specifies a certificate that can be used by an OpenFlow
-       Logical Switch for authenticating a controller when a TLS
-       connection is established.";
-
-    uses of-config-resource-id;
-
-    leaf certificate {
-      type string;
-      mandatory true;
-      description
-	"An X.509 certificate in DER format base64 encoded.";
-    }
-  }
-
-  grouping OFOwnedCertificateType {
-    description
-      "This grouping specifies a certificate and a private key. It can be used
-      by an OpenFlow Logical Switch for authenticating itself to a
-      controller when a TLS connection is established.";
-    uses of-config-resource-id;
-
-    leaf certificate {
-      type string;
-      mandatory true;
-      description
-	"An X.509 certificate in DER format base64 encoded.";
-    }
-
-    container private-key {
-      uses KeyValueType;
-      description
-	"This element contains the private key corresponding to the
-        certificate. The private key is encoded as specified in
-        XML-Signature Syntax and Processing
-        (http://www.w3.org/TR/2001/PR-xmldsig-core-20010820/).
-        Currently the specification only support DSA and RSA keys.";
-    }
-  }
-
-  grouping KeyValueType {
-    description
-      "The KeyValue element contains a single public key that may be useful in
-       validating the signature.";
-
-    choice key-type {
-      mandatory true;
-      case dsa {
-        container DSAKeyValue {
-          uses DSAKeyValueType;
-        }
-      }
-      case rsa {
-        container RSAKeyValue {
-          uses RSAKeyValueType;
-        }
-      }
-    }
-  }
-
-  grouping DSAKeyValueType {
-    description
-      "DSA keys and the DSA signature algorithm are specified in 'FIPS PUB
-    186-2, Digital Signature Standard (DSS), U.S. Department of
-    Commerce/National Institute of Standards and Technology,
-    http://csrc.nist.gov/publications/fips/fips186-2/fips186-2.pdf'.
-    DSA public key values can have the following fields:
-
-    P
-        a prime modulus meeting the requirements of the standard
-        above
-    Q
-        an integer in the range 2**159 < Q < 2**160 which is a
-        prime divisor of P-1
-    G
-        an integer with certain properties with respect to P and Q
-    J
-        (P - 1) / Q
-    Y
-        G**X mod P (where X is part of the private key and not made
-        public)
-    seed
-        a DSA prime generation seed
-    pgenCounter
-        a DSA prime generation counter
-
-    Parameter J is avilable for inclusion solely for efficiency as
-    it is calculatable from P and Q. Parameters seed and
-    pgenCounter are used in the DSA prime number generation
-    algorithm specified in the above standard. As such, they are
-    optional but MUST either both be present or both be absent.
-    This prime generation algorithm is designed to provide
-    assurance that a weak prime is not being used and it yields a P
-    and Q value. Parameters P, Q, and G can be public and common to
-    a group of users. They might be known from application context.
-    As such, they are optional but P and Q MUST either both appear
-    or both be absent. If all of P, Q, seed, and pgenCounter are
-    present, implementations are not required to check if they are
-    consistent and are free to use either P and Q or seed and
-    pgenCounter. All parameters are encoded as base64 values.";
-
-    leaf P {
-      when "count(../Q) != 0";
-      type binary;
-      mandatory true;
-      description
-	"A prime modulus meeting the requirements of the standard
-         above";
-    }
-
-    leaf Q {
-      when "count(../P) != 0";
-      type binary;
-      mandatory true;
-      description
-	"An integer in the range 2**159 < Q < 2**160 which is a
-         prime divisor of P-1";
-    }
-
-    leaf J {
-      type binary;
-      description
-	"(P - 1) / Q";
-    }
-
-    leaf G {
-      type binary;
-      description
-	"An integer with certain properties with respect to P and Q";
-    }
-
-    leaf Y {
-      type binary;
-      mandatory true;
-      description
-	"G**X mod P (where X is part of the private key and not made
-         public)";
-    }
-
-    leaf Seed {
-      when "count(../PgenCounter) != 0";
-      type binary;
-      mandatory true;
-      description
-	"A DSA prime generation seed";
-
-    }
-    leaf PgenCounter {
-      when "count(../Seed) != 0";
-      type binary;
-      mandatory true;
-      description
-	"A DSA prime generation counter";
-    }
-  }
-
-  grouping RSAKeyValueType {
-    description
-      "RSA key values have two fields: Modulus and Exponent.";
-
-    leaf Modulus {
-      type binary;
-      mandatory true;
-    }
-
-    leaf Exponent {
-      type binary;
-      mandatory true;
-    }
-  }
-
   grouping openflow-table-actions {
     description
       "List of actions supported by an OF table";
@@ -1610,21 +1422,6 @@ module onf-of-config {
         available to be assigned to an OpenFlow Logical Switch or
         already in use by an OpenFlow Logical Switch.";
 
-      list owned-certificate {
-        key "resource-id";
-        description
-          "The list contains all owned certificate resources of the
-          OpenFlow Capable Switch.";
-        uses OFOwnedCertificateType;
-      }
-
-      list external-certificate {
-        key "resource-id";
-        description
-	  "The list contains all external certificate resources of the OpenFlow
-           Capable Switch.";
-        uses OFExternalCertificateType;
-      }
     }
 
     container logical-switches {
