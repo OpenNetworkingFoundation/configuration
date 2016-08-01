@@ -258,7 +258,7 @@ reboots of the OpenFlow Capable Switch.">  id </abbr>
                                 onclick="toggleRows(this);return false"
                                 class="folder">&nbsp;
                              </a>
-                             <abbr title="No description">configuration-points</abbr>
+                             <abbr title="Enclosing container for the list of configuration points.">configuration-points</abbr>
                           </div>
                        </td> 
 <td nowrap>container</td>
@@ -364,341 +364,6 @@ already in use by an OpenFlow Logical Switch.">resources</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:resources</td>
                     </tr> 
-<tr id="1-1-4-2" class="a">
-                       <td nowrap id="p4000">
-                          <div id="p5000" class="tier4">
-                             <a href="#" id="p6000"
-                                onclick="toggleRows(this);return false"
-                                class="folder">&nbsp;
-                             </a>
-                             <abbr title="The list contains all owned certificate resources of the
-OpenFlow Capable Switch.">owned-certificate[resource-id]</abbr>
-                          </div>
-                       </td> 
-<td nowrap>list</td>
-                    <td nowrap></td>
-                    <td nowrap>config</td>
-                    <td></td>
-                    <td>current</td>
-                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:owned-certificate</td>
-                    </tr> 
-<tr id="1-1-4-2-4" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier5>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="A unique but locally arbitrary identifier that uniquely
-identifies an OpenFlow Port within the context of an OpenFlow
-Logical Switch. It MUST be persistent across reboots of the
-OpenFlow Capable Switch.">  resource-id </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="of-config-resource-id-type
-inet:uri
-">of-config-resource-id-type</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:owned-certificate/of-config:resource-id</td</tr> 
-<tr id="1-1-4-2-5" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier5>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="An X.509 certificate in DER format base64 encoded.">  certificate </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="string
-">string</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:owned-certificate/of-config:certificate</td</tr> 
-<tr id="1-1-4-2-6" class="a">
-                       <td nowrap id="p4000">
-                          <div id="p5000" class="tier5">
-                             <a href="#" id="p6000"
-                                onclick="toggleRows(this);return false"
-                                class="folder">&nbsp;
-                             </a>
-                             <abbr title="This element contains the private key corresponding to the
-      certificate. The private key is encoded as specified in
-      XML-Signature Syntax and Processing
-      (http://www.w3.org/TR/2001/PR-xmldsig-core-20010820/).
-      Currently the specification only support DSA and RSA keys.">private-key</abbr>
-                          </div>
-                       </td> 
-<td nowrap>container</td>
-                    <td nowrap></td>
-                    <td nowrap>config</td>
-                    <td></td>
-                    <td>current</td>
-                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:owned-certificate/of-config:private-key</td>
-                    </tr> 
-<tr id="1-1-4-2-6-1" class="a">
-                       <td nowrap id="p4000">
-                          <div id="p5000" class="tier6">
-                             <a href="#" id="p6000"
-                                onclick="toggleRows(this);return false"
-                                class="folder">&nbsp;
-                             </a>
-                             <abbr title="No description">(key-type)</abbr>
-                          </div>
-                       </td> 
-<td nowrap>choice</td>
-                    <td nowrap></td>
-                    <td nowrap>config</td>
-                    <td></td>
-                    <td>current</td>
-                    <td nowrap>/capable-switch/resources/owned-certificate/private-key</td>
-                    </tr> 
-<tr id="1-1-4-2-6-1-1" class="a">
-                       <td nowrap id="p4000">
-                          <div id="p5000" class="tier7">
-                             <a href="#" id="p6000"
-                                onclick="toggleRows(this);return false"
-                                class="folder">&nbsp;
-                             </a>
-                             <abbr title="No description">:(dsa)</abbr>
-                          </div>
-                       </td> 
-<td nowrap>case</td>
-                    <td nowrap></td>
-                    <td nowrap>config</td>
-                    <td></td>
-                    <td>current</td>
-                    <td nowrap>/capable-switch/resources/owned-certificate/private-key</td>
-                    </tr> 
-<tr id="1-1-4-2-6-1-1-1" class="a">
-                       <td nowrap id="p4000">
-                          <div id="p5000" class="tier8">
-                             <a href="#" id="p6000"
-                                onclick="toggleRows(this);return false"
-                                class="folder">&nbsp;
-                             </a>
-                             <abbr title="No description">DSAKeyValue</abbr>
-                          </div>
-                       </td> 
-<td nowrap>container</td>
-                    <td nowrap></td>
-                    <td nowrap>config</td>
-                    <td></td>
-                    <td>current</td>
-                    <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue</td>
-                    </tr> 
-<tr id="1-1-4-2-6-1-1-1-1" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="A prime modulus meeting the requirements of the standard
-       above">  P </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:P</td</tr> 
-<tr id="1-1-4-2-6-1-1-1-2" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="An integer in the range 2**159 < Q < 2**160 which is a
-       prime divisor of P-1">  Q </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:Q</td</tr> 
-<tr id="1-1-4-2-6-1-1-1-3" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="(P - 1) / Q"> <em> J </em></abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td>?</td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:J</td</tr> 
-<tr id="1-1-4-2-6-1-1-1-4" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="An integer with certain properties with respect to P and Q"> <em> G </em></abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td>?</td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:G</td</tr> 
-<tr id="1-1-4-2-6-1-1-1-5" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="G**X mod P (where X is part of the private key and not made
-       public)">  Y </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:Y</td</tr> 
-<tr id="1-1-4-2-6-1-1-1-6" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="A DSA prime generation seed">  Seed </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:Seed</td</tr> 
-<tr id="1-1-4-2-6-1-1-1-7" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="A DSA prime generation counter">  PgenCounter </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:DSAKeyValue/of-config:PgenCounter</td</tr> 
-<tr id="1-1-4-2-6-1-2" class="a">
-                       <td nowrap id="p4000">
-                          <div id="p5000" class="tier7">
-                             <a href="#" id="p6000"
-                                onclick="toggleRows(this);return false"
-                                class="folder">&nbsp;
-                             </a>
-                             <abbr title="No description">:(rsa)</abbr>
-                          </div>
-                       </td> 
-<td nowrap>case</td>
-                    <td nowrap></td>
-                    <td nowrap>config</td>
-                    <td></td>
-                    <td>current</td>
-                    <td nowrap>/capable-switch/resources/owned-certificate/private-key</td>
-                    </tr> 
-<tr id="1-1-4-2-6-1-2-2" class="a">
-                       <td nowrap id="p4000">
-                          <div id="p5000" class="tier8">
-                             <a href="#" id="p6000"
-                                onclick="toggleRows(this);return false"
-                                class="folder">&nbsp;
-                             </a>
-                             <abbr title="No description">RSAKeyValue</abbr>
-                          </div>
-                       </td> 
-<td nowrap>container</td>
-                    <td nowrap></td>
-                    <td nowrap>config</td>
-                    <td></td>
-                    <td>current</td>
-                    <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:RSAKeyValue</td>
-                    </tr> 
-<tr id="1-1-4-2-6-1-2-2-8" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="No description">  Modulus </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:RSAKeyValue/of-config:Modulus</td</tr> 
-<tr id="1-1-4-2-6-1-2-2-9" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier9>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="No description">  Exponent </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="binary
-">binary</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/capable-switch/resources/owned-certificate/private-key/of-config:RSAKeyValue/of-config:Exponent</td</tr> 
-<tr id="1-1-4-3" class="a">
-                       <td nowrap id="p4000">
-                          <div id="p5000" class="tier4">
-                             <a href="#" id="p6000"
-                                onclick="toggleRows(this);return false"
-                                class="folder">&nbsp;
-                             </a>
-                             <abbr title="The list contains all external certificate resources of the OpenFlow
-       Capable Switch.">external-certificate[resource-id]</abbr>
-                          </div>
-                       </td> 
-<td nowrap>list</td>
-                    <td nowrap></td>
-                    <td nowrap>config</td>
-                    <td></td>
-                    <td>current</td>
-                    <td nowrap>/of-config:capable-switch/of-config:resources/of-config:external-certificate</td>
-                    </tr> 
-<tr id="1-1-4-3-7" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier5>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="A unique but locally arbitrary identifier that uniquely
-identifies an OpenFlow Port within the context of an OpenFlow
-Logical Switch. It MUST be persistent across reboots of the
-OpenFlow Capable Switch.">  resource-id </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="of-config-resource-id-type
-inet:uri
-">of-config-resource-id-type</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:external-certificate/of-config:resource-id</td</tr> 
-<tr id="1-1-4-3-8" class="a">
-                       <td nowrap>
-                          <div id=9999 class=tier5>
-                             <a class="leaf">&nbsp;</a>
-                             <abbr title="An X.509 certificate in DER format base64 encoded.">  certificate </abbr>
-                          </div>
-                       </td>
-                       <td>leaf</td>
-                       <td nowrap><abbr title="string
-">string</abbr></td>
-                       <td nowrap>config</td>
-                       <td></td>
-                       <td>current</td>
-                       <td nowrap>/of-config:capable-switch/of-config:resources/of-config:external-certificate/of-config:certificate</td</tr> 
 <tr id="1-1-5" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier3">
@@ -717,7 +382,7 @@ inet:uri
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches</td>
                     </tr> 
-<tr id="1-1-5-4" class="a">
+<tr id="1-1-5-2" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier4">
                              <a href="#" id="p6000"
@@ -735,7 +400,7 @@ Capable Switch.">switch[id]</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch</td>
                     </tr> 
-<tr id="1-1-5-4-9" class="a">
+<tr id="1-1-5-2-4" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -753,7 +418,7 @@ string
                        <td></td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:id</td</tr> 
-<tr id="1-1-5-4-10" class="a">
+<tr id="1-1-5-2-5" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier5">
                              <a href="#" id="p6000"
@@ -771,7 +436,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities</td>
                     </tr> 
-<tr id="1-1-5-4-10-2" class="a">
+<tr id="1-1-5-2-5-1" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -787,7 +452,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:max-buffered-packets</td</tr> 
-<tr id="1-1-5-4-10-3" class="a">
+<tr id="1-1-5-2-5-2" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -801,7 +466,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:max-tables</td</tr> 
-<tr id="1-1-5-4-10-4" class="a">
+<tr id="1-1-5-2-5-3" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -815,7 +480,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:max-ports</td</tr> 
-<tr id="1-1-5-4-10-5" class="a">
+<tr id="1-1-5-2-5-4" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -829,7 +494,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:flow-statistics</td</tr> 
-<tr id="1-1-5-4-10-6" class="a">
+<tr id="1-1-5-2-5-5" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -843,7 +508,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:table-statistics</td</tr> 
-<tr id="1-1-5-4-10-7" class="a">
+<tr id="1-1-5-2-5-6" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -857,7 +522,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:port-statistics</td</tr> 
-<tr id="1-1-5-4-10-8" class="a">
+<tr id="1-1-5-2-5-7" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -871,7 +536,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-statistics</td</tr> 
-<tr id="1-1-5-4-10-9" class="a">
+<tr id="1-1-5-2-5-8" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -885,7 +550,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:queue-statistics</td</tr> 
-<tr id="1-1-5-4-10-10" class="a">
+<tr id="1-1-5-2-5-9" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -899,7 +564,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:reassemble-ip-fragments</td</tr> 
-<tr id="1-1-5-4-10-11" class="a">
+<tr id="1-1-5-2-5-10" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -915,7 +580,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:block-looping-ports</td</tr> 
-<tr id="1-1-5-4-10-12" class="a">
+<tr id="1-1-5-2-5-11" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -934,11 +599,11 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:reserved-port-types</td>
                     </tr> 
-<tr id="1-1-5-4-10-12-3" class="a">
+<tr id="1-1-5-2-5-11-1" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
-                             <abbr title="No description">  type </abbr>
+                             <abbr title="List of the reserved port types.">  type </abbr>
                           </div>
                        </td>
                        <td>leaf-list</td>
@@ -948,7 +613,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:reserved-port-types/of-config:type</td</tr> 
-<tr id="1-1-5-4-10-13" class="a">
+<tr id="1-1-5-2-5-12" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -965,11 +630,11 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-types</td>
                     </tr> 
-<tr id="1-1-5-4-10-13-4" class="a">
+<tr id="1-1-5-2-5-12-2" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
-                             <abbr title="No description">  type </abbr>
+                             <abbr title="List of supported group types.">  type </abbr>
                           </div>
                        </td>
                        <td>leaf-list</td>
@@ -979,7 +644,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-types/of-config:type</td</tr> 
-<tr id="1-1-5-4-10-14" class="a">
+<tr id="1-1-5-2-5-13" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -996,11 +661,11 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-capabilities</td>
                     </tr> 
-<tr id="1-1-5-4-10-14-5" class="a">
+<tr id="1-1-5-2-5-13-3" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
-                             <abbr title="No description">  capability </abbr>
+                             <abbr title="List of supported group capabilities.">  capability </abbr>
                           </div>
                        </td>
                        <td>leaf-list</td>
@@ -1010,7 +675,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:group-capabilities/of-config:capability</td</tr> 
-<tr id="1-1-5-4-10-15" class="a">
+<tr id="1-1-5-2-5-14" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -1027,11 +692,11 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:action-types</td>
                     </tr> 
-<tr id="1-1-5-4-10-15-6" class="a">
+<tr id="1-1-5-2-5-14-4" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
-                             <abbr title="No description">  type </abbr>
+                             <abbr title="List of supported action types.">  type </abbr>
                           </div>
                        </td>
                        <td>leaf-list</td>
@@ -1041,7 +706,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:action-types/of-config:type</td</tr> 
-<tr id="1-1-5-4-10-16" class="a">
+<tr id="1-1-5-2-5-15" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -1058,11 +723,11 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:instruction-types</td>
                     </tr> 
-<tr id="1-1-5-4-10-16-7" class="a">
+<tr id="1-1-5-2-5-15-5" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
-                             <abbr title="No description">  type </abbr>
+                             <abbr title="List of supported instruction types.">  type </abbr>
                           </div>
                        </td>
                        <td>leaf-list</td>
@@ -1072,7 +737,7 @@ an OpenFlow Logical Switch MAY implement.">capabilities</abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:capabilities/of-config:instruction-types/of-config:type</td</tr> 
-<tr id="1-1-5-4-11" class="a">
+<tr id="1-1-5-2-6" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -1095,7 +760,7 @@ string
                        <td></td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:datapath-id</td</tr> 
-<tr id="1-1-5-4-12" class="a">
+<tr id="1-1-5-2-7" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -1114,37 +779,40 @@ network resources of the underlying platform."> <em> enabled </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:enabled</td</tr> 
-<tr id="1-1-5-4-13" class="a">
+<tr id="1-1-5-2-8" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
                              <abbr title="This element indicates the behavior of the
-       OpenFlow Logical Switch when connecting to an OpenFlow
-       Controller.
+OpenFlow Logical Switch when connecting to an OpenFlow
+Controller.
 
-       If set to value 'false', the logical switch will connect to
-       a controller without checking any controller certificate.
+If set to value 'false', the logical switch will connect to
+a controller without checking any controller certificate.
 
-       If set to value 'true', then the logical switch will
-       connect to a controller with element <protocol> set to
-       'TLS', only if the controller provides a certificate that
-       can be verified with one of the certificates stored in the
-       list called external-certificates in the OpenFlow Capable
-       Switch.
+Note that configuration of certificates is expected to be
+done using a separate data model which provides capabilities
+for system-wide security configuration, i.e., not in
+OF-Config.
 
-       If a certificate cannot be validated, the OpenFlow Logical
-       Switch MUST terminate communication with the corresponding
-       OpenFlow Controller, MUST NOT conduct any OpenFlow
-       processing on requests of this OpenFlow controller, and
-       SHOULD NOT further utilize any computational or network
-       resources of for dealing with this connection.
+If set to value 'true', then the logical switch will
+connect to a controller with element <protocol> set to
+'TLS', only if the controller provides a certificate that
+can be verified.
 
-       If set to value 'true', the OpenFlow Logical Switch MUST
-       NOT connect to any OpenFlow Controller that does not
-       provide a certificate. This implies that it cannot connect
-       to an OpenFlow controller that has the value of element
-       protocol set to 'TCP'. Only connections with protocol 'TLS'
-       are possible in this case."> <em> check-controller-certificate </em></abbr>
+If a certificate cannot be validated, the OpenFlow Logical
+Switch MUST terminate communication with the corresponding
+OpenFlow Controller, MUST NOT conduct any OpenFlow
+processing on requests of this OpenFlow controller, and
+SHOULD NOT further utilize any computational or network
+resources of for dealing with this connection.
+
+If set to value 'true', the OpenFlow Logical Switch MUST
+NOT connect to any OpenFlow Controller that does not
+provide a certificate. This implies that it cannot connect
+to an OpenFlow controller that has the value of element
+protocol set to 'TCP'. Only connections with protocol 'TLS'
+are possible in this case."> <em> check-controller-certificate </em></abbr>
                           </div>
                        </td>
                        <td>leaf</td>
@@ -1154,17 +822,17 @@ network resources of the underlying platform."> <em> enabled </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:check-controller-certificate</td</tr> 
-<tr id="1-1-5-4-14" class="a">
+<tr id="1-1-5-2-9" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
                              <abbr title="This element indicates the the behavior of the
-       OpenFlow Logical Switch in case it loses contact with all
-       OpenFlow Controllers.  There are two alternative modes in
-       such a case: fails secure mode and fail standalone mode as
-       defined by the OpenFlow protocol specification version 1.2,
-       section 6.4.  These are the only allowed values for this
-       element. Default is the fail secure mode."> <em> lost-connection-behavior </em></abbr>
+OpenFlow Logical Switch in case it loses contact with all
+OpenFlow Controllers.  There are two alternative modes in
+such a case: fails secure mode and fail standalone mode as
+defined by the OpenFlow protocol specification version 1.2,
+section 6.4.  These are the only allowed values for this
+element. Default is the fail secure mode."> <em> lost-connection-behavior </em></abbr>
                           </div>
                        </td>
                        <td>leaf</td>
@@ -1174,7 +842,7 @@ network resources of the underlying platform."> <em> enabled </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:lost-connection-behavior</td</tr> 
-<tr id="1-1-5-4-15" class="a">
+<tr id="1-1-5-2-10" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier5">
                              <a href="#" id="p6000"
@@ -1191,7 +859,7 @@ network resources of the underlying platform."> <em> enabled </em></abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers</td>
                     </tr> 
-<tr id="1-1-5-4-15-17" class="a">
+<tr id="1-1-5-2-10-16" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -1211,7 +879,7 @@ contained in this list.">controller[id]</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller</td>
                     </tr> 
-<tr id="1-1-5-4-15-17-8" class="a">
+<tr id="1-1-5-2-10-16-6" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1229,7 +897,7 @@ string
                        <td></td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:id</td</tr> 
-<tr id="1-1-5-4-15-17-9" class="a">
+<tr id="1-1-5-2-10-16-7" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1251,7 +919,7 @@ string
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:role</td</tr> 
-<tr id="1-1-5-4-15-17-10" class="a">
+<tr id="1-1-5-2-10-16-8" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1268,14 +936,14 @@ union
                        <td></td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:ip-address</td</tr> 
-<tr id="1-1-5-4-15-17-11" class="a">
+<tr id="1-1-5-2-10-16-9" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
                              <abbr title="The TCP port number at the OpenFlow Controller.  This port number is
-       used by the OpenFlow Logical Switch when connecting to the
-       OpenFlow Controller using TCP or TLS.  The default value is
-       6633."> <em> port </em></abbr>
+used by the OpenFlow Logical Switch when connecting to the
+OpenFlow Controller using TCP or TLS.  The default value is
+6633."> <em> port </em></abbr>
                           </div>
                        </td>
                        <td>leaf</td>
@@ -1286,7 +954,7 @@ uint16
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:port</td</tr> 
-<tr id="1-1-5-4-15-17-12" class="a">
+<tr id="1-1-5-2-10-16-10" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1310,7 +978,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:local-ip-address</td</tr> 
-<tr id="1-1-5-4-15-17-13" class="a">
+<tr id="1-1-5-2-10-16-11" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1335,12 +1003,14 @@ uint16
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:local-port</td</tr> 
-<tr id="1-1-5-4-15-17-14" class="a">
+<tr id="1-1-5-2-10-16-12" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
                              <abbr title="The default protocol that the OpenFlow Logical Switch uses to connect to
-       this OpenFlow Controller."> <em> protocol </em></abbr>
+this OpenFlow Controller.  Configuration of required certificates
+and keys for using TLS is expected to be done via a separate
+data model, i.e., not in OF-Config."> <em> protocol </em></abbr>
                           </div>
                        </td>
                        <td>leaf</td>
@@ -1350,7 +1020,7 @@ uint16
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:protocol</td</tr> 
-<tr id="1-1-5-4-15-17-15" class="a">
+<tr id="1-1-5-2-10-16-13" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier7">
                              <a href="#" id="p6000"
@@ -1358,8 +1028,8 @@ uint16
                                 class="folder">&nbsp;
                              </a>
                              <abbr title="This container holds connection state information that indicate the
-       connection state of the OpenFlow Logical Switch and the OpenFlow
-       protocol version used for the connection.">state</abbr>
+connection state of the OpenFlow Logical Switch and the OpenFlow
+protocol version used for the connection.">state</abbr>
                           </div>
                        </td> 
 <td nowrap>container</td>
@@ -1369,7 +1039,7 @@ uint16
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state</td>
                     </tr> 
-<tr id="1-1-5-4-15-17-15-3" class="a">
+<tr id="1-1-5-2-10-16-13-1" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -1385,7 +1055,7 @@ enumeration
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:connection-state</td</tr> 
-<tr id="1-1-5-4-15-17-15-4" class="a">
+<tr id="1-1-5-2-10-16-13-2" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -1409,7 +1079,7 @@ enumeration
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:current-version</td</tr> 
-<tr id="1-1-5-4-15-17-15-5" class="a">
+<tr id="1-1-5-2-10-16-13-3" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf-list">&nbsp;</a>
@@ -1425,7 +1095,7 @@ enumeration
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:supported-versions</td</tr> 
-<tr id="1-1-5-4-15-17-15-6" class="a">
+<tr id="1-1-5-2-10-16-13-4" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -1443,7 +1113,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:local-ip-address-in-use</td</tr> 
-<tr id="1-1-5-4-15-17-15-7" class="a">
+<tr id="1-1-5-2-10-16-13-5" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -1467,7 +1137,7 @@ uint16
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:controllers/of-config:controller/of-config:state/of-config:local-port-in-use</td</tr> 
-<tr id="1-1-5-4-16" class="a">
+<tr id="1-1-5-2-11" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier5">
                              <a href="#" id="p6000"
@@ -1475,18 +1145,18 @@ uint16
                                 class="folder">&nbsp;
                              </a>
                              <abbr title="The list of identifiers of all resources of the
-       OpenFlow Capable Switch that the OpenFlow Logical Switch
-       has exclusive or non-exclusive access to.  A resource is
-       identified by the value of its resource-identifier element.
-       For each resource identifier value in this list, there MUST
-       be an element with a matching resource identifier value in
-       the resources list of the OpenFlow Capable Switch.
+OpenFlow Capable Switch that the OpenFlow Logical Switch
+has exclusive or non-exclusive access to.  A resource is
+identified by the value of its resource-identifier element.
+For each resource identifier value in this list, there MUST
+be an element with a matching resource identifier value in
+the resources list of the OpenFlow Capable Switch.
 
-       Identifiers of this list are contained in elements
-       indicating the type of resource: 'port', 'queue',
-       'certificate', or 'flow-table'.  Depending on the type,
-       different constraints apply.  These are specified in
-       separate descriptions per type.">resources</abbr>
+Identifiers of this list are contained in elements
+indicating the type of resource: 'port', 'queue',
+'certificate', or 'flow-table'.  Depending on the type,
+different constraints apply.  These are specified in
+separate descriptions per type.">resources</abbr>
                           </div>
                        </td> 
 <td nowrap>container</td>
@@ -1496,7 +1166,7 @@ uint16
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources</td>
                     </tr> 
-<tr id="1-1-5-4-16-18" class="a">
+<tr id="1-1-5-2-11-17" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -1515,7 +1185,7 @@ base interfaces model.">port[number]</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port</td>
                     </tr> 
-<tr id="1-1-5-4-16-18-16" class="a">
+<tr id="1-1-5-2-11-17-14" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1537,7 +1207,7 @@ port when it is assigned to a logical switch.">  number </abbr>
                        <td></td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port/of-config:number</td</tr> 
-<tr id="1-1-5-4-16-18-17" class="a">
+<tr id="1-1-5-2-11-17-15" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1553,34 +1223,56 @@ leafref
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port/of-config:port-reference</td</tr> 
-<tr id="1-1-5-4-16-19" class="a">
+<tr id="1-1-5-2-11-17-16" class="a">
+                       <td nowrap id="p4000">
+                          <div id="p5000" class="tier7">
+                             <a href="#" id="p6000"
+                                onclick="toggleRows(this);return false"
+                                class="folder">&nbsp;
+                             </a>
+                             <abbr title="List of queues associated with the logical switch port.
+A queue is identified by its id within a port, and
+contains a reference to a queue in the base interfaces
+model.">queue[queue-id]</abbr>
+                          </div>
+                       </td> 
+<td nowrap>list</td>
+                    <td nowrap></td>
+                    <td nowrap>config</td>
+                    <td></td>
+                    <td>current</td>
+                    <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port/of-config:queue</td>
+                    </tr> 
+<tr id="1-1-5-2-11-17-16-6" class="a">
                        <td nowrap>
-                          <div id=9999 class=tier6>
+                          <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
-                             <abbr title="The resource identifier of the owned certificate in the
-OpenFlow Capable Switch that the OpenFlow Logical Switch
-uses to identify itself.  This element MUST NOT occur more
-than once in an OpenFlow Logical Switch's resource list.
-
-If no such element is in an OpenFlow Logical Switch's
-resource list, then the OpenFlow Logical Switch does not
-authenticate itself towards an OpenFlow Controller with a
-certificate.  If this element is present, then the OpenFlow
-Logical Switch MUST provide this certificate for
-authentication to an OpenFlow Controller when setting up a
-TLS connection.
-
-For TCP connections this element is irrelevant."> <em> certificate </em></abbr>
+                             <abbr title="The queue id identifies a queue associated with the
+corresponding port.">  queue-id </abbr>
+                          </div>
+                       </td>
+                       <td>leaf</td>
+                       <td nowrap><abbr title="uint32
+">uint32</abbr></td>
+                       <td nowrap>config</td>
+                       <td></td>
+                       <td>current</td>
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port/of-config:queue/of-config:queue-id</td</tr> 
+<tr id="1-1-5-2-11-17-16-7" class="a">
+                       <td nowrap>
+                          <div id=9999 class=tier8>
+                             <a class="leaf">&nbsp;</a>
+                             <abbr title="References a queue associated with the current port."> <em> queue-reference </em></abbr>
                           </div>
                        </td>
                        <td>leaf</td>
                        <td nowrap><abbr title="leafref
- : /capable-switch/resources/owned-certificate/resource-id">leafref</abbr></td>
+ : /if:interfaces/if:interface[if:name=current()/../../port-reference]/openflow/queue/id">leafref</abbr></td>
                        <td nowrap>config</td>
                        <td>?</td>
                        <td>current</td>
-                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:certificate</td</tr> 
-<tr id="1-1-5-4-16-20" class="a">
+                       <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:port/of-config:queue/of-config:queue-reference</td</tr> 
+<tr id="1-1-5-2-11-18" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -1600,7 +1292,7 @@ has exclusive access to these table resources.">flow-table[table-id]</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-18" class="a">
+<tr id="1-1-5-2-11-18-17" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1615,7 +1307,7 @@ logical switch.">  table-id </abbr>
                        <td></td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:table-id</td</tr> 
-<tr id="1-1-5-4-16-20-19" class="a">
+<tr id="1-1-5-2-11-18-18" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1629,7 +1321,7 @@ logical switch.">  table-id </abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:name</td</tr> 
-<tr id="1-1-5-4-16-20-20" class="a">
+<tr id="1-1-5-2-11-18-19" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1646,7 +1338,7 @@ integer in hexadecimal digits([0-9a-fA-F]) format."> <em> metadata-match </em></
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:metadata-match</td</tr> 
-<tr id="1-1-5-4-16-20-21" class="a">
+<tr id="1-1-5-2-11-18-20" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1664,7 +1356,7 @@ hexadecimal digits([0-9a-fA-F]) format."> <em> metadata-write </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:metadata-write</td</tr> 
-<tr id="1-1-5-4-16-20-22" class="a">
+<tr id="1-1-5-2-11-18-21" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -1679,7 +1371,7 @@ flow table."> <em> max-entries </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:max-entries</td</tr> 
-<tr id="1-1-5-4-16-20-23" class="a">
+<tr id="1-1-5-2-11-18-22" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier7">
                              <a href="#" id="p6000"
@@ -1703,7 +1395,7 @@ entries.">properties</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-8" class="a">
+<tr id="1-1-5-2-11-18-22-8" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1720,7 +1412,7 @@ entries.">properties</abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:instructions</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-8-10" class="a">
+<tr id="1-1-5-2-11-18-22-8-1" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1735,7 +1427,7 @@ for regular flow entries">  instruction </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:instructions/of-config:instruction</td</tr> 
-<tr id="1-1-5-4-16-20-23-9" class="a">
+<tr id="1-1-5-2-11-18-22-9" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1752,7 +1444,7 @@ for regular flow entries">  instruction </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:instructions-miss</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-9-11" class="a">
+<tr id="1-1-5-2-11-18-22-9-2" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1767,7 +1459,7 @@ table for table-miss flow entries">  instruction </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:instructions-miss/of-config:instruction</td</tr> 
-<tr id="1-1-5-4-16-20-23-10" class="a">
+<tr id="1-1-5-2-11-18-22-10" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1784,7 +1476,7 @@ table for table-miss flow entries">  instruction </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:next-tables</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-10-12" class="a">
+<tr id="1-1-5-2-11-18-22-10-3" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1800,7 +1492,7 @@ reference the identifiers in the logical switch scope.">  table-id </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:next-tables/of-config:table-id</td</tr> 
-<tr id="1-1-5-4-16-20-23-11" class="a">
+<tr id="1-1-5-2-11-18-22-11" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1817,7 +1509,7 @@ reference the identifiers in the logical switch scope.">  table-id </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:next-tables-miss</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-11-13" class="a">
+<tr id="1-1-5-2-11-18-22-11-4" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1834,7 +1526,7 @@ logical switch scope.">  table-id </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:next-tables-miss/of-config:table-id</td</tr> 
-<tr id="1-1-5-4-16-20-23-12" class="a">
+<tr id="1-1-5-2-11-18-22-12" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1851,7 +1543,7 @@ logical switch scope.">  table-id </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-actions</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-12-14" class="a">
+<tr id="1-1-5-2-11-18-22-12-5" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1866,7 +1558,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-actions/of-config:action</td</tr> 
-<tr id="1-1-5-4-16-20-23-13" class="a">
+<tr id="1-1-5-2-11-18-22-13" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1883,7 +1575,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-actions-miss</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-13-15" class="a">
+<tr id="1-1-5-2-11-18-22-13-6" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1898,7 +1590,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-actions-miss/of-config:action</td</tr> 
-<tr id="1-1-5-4-16-20-23-14" class="a">
+<tr id="1-1-5-2-11-18-22-14" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1915,7 +1607,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-actions</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-14-16" class="a">
+<tr id="1-1-5-2-11-18-22-14-7" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1930,7 +1622,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-actions/of-config:action</td</tr> 
-<tr id="1-1-5-4-16-20-23-15" class="a">
+<tr id="1-1-5-2-11-18-22-15" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1947,7 +1639,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-actions-miss</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-15-17" class="a">
+<tr id="1-1-5-2-11-18-22-15-8" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1962,7 +1654,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-actions-miss/of-config:action</td</tr> 
-<tr id="1-1-5-4-16-20-23-16" class="a">
+<tr id="1-1-5-2-11-18-22-16" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -1979,7 +1671,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:match</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-16-18" class="a">
+<tr id="1-1-5-2-11-18-22-16-9" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -1993,7 +1685,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:match/of-config:oxm-type</td</tr> 
-<tr id="1-1-5-4-16-20-23-17" class="a">
+<tr id="1-1-5-2-11-18-22-17" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -2010,7 +1702,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:wildcards</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-17-19" class="a">
+<tr id="1-1-5-2-11-18-22-17-10" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -2024,7 +1716,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:wildcards/of-config:oxm-type</td</tr> 
-<tr id="1-1-5-4-16-20-23-18" class="a">
+<tr id="1-1-5-2-11-18-22-18" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -2041,7 +1733,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-setfield</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-18-20" class="a">
+<tr id="1-1-5-2-11-18-22-18-11" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -2055,7 +1747,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-setfield/of-config:oxm-type</td</tr> 
-<tr id="1-1-5-4-16-20-23-19" class="a">
+<tr id="1-1-5-2-11-18-22-19" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -2072,7 +1764,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-setfield-miss</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-19-21" class="a">
+<tr id="1-1-5-2-11-18-22-19-12" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -2086,7 +1778,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:write-setfield-miss/of-config:oxm-type</td</tr> 
-<tr id="1-1-5-4-16-20-23-20" class="a">
+<tr id="1-1-5-2-11-18-22-20" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -2103,7 +1795,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-setfield</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-20-22" class="a">
+<tr id="1-1-5-2-11-18-22-20-13" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -2117,7 +1809,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-setfield/of-config:oxm-type</td</tr> 
-<tr id="1-1-5-4-16-20-23-21" class="a">
+<tr id="1-1-5-2-11-18-22-21" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -2134,7 +1826,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-setfield-miss</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-21-23" class="a">
+<tr id="1-1-5-2-11-18-22-21-14" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -2148,7 +1840,7 @@ table for normal flow entries.">  action </abbr>
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:apply-setfield-miss/of-config:oxm-type</td</tr> 
-<tr id="1-1-5-4-16-20-23-22" class="a">
+<tr id="1-1-5-2-11-18-22-22" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -2165,7 +1857,7 @@ table for normal flow entries.">  action </abbr>
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:experimenter</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-22-24" class="a">
+<tr id="1-1-5-2-11-18-22-22-15" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -2181,7 +1873,7 @@ uint32
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:experimenter/of-config:experimenter-id</td</tr> 
-<tr id="1-1-5-4-16-20-23-23" class="a">
+<tr id="1-1-5-2-11-18-22-23" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier8">
                              <a href="#" id="p6000"
@@ -2198,7 +1890,7 @@ uint32
                     <td>current</td>
                     <td nowrap>/of-config:capable-switch/of-config:logical-switches/of-config:switch/of-config:resources/of-config:flow-table/of-config:properties/of-config:experimenter-miss</td>
                     </tr> 
-<tr id="1-1-5-4-16-20-23-23-25" class="a">
+<tr id="1-1-5-2-11-18-22-23-16" class="a">
                        <td nowrap>
                           <div id=9999 class=tier9>
                              <a class="leaf-list">&nbsp;</a>
@@ -2271,7 +1963,7 @@ the configured interface is not instantiated in the
                     <td>current</td>
                     <td nowrap>/if:interfaces/if:interface</td>
                     </tr> 
-<tr id="4-2-6-5" class="a">
+<tr id="4-2-6-3" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -2312,7 +2004,7 @@ the system, it is instantiated with the same name in the
                        <td></td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/if:name</td</tr> 
-<tr id="4-2-6-6" class="a">
+<tr id="4-2-6-4" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -2351,7 +2043,7 @@ datastore."> <em> description </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/if:description</td</tr> 
-<tr id="4-2-6-7" class="a">
+<tr id="4-2-6-5" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -2377,7 +2069,7 @@ error-tag 'invalid-value' in this case.">  type </abbr>
                        <td></td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/if:type</td</tr> 
-<tr id="4-2-6-8" class="a">
+<tr id="4-2-6-6" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -2403,7 +2095,7 @@ changed over SNMP, this leaf is not affected."> <em> enabled </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/if:enabled</td</tr> 
-<tr id="4-2-6-9" class="a">
+<tr id="4-2-6-7" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -2423,7 +2115,7 @@ no 'lower-layer-if' entries), and 'disabled' otherwise."> <em> link-up-down-trap
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/if:link-up-down-trap-enable</td</tr> 
-<tr id="4-2-6-10" class="a">
+<tr id="4-2-6-8" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier4">
                              <a href="#" id="p6000"
@@ -2440,7 +2132,7 @@ no 'lower-layer-if' entries), and 'disabled' otherwise."> <em> link-up-down-trap
                     <td>current</td>
                     <td nowrap>/if:interfaces/if:interface/of-config:openflow</td>
                     </tr> 
-<tr id="4-2-6-10-17" class="a">
+<tr id="4-2-6-8-12" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -2461,7 +2153,7 @@ Corresponds to OFPPC_PORT_DOWN configuration in OF switch."> <em> of-config:admi
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:admin-state</td</tr> 
-<tr id="4-2-6-10-18" class="a">
+<tr id="4-2-6-8-13" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -2478,7 +2170,7 @@ Corresponds to OFPPC_NO_RECV configuration in OF switch."> <em> of-config:no-rec
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:no-receive</td</tr> 
-<tr id="4-2-6-10-19" class="a">
+<tr id="4-2-6-8-14" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -2495,7 +2187,7 @@ Corresponds to OFPPC_NO_FWD configuration in OF switch."> <em> of-config:no-forw
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:no-forward</td</tr> 
-<tr id="4-2-6-10-20" class="a">
+<tr id="4-2-6-8-15" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -2514,14 +2206,14 @@ OF switch."> <em> of-config:no-packet-in </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:no-packet-in</td</tr> 
-<tr id="4-2-6-10-21" class="a">
+<tr id="4-2-6-8-16" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier5">
                              <a href="#" id="p6000"
                                 onclick="toggleRows(this);return false"
                                 class="folder">&nbsp;
                              </a>
-                             <abbr title="List of OpenFlow queues associated with the port.">of-config:queue[queue-id]</abbr>
+                             <abbr title="List of OpenFlow queues associated with the port.">of-config:queue[id]</abbr>
                           </div>
                        </td> 
 <td nowrap>list</td>
@@ -2531,25 +2223,17 @@ OF switch."> <em> of-config:no-packet-in </em></abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:queue</td>
                     </tr> 
-<tr id="4-2-6-10-21-21" class="a">
+<tr id="4-2-6-8-16-19" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
-                             <abbr title="This id identifies the OpenFlow Queue to OpenFlow
-Controllers. It is assigned to an OpenFlow Queue latest when
-the OpenFlow Queue is associated with and OpenFlow Logical
-Switch.  If the OpenFlow Queue is associated with an OpenFlow
-Logical Switch, this element MUST be unique within the context
-of the OpenFlow Logical Switch.
+                             <abbr title="This id identifies a queue associated with an interface
+in the base interfaces model.  The id may be used to
+associate a queue in an OpenFlow logical switch (based on
+its queue-id) with the corresponding interface queue.
 
-OpenFlow Capable Switch implementations may choose to assign
-values to OpenFlow Queues that are unique within the context
-of the OpenFlow Logical Switch.  These id can be used
-independent of assignments to OpenFlow Logical Switches.
-
-Other implementations may assign values to this element only
-if the OpenFlow Queue is assigned to an OpenFlow Logical
-Switch.">  of-config:queue-id </abbr>
+Queues are assumed to be part of a parent interface, i.e.,
+they are not independently assignable.">  of-config:id </abbr>
                           </div>
                        </td>
                        <td>leaf</td>
@@ -2558,8 +2242,8 @@ Switch.">  of-config:queue-id </abbr>
                        <td nowrap>config</td>
                        <td></td>
                        <td>current</td>
-                       <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:queue/of-config:queue-id</td</tr> 
-<tr id="4-2-6-10-21-22" class="a">
+                       <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:queue/of-config:id</td</tr> 
+<tr id="4-2-6-8-16-20" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -2576,7 +2260,7 @@ port."> <em> of-config:min-rate </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:queue/of-config:min-rate</td</tr> 
-<tr id="4-2-6-10-21-23" class="a">
+<tr id="4-2-6-8-16-21" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -2593,7 +2277,7 @@ port."> <em> of-config:max-rate </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:queue/of-config:max-rate</td</tr> 
-<tr id="4-2-6-10-21-24" class="a">
+<tr id="4-2-6-8-16-22" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -2607,7 +2291,7 @@ port."> <em> of-config:max-rate </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:queue/of-config:experimenter-id</td</tr> 
-<tr id="4-2-6-10-21-25" class="a">
+<tr id="4-2-6-8-16-23" class="a">
                        <td nowrap>
                           <div id=9999 class=tier6>
                              <a class="leaf">&nbsp;</a>
@@ -2624,7 +2308,7 @@ binary
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:queue/of-config:experimenter-data</td</tr> 
-<tr id="4-2-6-10-22" class="a">
+<tr id="4-2-6-8-17" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier5">
                              <a href="#" id="p6000"
@@ -2642,7 +2326,7 @@ an interface">of-config:logical-ports</abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports</td>
                     </tr> 
-<tr id="4-2-6-10-22-26" class="a">
+<tr id="4-2-6-8-17-24" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -2661,7 +2345,7 @@ the tunnel type is set to the correspoinding value.">of-config:tunnel</abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel</td>
                     </tr> 
-<tr id="4-2-6-10-22-26-24" class="a">
+<tr id="4-2-6-8-17-24-23" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -2675,7 +2359,7 @@ the tunnel type is set to the correspoinding value.">of-config:tunnel</abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:tunnel-type</td</tr> 
-<tr id="4-2-6-10-22-26-25" class="a">
+<tr id="4-2-6-8-17-24-24" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier7">
                              <a href="#" id="p6000"
@@ -2692,7 +2376,7 @@ the tunnel type is set to the correspoinding value.">of-config:tunnel</abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:ipgre-tunnel</td>
                     </tr> 
-<tr id="4-2-6-10-22-26-25-24" class="a">
+<tr id="4-2-6-8-17-24-24-24" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2709,7 +2393,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:ipgre-tunnel/of-config:local-endpoint-address</td</tr> 
-<tr id="4-2-6-10-22-26-25-25" class="a">
+<tr id="4-2-6-8-17-24-24-25" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2726,7 +2410,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:ipgre-tunnel/of-config:remote-endpoint-address</td</tr> 
-<tr id="4-2-6-10-22-26-25-26" class="a">
+<tr id="4-2-6-8-17-24-24-26" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2740,7 +2424,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:ipgre-tunnel/of-config:checksum-present</td</tr> 
-<tr id="4-2-6-10-22-26-25-27" class="a">
+<tr id="4-2-6-8-17-24-24-27" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2754,7 +2438,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:ipgre-tunnel/of-config:key-present</td</tr> 
-<tr id="4-2-6-10-22-26-25-28" class="a">
+<tr id="4-2-6-8-17-24-24-28" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2770,7 +2454,7 @@ OpenFlow protocol"> <em> of-config:key </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:ipgre-tunnel/of-config:key</td</tr> 
-<tr id="4-2-6-10-22-26-25-29" class="a">
+<tr id="4-2-6-8-17-24-24-29" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2784,7 +2468,7 @@ OpenFlow protocol"> <em> of-config:key </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:ipgre-tunnel/of-config:sequence-number-present</td</tr> 
-<tr id="4-2-6-10-22-26-26" class="a">
+<tr id="4-2-6-8-17-24-25" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier7">
                              <a href="#" id="p6000"
@@ -2801,7 +2485,7 @@ OpenFlow protocol"> <em> of-config:key </em></abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel</td>
                     </tr> 
-<tr id="4-2-6-10-22-26-26-30" class="a">
+<tr id="4-2-6-8-17-24-25-30" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2818,7 +2502,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel/of-config:local-endpoint-address</td</tr> 
-<tr id="4-2-6-10-22-26-26-31" class="a">
+<tr id="4-2-6-8-17-24-25-31" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2835,7 +2519,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel/of-config:remote-endpoint-address</td</tr> 
-<tr id="4-2-6-10-22-26-26-32" class="a">
+<tr id="4-2-6-8-17-24-25-32" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2850,7 +2534,7 @@ packets sent on the tunnel."> <em> of-config:vni-valid </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel/of-config:vni-valid</td</tr> 
-<tr id="4-2-6-10-22-26-26-33" class="a">
+<tr id="4-2-6-8-17-24-25-33" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2867,7 +2551,7 @@ OpenFlow protocol."> <em> of-config:vni </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel/of-config:vni</td</tr> 
-<tr id="4-2-6-10-22-26-26-34" class="a">
+<tr id="4-2-6-8-17-24-25-34" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2884,7 +2568,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel/of-config:vni-multicast-group</td</tr> 
-<tr id="4-2-6-10-22-26-26-35" class="a">
+<tr id="4-2-6-8-17-24-25-35" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2900,7 +2584,7 @@ uint16
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel/of-config:udp-source-port</td</tr> 
-<tr id="4-2-6-10-22-26-26-36" class="a">
+<tr id="4-2-6-8-17-24-25-36" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2916,7 +2600,7 @@ uint16
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel/of-config:udp-dest-port</td</tr> 
-<tr id="4-2-6-10-22-26-26-37" class="a">
+<tr id="4-2-6-8-17-24-25-37" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2931,7 +2615,7 @@ checksum should be set"> <em> of-config:udp-checksum </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:vxlan-tunnel/of-config:udp-checksum</td</tr> 
-<tr id="4-2-6-10-22-26-27" class="a">
+<tr id="4-2-6-8-17-24-26" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier7">
                              <a href="#" id="p6000"
@@ -2948,7 +2632,7 @@ checksum should be set"> <em> of-config:udp-checksum </em></abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:nvgre-tunnel</td>
                     </tr> 
-<tr id="4-2-6-10-22-26-27-38" class="a">
+<tr id="4-2-6-8-17-24-26-38" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2965,7 +2649,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:nvgre-tunnel/of-config:local-endpoint-address</td</tr> 
-<tr id="4-2-6-10-22-26-27-39" class="a">
+<tr id="4-2-6-8-17-24-26-39" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2982,7 +2666,7 @@ union
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:nvgre-tunnel/of-config:remote-endpoint-address</td</tr> 
-<tr id="4-2-6-10-22-26-27-40" class="a">
+<tr id="4-2-6-8-17-24-26-40" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -2997,7 +2681,7 @@ belonging to the NVGRE virtual layer-2 network (24 bit)"> <em> of-config:vsid </
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces/if:interface/of-config:openflow/of-config:logical-ports/of-config:tunnel/of-config:nvgre-tunnel/of-config:vsid</td</tr> 
-<tr id="4-2-6-10-22-26-27-41" class="a">
+<tr id="4-2-6-8-17-24-26-41" class="a">
                        <td nowrap>
                           <div id=9999 class=tier8>
                              <a class="leaf">&nbsp;</a>
@@ -3050,7 +2734,7 @@ not.">interface[name]</abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces-state/if:interface</td>
                     </tr> 
-<tr id="4-3-7-11" class="a">
+<tr id="4-3-7-9" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -3070,7 +2754,7 @@ such a mechanism is outside the scope of this document.">  name </abbr>
                        <td></td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:name</td</tr> 
-<tr id="4-3-7-12" class="a">
+<tr id="4-3-7-10" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -3084,7 +2768,7 @@ such a mechanism is outside the scope of this document.">  name </abbr>
                        <td></td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:type</td</tr> 
-<tr id="4-3-7-13" class="a">
+<tr id="4-3-7-11" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -3100,7 +2784,7 @@ This leaf has the same read semantics as ifAdminStatus.">  admin-status </abbr>
                        <td></td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:admin-status</td</tr> 
-<tr id="4-3-7-14" class="a">
+<tr id="4-3-7-12" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -3116,7 +2800,7 @@ This leaf has the same semantics as ifOperStatus.">  oper-status </abbr>
                        <td></td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:oper-status</td</tr> 
-<tr id="4-3-7-15" class="a">
+<tr id="4-3-7-13" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -3134,7 +2818,7 @@ string
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:last-change</td</tr> 
-<tr id="4-3-7-16" class="a">
+<tr id="4-3-7-14" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -3149,7 +2833,7 @@ interface.">  if-index </abbr>
                        <td></td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:if-index</td</tr> 
-<tr id="4-3-7-17" class="a">
+<tr id="4-3-7-15" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -3172,7 +2856,7 @@ string
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:phys-address</td</tr> 
-<tr id="4-3-7-18" class="a">
+<tr id="4-3-7-16" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf-list">&nbsp;</a>
@@ -3188,7 +2872,7 @@ leafref
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:higher-layer-if</td</tr> 
-<tr id="4-3-7-19" class="a">
+<tr id="4-3-7-17" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf-list">&nbsp;</a>
@@ -3204,7 +2888,7 @@ leafref
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:lower-layer-if</td</tr> 
-<tr id="4-3-7-20" class="a">
+<tr id="4-3-7-18" class="a">
                        <td nowrap>
                           <div id=9999 class=tier4>
                              <a class="leaf">&nbsp;</a>
@@ -3224,7 +2908,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:speed</td</tr> 
-<tr id="4-3-7-21" class="a">
+<tr id="4-3-7-19" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier4">
                              <a href="#" id="p6000"
@@ -3241,7 +2925,7 @@ uint64
                     <td>current</td>
                     <td nowrap>/if:interfaces-state/if:interface/if:statistics</td>
                     </tr> 
-<tr id="4-3-7-21-23" class="a">
+<tr id="4-3-7-19-18" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3261,7 +2945,7 @@ string
                        <td></td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:discontinuity-time</td</tr> 
-<tr id="4-3-7-21-24" class="a">
+<tr id="4-3-7-19-19" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3282,7 +2966,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:in-octets</td</tr> 
-<tr id="4-3-7-21-25" class="a">
+<tr id="4-3-7-19-20" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3304,7 +2988,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:in-unicast-pkts</td</tr> 
-<tr id="4-3-7-21-26" class="a">
+<tr id="4-3-7-19-21" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3326,7 +3010,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:in-broadcast-pkts</td</tr> 
-<tr id="4-3-7-21-27" class="a">
+<tr id="4-3-7-19-22" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3349,7 +3033,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:in-multicast-pkts</td</tr> 
-<tr id="4-3-7-21-28" class="a">
+<tr id="4-3-7-19-23" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3373,7 +3057,7 @@ uint32
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:in-discards</td</tr> 
-<tr id="4-3-7-21-29" class="a">
+<tr id="4-3-7-19-24" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3399,7 +3083,7 @@ uint32
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:in-errors</td</tr> 
-<tr id="4-3-7-21-30" class="a">
+<tr id="4-3-7-19-25" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3427,7 +3111,7 @@ uint32
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:in-unknown-protos</td</tr> 
-<tr id="4-3-7-21-31" class="a">
+<tr id="4-3-7-19-26" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3448,7 +3132,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:out-octets</td</tr> 
-<tr id="4-3-7-21-32" class="a">
+<tr id="4-3-7-19-27" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3471,7 +3155,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:out-unicast-pkts</td</tr> 
-<tr id="4-3-7-21-33" class="a">
+<tr id="4-3-7-19-28" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3494,7 +3178,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:out-broadcast-pkts</td</tr> 
-<tr id="4-3-7-21-34" class="a">
+<tr id="4-3-7-19-29" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3519,7 +3203,7 @@ uint64
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:out-multicast-pkts</td</tr> 
-<tr id="4-3-7-21-35" class="a">
+<tr id="4-3-7-19-30" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3543,7 +3227,7 @@ uint32
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:out-discards</td</tr> 
-<tr id="4-3-7-21-36" class="a">
+<tr id="4-3-7-19-31" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3570,7 +3254,7 @@ uint32
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/if:statistics/if:out-errors</td</tr> 
-<tr id="4-3-7-22" class="a">
+<tr id="4-3-7-20" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier4">
                              <a href="#" id="p6000"
@@ -3587,7 +3271,7 @@ uint32
                     <td>current</td>
                     <td nowrap>/if:interfaces-state/if:interface/of-config:openflow</td>
                     </tr> 
-<tr id="4-3-7-22-37" class="a">
+<tr id="4-3-7-20-32" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3603,7 +3287,7 @@ set in port features."> <em> of-config:current-speed </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:current-speed</td</tr> 
-<tr id="4-3-7-22-38" class="a">
+<tr id="4-3-7-20-33" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3619,7 +3303,7 @@ set in port features."> <em> of-config:max-speed </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:max-speed</td</tr> 
-<tr id="4-3-7-22-39" class="a">
+<tr id="4-3-7-20-34" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3636,7 +3320,7 @@ OpenFlow flooding."> <em> of-config:blocked </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:blocked</td</tr> 
-<tr id="4-3-7-22-40" class="a">
+<tr id="4-3-7-20-35" class="a">
                        <td nowrap>
                           <div id=9999 class=tier5>
                              <a class="leaf">&nbsp;</a>
@@ -3652,7 +3336,7 @@ failover."> <em> of-config:live </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:live</td</tr> 
-<tr id="4-3-7-22-41" class="a">
+<tr id="4-3-7-20-36" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier5">
                              <a href="#" id="p6000"
@@ -3671,7 +3355,7 @@ link type (copper/fiber) and link features
                     <td>current</td>
                     <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features</td>
                     </tr> 
-<tr id="4-3-7-22-41-27" class="a">
+<tr id="4-3-7-20-36-25" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -3689,7 +3373,7 @@ currently in use.">of-config:current</abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:current</td>
                     </tr> 
-<tr id="4-3-7-22-41-27-28" class="a">
+<tr id="4-3-7-20-36-25-27" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3708,7 +3392,7 @@ enumeration
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:current/of-config:rate</td</tr> 
-<tr id="4-3-7-22-41-27-29" class="a">
+<tr id="4-3-7-20-36-25-28" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3722,7 +3406,7 @@ enumeration
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:current/of-config:medium</td</tr> 
-<tr id="4-3-7-22-41-27-30" class="a">
+<tr id="4-3-7-20-36-25-29" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3737,7 +3421,7 @@ is enabled for the port."> <em> of-config:auto-negotiate </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:current/of-config:auto-negotiate</td</tr> 
-<tr id="4-3-7-22-41-27-31" class="a">
+<tr id="4-3-7-20-36-25-30" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3753,7 +3437,7 @@ asymmetric."> <em> of-config:pause </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:current/of-config:pause</td</tr> 
-<tr id="4-3-7-22-41-28" class="a">
+<tr id="4-3-7-20-36-26" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -3771,7 +3455,7 @@ advertised to the peer port.">of-config:advertised</abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:advertised</td>
                     </tr> 
-<tr id="4-3-7-22-41-28-32" class="a">
+<tr id="4-3-7-20-36-26-31" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
@@ -3790,7 +3474,7 @@ enumeration
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:advertised/of-config:rate</td</tr> 
-<tr id="4-3-7-22-41-28-33" class="a">
+<tr id="4-3-7-20-36-26-32" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
@@ -3804,7 +3488,7 @@ enumeration
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:advertised/of-config:medium</td</tr> 
-<tr id="4-3-7-22-41-28-34" class="a">
+<tr id="4-3-7-20-36-26-33" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3819,7 +3503,7 @@ is enabled for the port."> <em> of-config:auto-negotiate </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:advertised/of-config:auto-negotiate</td</tr> 
-<tr id="4-3-7-22-41-28-35" class="a">
+<tr id="4-3-7-20-36-26-34" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3835,7 +3519,7 @@ asymmetric."> <em> of-config:pause </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:advertised/of-config:pause</td</tr> 
-<tr id="4-3-7-22-41-29" class="a">
+<tr id="4-3-7-20-36-27" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -3853,7 +3537,7 @@ supported on the port.">of-config:supported</abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:supported</td>
                     </tr> 
-<tr id="4-3-7-22-41-29-36" class="a">
+<tr id="4-3-7-20-36-27-35" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
@@ -3872,7 +3556,7 @@ enumeration
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:supported/of-config:rate</td</tr> 
-<tr id="4-3-7-22-41-29-37" class="a">
+<tr id="4-3-7-20-36-27-36" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
@@ -3886,7 +3570,7 @@ enumeration
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:supported/of-config:medium</td</tr> 
-<tr id="4-3-7-22-41-29-38" class="a">
+<tr id="4-3-7-20-36-27-37" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3901,7 +3585,7 @@ is enabled for the port."> <em> of-config:auto-negotiate </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:supported/of-config:auto-negotiate</td</tr> 
-<tr id="4-3-7-22-41-29-39" class="a">
+<tr id="4-3-7-20-36-27-38" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3917,7 +3601,7 @@ asymmetric."> <em> of-config:pause </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:supported/of-config:pause</td</tr> 
-<tr id="4-3-7-22-41-30" class="a">
+<tr id="4-3-7-20-36-28" class="a">
                        <td nowrap id="p4000">
                           <div id="p5000" class="tier6">
                              <a href="#" id="p6000"
@@ -3935,7 +3619,7 @@ advertised by the peer port.">of-config:peer</abbr>
                     <td>current</td>
                     <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:peer</td>
                     </tr> 
-<tr id="4-3-7-22-41-30-40" class="a">
+<tr id="4-3-7-20-36-28-39" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
@@ -3954,7 +3638,7 @@ enumeration
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:peer/of-config:rate</td</tr> 
-<tr id="4-3-7-22-41-30-41" class="a">
+<tr id="4-3-7-20-36-28-40" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf-list">&nbsp;</a>
@@ -3968,7 +3652,7 @@ enumeration
                        <td>*</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:peer/of-config:medium</td</tr> 
-<tr id="4-3-7-22-41-30-42" class="a">
+<tr id="4-3-7-20-36-28-41" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
@@ -3983,7 +3667,7 @@ is enabled for the port."> <em> of-config:auto-negotiate </em></abbr>
                        <td>?</td>
                        <td>current</td>
                        <td nowrap>/if:interfaces-state/if:interface/of-config:openflow/of-config:features/of-config:peer/of-config:auto-negotiate</td</tr> 
-<tr id="4-3-7-22-41-30-43" class="a">
+<tr id="4-3-7-20-36-28-42" class="a">
                        <td nowrap>
                           <div id=9999 class=tier7>
                              <a class="leaf">&nbsp;</a>
