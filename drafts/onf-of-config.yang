@@ -353,23 +353,26 @@ module onf-of-config {
         separate descriptions per type.";
 
       list port {
+
+        key number;
+
         description
           "List of the ports assigned to the logical switch from the
           capable switch.  These ports reference interfaces in the
           base interfaces model.";
 
-        key number;
 
         uses openflow-logical-switch-ports;
 
         list queue {
+
+          key queue-id;
+
           description
             "List of queues associated with the logical switch port.
             A queue is identified by its id within a port, and
             contains a reference to a queue in the base interfaces
             model.";
-
-          key queue-id;
 
           uses openflow-logical-switch-queues;
 
@@ -488,6 +491,8 @@ module onf-of-config {
           enum normal;
           enum flood;
         }
+        description
+          "List of the reserved port types.";
       }
     }
 
@@ -506,6 +511,8 @@ module onf-of-config {
           enum indirect;
           enum fast-failover;
         }
+        description
+          "List of supported group types.";
       }
     }
 
@@ -524,17 +531,21 @@ module onf-of-config {
           enum chaining;
           enum chaining-check;
         }
+        description
+          "List of supported group capabilities.";
       }
     }
 
     container action-types {
       description
-	"Specify the action types supported by the logical switch.";
+	     "Specify the action types supported by the logical switch.";
 
       leaf-list type {
         type identityref {
           base of-types:OFActionType;
         }
+        description
+          "List of supported action types.";
       }
     }
 
@@ -546,6 +557,8 @@ module onf-of-config {
         type identityref {
           base of-types:OFInstructionType;
         }
+        description
+          "List of supported instruction types.";
       }
     }
   }
@@ -1403,6 +1416,9 @@ module onf-of-config {
     }
 
     container configuration-points {
+      description
+        "Enclosing container for the list of configuration points.";
+
       list configuration-point {
         key "id";
         description
@@ -1492,10 +1508,11 @@ module onf-of-config {
     }
 
     list queue {
-      description
-        "List of OpenFlow queues associated with the port.";
 
       key id;
+
+      description
+        "List of OpenFlow queues associated with the port.";
 
       uses openflow-queue;
     }
@@ -1629,10 +1646,11 @@ module onf-of-config {
       "Adds OF-Config opstate data to base interfaces model.";
 
     container openflow {
-      description
-        "OpenFlow-specific operational state data for interfaces";
 
       config false;
+
+      description
+        "OpenFlow-specific operational state data for interfaces";
 
       uses openflow-port-state;
     }
