@@ -1,0 +1,881 @@
+module onf-of-types-openconfig {
+
+
+  namespace "http://opennetworking.org/openflow";
+  //TODO: updated namespace to "urn:onf:config:yang"
+  //when available
+
+  prefix of-types;
+
+  import ietf-interfaces { prefix if; }
+  import ietf-inet-types { prefix inet; }
+  import openconfig-extensions { prefix oc-ext; }
+
+  organization
+    "Configuration and Management Working Group
+    Open Networking Foundation";
+
+  contact
+    "Open Networking Foundation
+    Configuration and Management Project
+    http://www.opennetworking.org
+    <mailto:info@opennetworking.org>";
+
+  description
+    "This module defines types based on the OpenFlow Switch
+    Specification for use in OpenConfig models.";
+
+
+  oc-ext:openconfig-version "1.3.0";
+
+  revision 2016-10-03 {
+    description
+      "This version of the YANG Module is the basis of the
+      OF-CONFIG 1.3 specification; please see the specification for
+      details.";
+
+    reference
+      "1.3.0";
+  }
+
+  revision 2015-07-31 {
+    description
+      "This version is based on the long-term stable OpenFlow
+      Switch Protocol specification, currently 1.3.5";
+
+    reference
+      "ONF OF-CONFIG 1.3";
+  }
+
+
+  // typedefs
+
+  typedef of-config-id {
+    type string;
+    description
+      "Generic type of an identifier in OF-CONFIG";
+  }
+
+  typedef of-config-resource-id-type {
+    type inet:uri;
+    description
+      "Generic type for use as a unique resource identifier in OF
+      capable or logical switches.";
+  }
+
+  typedef ofcp-protocol-type {
+    type enumeration {
+      enum "SSH" {
+        description
+          "SSH protocol";
+      }
+      enum "SOAP" {
+        description
+          "SOAP protocol";
+      }
+      enum "TLS" {
+        description
+          "TLS protocol";
+      }
+      enum "BEEP" {
+        description
+          "BEEP protcol";
+      }
+    }
+    description
+      "Possible protocols to connect ot an OF Configuration Point.
+      Note that confguration of required certificates, authentication
+      keys, etc. is expected to be handled by a separate data model.";
+  }
+
+  typedef ofc-protocol-type {
+    type enumeration {
+      enum "TCP" {
+        description
+          "TCP protocol";
+      }
+      enum "TLS" {
+        description
+          "TLS protocol";
+      }
+    }
+    description
+      "Protocol used by the switch to connect to an OpenFlow
+      controller";
+  }
+
+  typedef datapath-id-type {
+    type string {
+      pattern '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){7}';
+    }
+    description
+      "The datapath-id type represents an OpenFlow
+       datapath identifier.";
+  }
+
+  typedef of-tenth-pct-type {
+    type uint16 {
+      range "0..1000";
+    }
+    units "1/10 of a percent";
+    description
+      "This type defines a value in tenth of a percent.";
+  }
+
+  typedef of-oper-status-type {
+    type enumeration {
+      enum UP {
+        description
+          "Controller connection up";
+      }
+      enum DOWN {
+        description
+          "Controller connection down";
+      }
+    }
+    description
+      "Type to specify state information for a port or a
+       connection.";
+  }
+
+
+  typedef hex-binary {
+    type binary;
+    description
+      "Hex binary encoded string";
+    reference
+      "http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/datatypes.html#hexBinary";
+  }
+
+  typedef of-port-type {
+    type enumeration {
+      enum ALL {
+        description
+          "Represents all ports the switch can use for forwarding a
+          specific packet.";
+      }
+      enum CONTROLLER {
+        description
+          "Represents the control channel with the OpenFlow
+          controllers. Can be used as an ingress port or as an
+          output port.";
+      }
+      enum TABLE {
+        description
+          "Represents the start of the OpenFlow pipeline. This port
+          is only valid in an output action in the list of actions
+          of a packet-out message.";
+      }
+      enum IN_PORT {
+        description
+          "Represents the packet ingress port. Can be used only as
+          an output port, sends the packet out through its
+          ingress port";
+      }
+      enum ANY {
+        description
+          "Special value used in some OpenFlow requests when no port
+          is specified (i.e. port is wildcarded).";
+      }
+      enum LOCAL {
+        description
+          "Represents the switch’s local networking stack and its
+          management stack. Can be used as an ingress port or as an
+          output port.";
+      }
+      enum NORMAL {
+        description
+          "Represents forwarding using the traditional non-OpenFlow
+          pipeline of the switch.";
+      }
+      enum FLOOD {
+        description
+          "Represents flooding using the traditional non-OpenFlow
+          pipeline of the switch";
+      }
+    }
+  description
+    "OpenFlow reserved port types.";
+  }
+
+  typedef of-port-rate-type {
+    type enumeration {
+      enum 10MB_HD {
+        description
+          "10 Mb half-duplex rate";
+      }
+      enum 10MB_FD {
+        description
+          "10 Mb full-duplex rate";
+      }
+      enum 100MB_HD {
+        description
+          "100 Mb half-duplex rate";
+      }
+      enum 100MB_FD {
+        description
+          "100 Mb full-duplex rate";
+      }
+      enum 1GB_HD {
+        description
+          "1 Gb half-duplex rate";
+      }
+      enum 1GB_FD {
+        description
+          "1 Gb full-duplex rate";
+      }
+      enum 10GB {
+        description
+          "10 Gb full-duplex rate";
+      }
+      enum 40GB {
+        description
+          "40 Gb full-duplex rate";
+      }
+      enum 100GB {
+        description
+          "100 Gb full-duplex rate";
+      }
+      enum 1TB {
+        description
+          "1 Tb full-duplex rate";
+      }
+      enum OTHER {
+        description
+          "Other supported rate";
+      }
+    }
+    description
+      "Type to specify the rate of a port including the
+       duplex transmission feature. Possible rates are 10Mb, 100Mb,
+       1Gb, 10Gb, 40Gb, 100Gb, 1Tb or other. Rates of 10Mb, 100Mb
+       and 1 Gb can support half or full duplex transmission.";
+  }
+
+  typedef of-group-type {
+    type enumeration {
+      enum ALL {
+        description
+          "Execute all buckets in the group. This group is used for
+          multicast or broadcast forwarding.";
+      }
+      enum SELECT {
+        description
+          "Execute one bucket in the group. Packets are processed by
+          a single bucket in the group, based on a switch-computed
+          selection algorithm.";
+      }
+      enum INDIRECT {
+        description
+          "Execute the one defined bucket in this group. This group
+          supports only a single bucket.";
+      }
+      enum FAST_FAILOVER {
+        description
+          "Execute the first live bucket. Each action bucket is
+          associated with a specific port and/or group that controls
+          its liveness.";
+      }
+    }
+    description
+      "OpenFlow supported group types.";
+  }
+
+  typedef of-group-capability-type {
+    type enumeration {
+      enum SELECT_WEIGHT {
+        description
+          "Support weight for select groups";
+      }
+      enum SELECT_LIVENESS {
+        description
+          "Support liveness for select groups";
+      }
+      enum CHAINING {
+        description
+          "Support chaining groups";
+      }
+      enum CHAINING_CHECK {
+        description
+          "Check chaining for loops and delete";
+      }
+    }
+    description
+      "OpenFlow supported group capabilities.";
+  }
+
+  typedef of-lost-conn-type {
+    type enumeration {
+      enum FAIL_SECURE {
+        description
+          "Only change to switch behavior is that packets and
+          messages destined to the controllers are dropped.";
+      }
+      enum FAIL_STANDALONE {
+        description
+          "Switch processes all packets using the OFPP_NORMAL
+          reserved port; i.e., the switch acts as a legacy
+          Ethernet switch or router.";
+      }
+    }
+    description
+      "Defines the behavior when the switch loses contact with the
+      controller.  There are two alternative modes in
+      such a case: fails secure mode and fail standalone mode as
+      defined by the OpenFlow protocol specification.";
+  }
+
+  typedef of-controller-role-type {
+    type enumeration {
+      enum MASTER {
+        description
+          "Full access, at most one master";
+      }
+      enum SLAVE {
+        description
+          "Read-only access";
+      }
+      enum EQUAL {
+        description
+          "Default role, full access";
+      }
+    }
+    description
+      "Indicates the role of an OpenFlow controller";
+  }
+
+  typedef of-experimenter-id {
+    type uint32;
+    description
+      "The experimenter field is a 32-bit value that uniquely identifies the
+       experimenter. If the most significant byte is zero, the next
+       three bytes are the experimenter's IEEE OUI. If the most
+       significant byte is not zero, it is a value allocated by the
+       Open Networking Foundation.";
+  }
+
+  // identities
+
+  identity OF_OPENFLOW_VERSION_TYPE {
+    description
+      "Identity to represent major OpenFlow versions";
+  }
+
+  identity OF_OPENFLOW_VERSION_1.0 {
+    base OF_OPENFLOW_VERSION_TYPE;
+    description
+      "OpenFlow v 1.0";
+  }
+
+  identity OF_OPENFLOW_VERSION_1.1 {
+    base OF_OPENFLOW_VERSION_TYPE;
+    description
+      "OpenFlow v 1.1";
+  }
+
+  identity OF_OPENFLOW_VERSION_1.2 {
+    base OF_OPENFLOW_VERSION_TYPE;
+    description
+      "OpenFlow v 1.2";
+  }
+
+  identity OF_OPENFLOW_VERSION_1.3 {
+    base OF_OPENFLOW_VERSION_TYPE;
+    description
+      "OpenFlow v 1.3";
+  }
+
+  identity OPENFLOW_ENABLED {
+    base if:interface-type;
+    description
+      "Indicates a OpenFlow-enabled physical interface";
+  }
+
+  identity OF_MATCH_FIELD_TYPE {
+  description
+    "The types of match field defined in OpenFlow Switch
+    Specification";
+}
+
+  identity ARP_OP {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ARP opcode";
+  }
+
+  identity ARP_SRC_ADDR {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ARP source IPv4 address";
+  }
+
+  identity ARP_SRC_HW_ADDR {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ARP source hardware address";
+  }
+
+  identity ARP_TARGET_ADDR {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ARP target IPv4 address";
+  }
+
+  identity ARP_TARGET_HW_ADDR {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ARP target hardware address";
+  }
+
+  identity ETH_DST {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Ethernet destination address";
+  }
+
+  identity ETH_SRC {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Ethernet source address";
+  }
+
+  identity ETH_TYPE {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Ethernet frame type";
+  }
+
+  identity ICMPV4_CODE {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ICMP code";
+  }
+
+  identity ICMPV4_TYPE {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ICMP type";
+  }
+
+  identity ICMPV6_CODE {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ICMPv6 code";
+  }
+
+  identity ICMPV6_TYPE {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "ICMPv6 type";
+  }
+
+  identity IN_PHY_PORT {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Switch physical input port";
+  }
+
+  identity IN_PORT {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Switch input port";
+  }
+
+  identity IP_DSCP {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IP DSCP (6 bits in ToS field)";
+  }
+
+  identity IP_ECN {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IP ECN (2 bits in ToS field)";
+  }
+
+  identity IP_PROTO {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IP protocol";
+  }
+
+  identity IPV4_DST {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IPv4 destination address";
+  }
+
+  identity IPV4_SRC {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IPv4 source address";
+  }
+
+  identity IPV6_DST {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IPv6 destination address";
+  }
+
+  identity IPV6_EXTHDR {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IPv6 Extension Header pseudo-field";
+  }
+
+  identity IPV6_FLOW_LABEL {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IPv6 Flow Label";
+  }
+
+  identity IPV6_ND_SOURCE_LINK_LAYER {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Source link-layer for ND";
+  }
+
+  identity IPV6_ND_TARGET {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Target address for ND";
+  }
+
+  identity IPV6_ND_TARGET_LINK_LAYER {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Target link-layer for ND";
+  }
+
+  identity IPV6_SRC {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "IPv6 source address";
+  }
+
+  identity METADATA {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Metadata passed between tables";
+  }
+
+  identity MPLS_LABEL {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "MPLS label";
+  }
+
+  identity MPLS_TC {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "MPLS TC";
+  }
+
+  identity PBB_ISID {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "PBB I-SID";
+  }
+
+  identity SCTP_DST {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "SCTP destination port";
+  }
+
+  identity SCTP_SRC {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "SCTP source port";
+  }
+
+  identity TCP_DST {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "TCP destination port";
+  }
+
+  identity TCP_SRC {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "TCP source port";
+  }
+
+  identity TUNNEL_ID {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "Logical Port Metadata";
+  }
+
+  identity UDP_DST {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "UDP destination port";
+  }
+
+  identity UDP_SRC {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "UDP source port";
+  }
+
+  identity VLAN_ID {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "VLAN id";
+  }
+
+  identity VLAN_PRIORITY {
+    base OF_MATCH_FIELD_TYPE;
+    description
+      "VLAN priority";
+  }
+
+
+  identity OF_PORT_MEDIUM_TYPE {
+    description
+      "Base identity to describe the media type of an OpenFlow
+      port";
+  }
+
+  identity OF_PORT_MEDIUM_COPPER {
+    base OF_PORT_MEDIUM_TYPE;
+    description
+      "Port connected with copper media";
+  }
+
+  identity OF_PORT_MEDIUM_FIBER {
+    base OF_PORT_MEDIUM_TYPE;
+    description
+      "Port connected with fiber media";
+  }
+
+  identity OF_PORT_PAUSE_TYPE {
+    description
+      "Base identity to indicate the flow control mode supported by
+      the OpenFlow port";
+  }
+
+  identity OF_PORT_PAUSE_NONE {
+    base OF_PORT_PAUSE_TYPE;
+    description
+      "Flow control / PAUSE frames not supported";
+  }
+
+  identity OF_PORT_PAUSE_SYM {
+    base OF_PORT_PAUSE_TYPE;
+    description
+      "Symmetric Flow control / PAUSE supported";
+  }
+
+  identity OF_PORT_PAUSE_ASYM {
+    base OF_PORT_PAUSE_TYPE;
+    description
+      "Asymmetric Flow control / PAUSE supported";
+  }
+
+  identity OF_INSTRUCTION_TYPE {
+  description
+    "The types of instructions defined in OpenFlow
+    Switch Specification";
+  }
+
+  identity APPLY_ACTIONS {
+    base OF_INSTRUCTION_TYPE;
+    description
+      "Applies the specific action(s) immediately,
+      without any change to the Action Set (optional)";
+  }
+
+  identity CLEAR_ACTIONS {
+    base OF_INSTRUCTION_TYPE;
+    description
+      "Clears all the actions in the action set immediately
+      (required)";
+  }
+
+  identity GOTO_TABLE {
+    base OF_INSTRUCTION_TYPE;
+    description
+      "Indicates the next table in the processing
+      pipeline (required)";
+  }
+
+  identity METER {
+    base OF_INSTRUCTION_TYPE;
+    description
+      "Direct packet to the specified meter (optional)";
+  }
+
+  identity WRITE_ACTIONS {
+    base OF_INSTRUCTION_TYPE;
+    description
+      "Merges the specified set of action(s) into the
+      current action set (required)";
+  }
+
+  identity WRITE_METADATA {
+    base OF_INSTRUCTION_TYPE;
+    description
+      "Writes the masked metadata value into the metadata
+      field (optional)";
+  }
+
+  identity OF_ACTION_TYPE {
+  description
+    "Types of actions available for inclusion in an action
+    set";
+  }
+
+  identity COPY_TTL_INWARD {
+    base OF_ACTION_TYPE;
+    description
+      "Copy the TTL from outermost to next-to-outermost
+      header with TTL (optional). Copy can be IP-to-IP, MPLS-to-MPLS,
+      or MPLS-to-IP.";
+  }
+
+  identity COPY_TTL_OUTWARD {
+    base OF_ACTION_TYPE;
+    description
+      "Copy the TTL from next-to-outermost to outermost
+      header with TTL (optional). Copy can be IP-to-IP, MPLS-to-MPLS,
+      or IP-to-MPLS.";
+  }
+
+  identity DROP {
+    base OF_ACTION_TYPE;
+    description
+      "There is no explicit action to represent drops. Instead,
+      packets whose action sets have no output action and no group
+      action should be dropped (required).  The action type is included here
+      for completeness of the list of required OF actions.";
+  }
+
+  identity GROUP {
+    base OF_ACTION_TYPE;
+    description
+      "Process the packet through the specified group (required)";
+  }
+
+  identity IP_TTL_DECREMENT {
+    base OF_ACTION_TYPE;
+    description
+      "Decrement the IPv4 TTL or IPv6 Hop Limit field and
+      update the IP checksum (optional)";
+  }
+
+  identity IP_TTL_SET {
+    base OF_ACTION_TYPE;
+    description
+      "Replace the existing IPv4 TTL or IPv6 Hop Limit and
+      update the IP checksum (optional)";
+  }
+
+  identity MPLS_TTL_DECREMENT {
+    base OF_ACTION_TYPE;
+    description
+      "Decrement the MPLS TTL (optional)";
+  }
+
+  identity MPLS_TTL_SET {
+    base OF_ACTION_TYPE;
+    description
+      "Replace the existing MPLS TTL (optional)";
+  }
+
+  identity OUTPUT {
+    base OF_ACTION_TYPE;
+    description
+      "Forwards a packet to a specified OpenFlow physical ports,
+      switch-defined logical ports, or required reserved ports
+      (required)";
+  }
+
+  identity POP_MPLS_TAG {
+    base OF_ACTION_TYPE;
+    description
+      "Pop the outer-most MPLS tag or shim header from the packet
+      (optional)";
+  }
+
+  identity POP_PBB_TAG {
+    base OF_ACTION_TYPE;
+    description
+      "Pop the outer-most PBB service instance header (I-TAG TCI)
+      from the packet (optional)";
+  }
+
+  identity POP_VLAN_TAG {
+    base OF_ACTION_TYPE;
+    description
+      "Pop the outer-most VLAN header from the packet (optional)";
+  }
+
+  identity PUSH_MPLS_TAG {
+    base OF_ACTION_TYPE;
+    description
+      "Push a new MPLS shim header onto the packet (optional)";
+  }
+
+  identity PUSH_PBB_TAG {
+    base OF_ACTION_TYPE;
+    description
+      "Push a new PBB service instance header (I-TAG TCI) onto
+      the packet (optional)";
+  }
+
+  identity PUSH_VLAN_TAG {
+    base OF_ACTION_TYPE;
+    description
+      "Push a new VLAN header onto the packet (optional)";
+  }
+
+  identity SET_FIELD {
+    base OF_ACTION_TYPE;
+    description
+      "Set-Field actions are identified by their field type and
+      modify the values of respective header fields in the packet
+      (optional)";
+  }
+
+  identity SET_QUEUE {
+    base OF_ACTION_TYPE;
+    description
+      "Sets the queue id for a packet (optional)";
+  }
+
+
+  identity OF_LOGICAL_PORT_TYPE {
+    description
+      "Base identity for supported OpenFlow tunnel types (logical
+      ports)";
+  }
+
+  identity OF_TUNNEL_PORT_TYPE {
+    base OF_LOGICAL_PORT_TYPE;
+    description
+      "Logical ports representing various types of OF tunnel
+      endpoints";
+  }
+
+  identity IPGRE_TUNNEL {
+  base OF_TUNNEL_PORT_TYPE;
+  description
+    "Basic GRE tunnel type";
+  }
+
+  identity NVGRE_TUNNEL {
+    base OF_TUNNEL_PORT_TYPE;
+    description
+      "NVGRE tunnel type";
+  }
+
+  identity VXLAN_TUNNEL {
+    base OF_TUNNEL_PORT_TYPE;
+    description
+      "VxLAN tunnel type";
+  }
+
+
+}
